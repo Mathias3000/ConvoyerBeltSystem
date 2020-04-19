@@ -75,20 +75,46 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="ChainMode.cpp" />
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="diaTimer.cpp" />
+    <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="ICommand.cpp" />
     <ClCompile Include="keyboard.cpp" />
+    <ClCompile Include="KeyPad.cpp" />
+    <ClCompile Include="LocalMode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mode.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="Potentiometer.cpp" />
     <ClCompile Include="setMyIP.cpp" />
     <ClCompile Include="stateMachine.cpp" />
     <ClCompile Include="stateTable.cpp" />
+    <ClCompile Include="TCPClient.cpp" />
+    <ClCompile Include="TCPServer.cpp" />
+    <ClCompile Include="TelnetServer.cpp" />
+    <ClCompile Include="TestFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChainMode.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="diaTimer.h" />
+    <ClInclude Include="Helpers.h" />
+    <ClInclude Include="ICommand.h" />
     <ClInclude Include="keyboard.h" />
+    <ClInclude Include="KeyPad.h" />
+    <ClInclude Include="LocalMode.h" />
+    <ClInclude Include="Mode.h" />
     <ClInclude Include="myFunctions.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="Potentiometer.h" />
     <ClInclude Include="stateMachine.h" />
     <ClInclude Include="stateTable.h" />
+    <ClInclude Include="TCPClient.h" />
+    <ClInclude Include="TCPServer.h" />
+    <ClInclude Include="TelnetServer.h" />
+    <ClInclude Include="TestFunctions.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Link>
