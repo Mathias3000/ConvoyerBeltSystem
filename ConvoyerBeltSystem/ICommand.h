@@ -1,6 +1,8 @@
 #pragma once
+#include "Command.h"
+
 class ICommand
 {
-	virtual int parse() = 0;
+	virtual Command parse() = 0;
 };
 
