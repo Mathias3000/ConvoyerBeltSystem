@@ -16,7 +16,6 @@
     <ClCompile Include="stateTable.cpp">
       <Filter>FSM framework</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Network.cpp">
       <Filter>Communication\Networking</Filter>
     </ClCompile>
@@ -55,6 +54,25 @@
     </ClCompile>
     <ClCompile Include="TestFunctions.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="motorController.cpp">
+      <Filter>MotorController</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="speedProfile.cpp">
+      <Filter>MotorController\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>MotorController\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="encoder.cpp">
+      <Filter>MotorController\Motor</Filter>
+    </ClCompile>
+    <ClCompile Include="motor.cpp">
+      <Filter>MotorController\Motor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +133,24 @@
     <ClInclude Include="TestFunctions.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="motorController.h">
+      <Filter>MotorController</Filter>
+    </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="speedProfile.h">
+      <Filter>MotorController\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="encoder.h">
+      <Filter>MotorController\Motor</Filter>
+    </ClInclude>
+    <ClInclude Include="motor.h">
+      <Filter>MotorController\Motor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FSM framework">
@@ -140,6 +176,21 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{8b8b0020-57f2-4c39-bf2f-c03461e4b53b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Display">
+      <UniqueIdentifier>{6d7cef5d-4fa5-47d3-bb50-9f435e170f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController">
+      <UniqueIdentifier>{fa2115e6-edd7-4657-a5ba-699bfb8c71a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController\Motor">
+      <UniqueIdentifier>{8226994e-081d-4e08-97b8-1e692da7cffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController\Controller">
+      <UniqueIdentifier>{3d3d0cc1-1440-436e-b3fa-ea7150697e9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController\Profile">
+      <UniqueIdentifier>{2d03bc26-fc20-49ee-9d81-0b8d485290fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
