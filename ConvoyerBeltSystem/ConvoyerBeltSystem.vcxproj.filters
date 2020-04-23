@@ -55,24 +55,24 @@
     <ClCompile Include="TestFunctions.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="motorController.cpp">
-      <Filter>MotorController</Filter>
-    </ClCompile>
-    <ClCompile Include="display.cpp">
-      <Filter>Display</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="speedProfile.cpp">
-      <Filter>MotorController\Profile</Filter>
-    </ClCompile>
-    <ClCompile Include="controller.cpp">
+    <ClCompile Include="Controller.cpp">
       <Filter>MotorController\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="encoder.cpp">
+    <ClCompile Include="Display.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Encoder.cpp">
       <Filter>MotorController\Motor</Filter>
     </ClCompile>
-    <ClCompile Include="motor.cpp">
+    <ClCompile Include="Motor.cpp">
       <Filter>MotorController\Motor</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorController.cpp">
+      <Filter>MotorController</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedProfile.cpp">
+      <Filter>MotorController\Profile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,23 +133,23 @@
     <ClInclude Include="TestFunctions.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="motorController.h">
-      <Filter>MotorController</Filter>
-    </ClInclude>
-    <ClInclude Include="display.h">
+    <ClInclude Include="Display.h">
       <Filter>Display</Filter>
     </ClInclude>
-    <ClInclude Include="speedProfile.h">
-      <Filter>MotorController\Profile</Filter>
-    </ClInclude>
-    <ClInclude Include="controller.h">
+    <ClInclude Include="Controller.h">
       <Filter>MotorController\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="encoder.h">
+    <ClInclude Include="Encoder.h">
       <Filter>MotorController\Motor</Filter>
     </ClInclude>
-    <ClInclude Include="motor.h">
+    <ClInclude Include="Motor.h">
       <Filter>MotorController\Motor</Filter>
+    </ClInclude>
+    <ClInclude Include="MotorController.h">
+      <Filter>MotorController</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedProfile.h">
+      <Filter>MotorController\Profile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
