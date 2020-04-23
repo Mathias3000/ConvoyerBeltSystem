@@ -1,7 +1,7 @@
 #pragma once
-class encoder
+
+class Encoder
 {
 public:
 	double getSpeed(void);
 };
-
