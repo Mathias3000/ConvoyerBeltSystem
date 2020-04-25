@@ -4,7 +4,7 @@
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
-    testTCPServer();
+    testDisplay();
 
     return 0;
 }
