@@ -7,15 +7,20 @@
 #include <string>
 #include <iostream>
 
+#define HOST_IP "192.168.7.2"
+#define CONVBELT_IP "91.0.0.7"
+
+#define TCP_PORT 5555
+#define TELNET_PORT 4444
+
 using namespace std;
 
 class TCPServer
 {
 private: 
 
-	int port = 5555;	// default
-	in_addr_t systemAddr = inet_addr("192.168.7.2");
-	in_addr_t convBeltAddr = inet_addr("91.0.0.7");
+	int port = TCP_PORT;	// default
+	in_addr_t socketAddress = inet_addr(HOST_IP);	// default
 
 	int listening;
 	sockaddr_in server;
@@ -30,7 +35,7 @@ private:
 	int init();
 
 public: 
-	TCPServer(int port);
+	TCPServer(in_addr_t IPAddress, int port);
 	~TCPServer();
 	char* recv();
 

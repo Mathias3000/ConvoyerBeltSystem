@@ -4,7 +4,7 @@
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
-    testDisplay();
+    testTelnet();
 
     return 0;
 }
