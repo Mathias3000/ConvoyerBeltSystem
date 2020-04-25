@@ -4,8 +4,7 @@
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
-    // testTelnet();
-    testTCPServer();
+    testTCPClient();
 
     return 0;
 }

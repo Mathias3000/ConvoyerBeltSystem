@@ -7,7 +7,7 @@
 #include <string>
 #include <string.h>
 
-#define CONVBELT_IP "91.0.0.7"
+#define RIGHT_CONVBELT_IP "192.168.7.1"
 #define TCP_PORT 5555
 #define BUF_SIZE 128
 
@@ -24,7 +24,7 @@ private:
 	int port;
 
 public: 
-	TCPClient(in_addr_t IPAddress, int port);
+	TCPClient(in_addr_t serverAddress, int port);
 	int init();
 
 
