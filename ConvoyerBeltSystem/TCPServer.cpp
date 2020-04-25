@@ -5,7 +5,6 @@ TCPServer::TCPServer(in_addr_t IPAddress, int port) {
 
 	this->port = port;
 	socketAddress = IPAddress;
-	buffer[buffersize];		// init buffer with size
 	init();
 }
 
@@ -23,15 +22,10 @@ int TCPServer::init() {
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = socketAddress;	// or INADDR_ANY to use the address of the BB
 	server.sin_port = htons(port);			// default set to 5555
-	// inet_pton(AF_INET, "0.0.0.0", &server.sin_addr);
-	//if (bind(listening, (sockaddr*)&server, sizeof(server)) == -1) {
-	//	cerr << "Can't bind to IP/port";
-	//	return -2;
-	//}
 
-	int err = bind(listening, (sockaddr*)&server, sizeof(server));
+	//inet_pton(AF_INET, "0.0.0.0", &server.sin_addr);
 
-	if (err == -1) {
+	if (bind(listening, (sockaddr*)&server, sizeof(server)) == -1) {
 		cerr << "Can't bind to IP/port";
 		return -2;
 	}

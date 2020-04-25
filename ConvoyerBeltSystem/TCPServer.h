@@ -13,6 +13,8 @@
 #define TCP_PORT 5555
 #define TELNET_PORT 4444
 
+#define BUF_SIZE 128
+
 using namespace std;
 
 class TCPServer
@@ -29,8 +31,7 @@ private:
 	char host[NI_MAXHOST];
 	char svc[NI_MAXSERV];	// services
 	int clientSocket;
-	int buffersize = 128;
-	char buffer[];
+	char buffer[BUF_SIZE];
 
 	int init();
 

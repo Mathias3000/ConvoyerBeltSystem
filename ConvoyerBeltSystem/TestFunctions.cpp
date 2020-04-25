@@ -2,11 +2,9 @@
 
 void testTCPServer()
 {
-	TCPServer* server = new TCPServer(inet_addr(CONVBELT_IP), TCP_PORT);
+	TCPServer* server = new TCPServer(inet_addr(HOST_IP), TCP_PORT);
 
-	while (1) {
-
-	}
+	while (1) {}
 }
 
 void testDisplay()
@@ -36,16 +34,19 @@ void testDisplay()
 	d->display(speed2);
 	d->displayLine(" rms! ");
 
-	while (1) {
-
-	}
+	while (1) {}
 }
 
 void testTelnet()
 {
 	TelnetServer* telnetServer = new TelnetServer();
 
-	while (1) {
+	while (1) {}
+}
 
-	}
+void testTCPClient()
+{
+	TCPClient* client = new TCPClient(inet_addr(RIGHT_CONVBELT_IP), TCP_PORT);
+
+	while (1){}
 }
