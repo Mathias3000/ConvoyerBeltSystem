@@ -2,7 +2,8 @@
 
 void testTCPServer()
 {
-	TCPServer* server = new TCPServer();
+	int port = 5555;
+	TCPServer* server = new TCPServer(port);
 
 	while (1) {
 

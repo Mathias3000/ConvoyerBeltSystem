@@ -1,7 +1,9 @@
 #include "TCPServer.h"
 #include <string.h>
 
-TCPServer::TCPServer() {
+TCPServer::TCPServer(int port) {
+
+	this->port = port;
 	buffer[buffersize];		// init buffer with size
 	init();
 }

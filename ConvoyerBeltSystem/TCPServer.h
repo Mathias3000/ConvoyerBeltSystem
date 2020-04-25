@@ -13,7 +13,7 @@ class TCPServer
 {
 private: 
 
-	int port = 5555;
+	int port = 5555;	// default
 	in_addr_t systemAddr = inet_addr("192.168.7.2");
 	in_addr_t convBeltAddr = inet_addr("91.0.0.7");
 
@@ -30,8 +30,9 @@ private:
 	int init();
 
 public: 
-	TCPServer();
+	TCPServer(int port);
 	~TCPServer();
+	char* recv();
 
 
 };
