@@ -1,7 +1,11 @@
 #pragma once
-class display
+class Display
 {
 public:
-	int displayString(char* string);
+	int display(char* string);
+	int displayLine(char* string);	// with carriage return
+	int display(int integerValue); 
+	int display(double doubleValue);
+
 };
 
