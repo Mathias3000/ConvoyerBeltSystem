@@ -2,8 +2,7 @@
 
 void testTCPServer()
 {
-	int port = 5555;
-	TCPServer* server = new TCPServer(port);
+	TCPServer* server = new TCPServer(inet_addr(CONVBELT_IP), TCP_PORT);
 
 	while (1) {
 
@@ -36,6 +35,15 @@ void testDisplay()
 	d->display(": ");
 	d->display(speed2);
 	d->displayLine(" rms! ");
+
+	while (1) {
+
+	}
+}
+
+void testTelnet()
+{
+	TelnetServer* telnetServer = new TelnetServer();
 
 	while (1) {
 

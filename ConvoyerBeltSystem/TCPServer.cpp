@@ -1,9 +1,10 @@
 #include "TCPServer.h"
 #include <string.h>
 
-TCPServer::TCPServer(int port) {
+TCPServer::TCPServer(in_addr_t IPAddress, int port) {
 
 	this->port = port;
+	socketAddress = IPAddress;
 	buffer[buffersize];		// init buffer with size
 	init();
 }
@@ -20,21 +21,28 @@ int TCPServer::init() {
 
 	// Bind socket to IP address and port
 	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = systemAddr;	// or INADDR_ANY to use the address of the BB
-	server.sin_port = htons(port);			// set to 5555
-	inet_pton(AF_INET, "0.0.0.0", &server.sin_addr);
-	if (bind(listening, (sockaddr*)&server, sizeof(server)) == -1) {
+	server.sin_addr.s_addr = socketAddress;	// or INADDR_ANY to use the address of the BB
+	server.sin_port = htons(port);			// default set to 5555
+	// inet_pton(AF_INET, "0.0.0.0", &server.sin_addr);
+	//if (bind(listening, (sockaddr*)&server, sizeof(server)) == -1) {
+	//	cerr << "Can't bind to IP/port";
+	//	return -2;
+	//}
+
+	int err = bind(listening, (sockaddr*)&server, sizeof(server));
+
+	if (err == -1) {
 		cerr << "Can't bind to IP/port";
 		return -2;
 	}
+
+	cout << "Listening to clients" << endl;
 
 	// Mark the socket for listening
 	if (listen(listening, SOMAXCONN) == -1) {
 		cerr << "Can't listen!" << errno;
 		return -3;
 	}
-
-	cout << "Listening to clients" << endl;
 
 	// Accept a call
 	clientSize = sizeof(client);
