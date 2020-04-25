@@ -7,8 +7,8 @@
 #include <string>
 #include <iostream>
 
-#define HOST_IP "192.168.7.2"
-#define CONVBELT_IP "91.0.0.7"
+#define HOST_IP "192.168.7.2"			// telnet
+#define CONVBELT_IP "91.0.0.7"			// tcp
 
 #define TCP_PORT 5555
 #define TELNET_PORT 4444
