@@ -74,6 +74,10 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>C:\Users\nicol\Documents\GitHub\ConvoyerBeltSystem\ConvoyerBeltSystem\Hardware Functions;C:\Users\nicol\Documents\GitHub\ConvoyerBeltSystem\ConvoyerBeltSystem;$(IncludePath)</IncludePath>
+    <ProjectPublicIncludePath>C:\Users\nicol\Documents\GitHub\ConvoyerBeltSystem\ConvoyerBeltSystem;$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
+  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="ChainMode.cpp" />
     <ClCompile Include="Command.cpp" />
@@ -81,6 +85,12 @@
     <ClCompile Include="diaTimer.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Encoder.cpp" />
+    <ClCompile Include="Hardware Functions\cons.c" />
+    <ClCompile Include="Hardware Functions\funcs.c" />
+    <ClCompile Include="Hardware Functions\gpio.c" />
+    <ClCompile Include="Hardware Functions\pwm.c" />
+    <ClCompile Include="Hardware Functions\qep.c" />
+    <ClCompile Include="Hardware Functions\spi.c" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="ICommand.cpp" />
     <ClCompile Include="keyboard.cpp" />
@@ -109,6 +119,12 @@
     <ClInclude Include="diaTimer.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Encoder.h" />
+    <ClInclude Include="Hardware Functions\cons.h" />
+    <ClInclude Include="Hardware Functions\funcs.h" />
+    <ClInclude Include="Hardware Functions\gpio.h" />
+    <ClInclude Include="Hardware Functions\pwm.h" />
+    <ClInclude Include="Hardware Functions\qep.h" />
+    <ClInclude Include="Hardware Functions\spi.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="keyboard.h" />
