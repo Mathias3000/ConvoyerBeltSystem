@@ -71,7 +71,6 @@
     <ClCompile Include="SpeedProfile.cpp">
       <Filter>MotorController\Profile</Filter>
     </ClCompile>
-
     <ClCompile Include="Hardware Functions\cons.c">
       <Filter>Hardware Functions</Filter>
     </ClCompile>
@@ -89,7 +88,9 @@
     </ClCompile>
     <ClCompile Include="Hardware Functions\spi.c">
       <Filter>Hardware Functions</Filter>
-
+    </ClCompile>
+    <ClCompile Include="MotorController.cpp">
+      <Filter>MotorController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +166,6 @@
     <ClInclude Include="SpeedProfile.h">
       <Filter>MotorController\Profile</Filter>
     </ClInclude>
-
     <ClInclude Include="Hardware Functions\cons.h">
       <Filter>Hardware Functions</Filter>
     </ClInclude>
@@ -183,7 +183,9 @@
     </ClInclude>
     <ClInclude Include="Hardware Functions\spi.h">
       <Filter>Hardware Functions</Filter>
-
+    </ClInclude>
+    <ClInclude Include="MotorController.h">
+      <Filter>MotorController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
