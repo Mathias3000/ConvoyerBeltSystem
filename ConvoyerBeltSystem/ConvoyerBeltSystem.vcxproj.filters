@@ -74,6 +74,24 @@
     <ClCompile Include="SpeedProfile.cpp">
       <Filter>MotorController\Profile</Filter>
     </ClCompile>
+    <ClCompile Include="Hardware Functions\cons.c">
+      <Filter>Hardware Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Hardware Functions\funcs.c">
+      <Filter>Hardware Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Hardware Functions\gpio.c">
+      <Filter>Hardware Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Hardware Functions\pwm.c">
+      <Filter>Hardware Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Hardware Functions\qep.c">
+      <Filter>Hardware Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Hardware Functions\spi.c">
+      <Filter>Hardware Functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">
@@ -151,6 +169,24 @@
     <ClInclude Include="SpeedProfile.h">
       <Filter>MotorController\Profile</Filter>
     </ClInclude>
+    <ClInclude Include="Hardware Functions\cons.h">
+      <Filter>Hardware Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Hardware Functions\funcs.h">
+      <Filter>Hardware Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Hardware Functions\gpio.h">
+      <Filter>Hardware Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Hardware Functions\pwm.h">
+      <Filter>Hardware Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Hardware Functions\qep.h">
+      <Filter>Hardware Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Hardware Functions\spi.h">
+      <Filter>Hardware Functions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FSM framework">
@@ -191,6 +227,9 @@
     </Filter>
     <Filter Include="MotorController\Profile">
       <UniqueIdentifier>{2d03bc26-fc20-49ee-9d81-0b8d485290fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hardware Functions">
+      <UniqueIdentifier>{9c62b088-95ea-41fe-975e-0a596d383097}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

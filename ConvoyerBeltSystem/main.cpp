@@ -3,8 +3,8 @@
 
 int main()
 {
-    printf("hello from ConvoyerBeltSystem!\n");
-    testTCPServer();
-
+    // printf("hello from ConvoyerBeltSystem!\n");
+    //testTCPServer();
+	testMotor(0);
     return 0;
 }

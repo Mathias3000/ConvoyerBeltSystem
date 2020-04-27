@@ -1,6 +1,14 @@
 #pragma once
 #include <string>
+#include <string.h>
 #include "TCPServer.h"
+extern "C" {
+	#include <gpio.h>
+	#include <spi.h>
+	#include <pwm.h>
+}
+
+
 
 using namespace std;
 
@@ -8,6 +16,6 @@ using namespace std;
 void testTCPServer();
 void testKeyPad();
 void testPotentiometer();
-void testMotor();
+void testMotor(int dir);
 
 
