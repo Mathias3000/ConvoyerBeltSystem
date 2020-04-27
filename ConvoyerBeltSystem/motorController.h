@@ -3,11 +3,11 @@
 
 using namespace std;
 
-class motorController
+class MotorController
 {
 private:
 	double currentSpeed;
-	char currentState [MAX_STATE_NAME];
+	char currentState[MAX_STATE_NAME];
 	int currentSteps;
 	enum MotorState
 	{
@@ -20,7 +20,7 @@ public:
 	int setSpeed(double speed);
 	double getCurrentSpeed(void);
 	MotorState getCurrentMotorState(void);
-	int setDirection(int direction); 
+	int setDirection(int direction);
 	bool readyToRecvPayload(void);
 	bool finishedProfile(void);
 };

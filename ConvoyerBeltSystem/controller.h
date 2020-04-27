@@ -1,5 +1,5 @@
 #pragma once
-class controller
+class Controller
 {
 public:
 	int setValue(double value);

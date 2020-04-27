@@ -1,5 +1,10 @@
 #pragma once
-class motor
+
+#include <gpio.h>
+
+class Motor
 {
+public:
+	int initMotorHBrigde();
 };
 
