@@ -55,7 +55,6 @@
     <ClCompile Include="TestFunctions.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Controller.cpp">
       <Filter>MotorController\Controller</Filter>
     </ClCompile>
@@ -71,26 +70,29 @@
     <ClCompile Include="SpeedProfile.cpp">
       <Filter>MotorController\Profile</Filter>
     </ClCompile>
-    <ClCompile Include="Hardware Functions\cons.c">
-      <Filter>HardwareFunctions</Filter>
-    </ClCompile>
-    <ClCompile Include="Hardware Functions\funcs.c">
-      <Filter>HardwareFunctions</Filter>
-    </ClCompile>
-    <ClCompile Include="Hardware Functions\gpio.c">
-      <Filter>HardwareFunctions</Filter>
-    </ClCompile>
-    <ClCompile Include="Hardware Functions\pwm.c">
-      <Filter>HardwareFunctions</Filter>
-    </ClCompile>
-    <ClCompile Include="Hardware Functions\qep.c">
-      <Filter>HardwareFunctions</Filter>
-    </ClCompile>
-    <ClCompile Include="Hardware Functions\spi.c">
-      <Filter>HardwareFunctions</Filter>
-    </ClCompile>
     <ClCompile Include="MotorController.cpp">
       <Filter>MotorController</Filter>
+    </ClCompile>
+    <ClCompile Include="cons.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="funcs.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="gpio.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="pwm.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="qep.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="spi.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,26 +168,26 @@
     <ClInclude Include="SpeedProfile.h">
       <Filter>MotorController\Profile</Filter>
     </ClInclude>
-    <ClInclude Include="Hardware Functions\cons.h">
-      <Filter>HardwareFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Hardware Functions\funcs.h">
-      <Filter>HardwareFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Hardware Functions\gpio.h">
-      <Filter>HardwareFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Hardware Functions\pwm.h">
-      <Filter>HardwareFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Hardware Functions\qep.h">
-      <Filter>HardwareFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="Hardware Functions\spi.h">
-      <Filter>HardwareFunctions</Filter>
-    </ClInclude>
     <ClInclude Include="MotorController.h">
       <Filter>MotorController</Filter>
+    </ClInclude>
+    <ClInclude Include="spi.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="cons.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="funcs.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="pwm.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="qep.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -228,8 +230,8 @@
     <Filter Include="MotorController\Profile">
       <UniqueIdentifier>{2d03bc26-fc20-49ee-9d81-0b8d485290fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HardwareFunctions">
-      <UniqueIdentifier>{9c62b088-95ea-41fe-975e-0a596d383097}</UniqueIdentifier>
+    <Filter Include="FSM framework\HardwareFunctions">
+      <UniqueIdentifier>{cc175e9b-e054-46f9-95be-6d025468afa7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

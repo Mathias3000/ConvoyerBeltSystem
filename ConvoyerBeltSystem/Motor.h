@@ -1,6 +1,9 @@
 #pragma once
 
-#include <gpio.h>
+//#include "gpio.h"
+extern "C" {
+#include "gpio.h"
+}
 
 class Motor
 {

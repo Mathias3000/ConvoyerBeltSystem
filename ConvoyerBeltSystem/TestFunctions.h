@@ -2,15 +2,19 @@
 #include <string>
 #include <string.h>
 #include "TCPServer.h"
+#include "Display.h"
+#include "TelnetServer.h"
+#include "TCPClient.h"
+
+//#include "gpio.h"
+//#include "spi.h"
+//#include "pwm.h"
 
 extern "C" {
-	#include <gpio.h>
-	#include <spi.h>
-	#include <pwm.h>
+#include "gpio.h"
+#include "spi.h"
+#include "pwm.h"
 }
-
-
-
 
 using namespace std;
 
