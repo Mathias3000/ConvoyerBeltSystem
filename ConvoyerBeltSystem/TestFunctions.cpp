@@ -139,12 +139,7 @@ void testMotor(int dir)
 	strcpy(spiMotorRef.MISOpin, "P9_29_pinmux");
 	strcpy(spiMotorRef.MOSIpin, "P9_30_pinmux");
 	strcpy(spiMotorRef.SCLKpin, "P9_31_pinmux");
-	/*
-	strcpy(spiMotor->CSpin, "P9_28_pinmux");
-	strcpy(spiMotor->MISOpin, "P9_29_pinmux");
-	strcpy(spiMotor->MOSIpin, "P9_30_pinmux");
-	strcpy(spiMotor->SCLKpin, "P9_31_pinmux");
-	*/
+	
 	spiDescriptor* spiDescMotor = new spiDescriptor;
 	spiDescMotor->spiNum = 2;
 	spiDescMotor->bitsPerWord = 8;
@@ -160,7 +155,6 @@ void testMotor(int dir)
 	usleep(50);
 	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x6D18);
 	
-
 	/*
 	IN1, IN2: Logic input control of OUT1, OUT2
 	Code example Pilsan:
