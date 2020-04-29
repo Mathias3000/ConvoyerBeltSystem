@@ -82,9 +82,6 @@
     <ClCompile Include="gpio.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>FSM framework\HardwareFunctions</Filter>
-    </ClCompile>
     <ClCompile Include="pwm.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
@@ -94,6 +91,7 @@
     <ClCompile Include="spi.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">

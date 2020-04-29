@@ -121,3 +121,16 @@ void testMotor(int dir)
 	pwm->pwmNum = 7;
 	*/
 }
+
+void testKeyBoard()
+{
+	Keyboard* k = new Keyboard();
+	char readValue;
+
+	while (true) {
+		readValue = k->getPressedKey();
+		cout << "Key pressed: " << readValue << endl;
+		this_thread::sleep_for(chrono::milliseconds(150));
+	}
+
+}

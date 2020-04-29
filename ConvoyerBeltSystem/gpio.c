@@ -88,46 +88,93 @@ Fills the struct kbdDescriptor with appropriate values
 */
 extern int initKeyboard(kbdDescriptor* kbd) {
 	int retVal;
-	kbd->kbdOut0.gpioNum = 66;
+	//kbd->kbdOut0.gpioNum = 66;
+	//// P8_7 = GPIO2_2: 32*2+2=66 - KBD-OUT-0
+	//strcpy(kbd->kbdOut0.direction, "out");
+	//retVal = gpioOpen(&(kbd->kbdOut0));
+	//if (retVal < 0) return (-1);
+	//gpioSetValue(&(kbd->kbdOut0), 1);
+	//kbd->kbdOut1.gpioNum = 67;
+	//// P8_8 = GPIO2_3: 32*2+3=67 - KBD-OUT-1
+	//strcpy(kbd->kbdOut1.direction, "out");
+	//retVal = gpioOpen(&(kbd->kbdOut1));
+	//if (retVal < 0) return (-1);
+	//gpioSetValue(&(kbd->kbdOut1), 1);
+	//kbd->kbdOut2.gpioNum = 69;
+	//// P8_9 = GPIO2_5: 32*2+5=69 - KBD-OUT-2
+	//strcpy(kbd->kbdOut2.direction, "out");
+	//retVal = gpioOpen(&(kbd->kbdOut2));
+	//if (retVal < 0) return (-1);
+	//gpioSetValue(&(kbd->kbdOut2), 1);
+	//kbd->kbdOut3.gpioNum = 68;
+	//// P8_10 = GPIO2_4: 32*2+2=68 - KBD-OUT-3
+	//strcpy(kbd->kbdOut3.direction, "out");
+	//retVal = gpioOpen(&(kbd->kbdOut3));
+	//if (retVal < 0) return (-1);
+	//gpioSetValue(&(kbd->kbdOut3), 1);
+	//kbd->kbdIn0.gpioNum = 45;
+	//// P8_11 = GPIO1_13: 32*1+13=45 - KBD-IN-0
+	//strcpy(kbd->kbdIn0.direction, "in");
+	//retVal = gpioOpen(&(kbd->kbdIn0));
+	//if (retVal < 0) return (-1);
+	//kbd->kbdIn1.gpioNum = 44;
+	//// P8_12 = GPIO1_12: 32*1+12=44 - KBD-IN-1
+	//strcpy(kbd->kbdIn1.direction, "in");
+	//retVal = gpioOpen(&(kbd->kbdIn1));
+	//if (retVal < 0) return (-1);
+	//kbd->kbdIn2.gpioNum = 47;
+	//// P8_15 = GPIO1_15: 32*1+15=47 - KBD-IN-2
+	//strcpy(kbd->kbdIn2.direction, "in");
+	//retVal = gpioOpen(&(kbd->kbdIn2));
+	//if (retVal < 0) return (-1);
+	//kbd->kbdIn3.gpioNum = 46;
+	//// P8_16 = GPIO1_14: 32*1+14=46 - KBD-IN-3
+	//strcpy(kbd->kbdIn3.direction, "in");
+	//retVal = gpioOpen(&(kbd->kbdIn3));
+	//if (retVal < 0) return (-1);
+	//return 0;
+
+	// myCode
+	kbd->kbdOut0.gpioNum = 68;
 	// P8_7 = GPIO2_2: 32*2+2=66 - KBD-OUT-0
 	strcpy(kbd->kbdOut0.direction, "out");
 	retVal = gpioOpen(&(kbd->kbdOut0));
 	if (retVal < 0) return (-1);
 	gpioSetValue(&(kbd->kbdOut0), 1);
-	kbd->kbdOut1.gpioNum = 67;
+	kbd->kbdOut1.gpioNum = 69;
 	// P8_8 = GPIO2_3: 32*2+3=67 - KBD-OUT-1
 	strcpy(kbd->kbdOut1.direction, "out");
 	retVal = gpioOpen(&(kbd->kbdOut1));
 	if (retVal < 0) return (-1);
 	gpioSetValue(&(kbd->kbdOut1), 1);
-	kbd->kbdOut2.gpioNum = 69;
+	kbd->kbdOut2.gpioNum = 67;	
 	// P8_9 = GPIO2_5: 32*2+5=69 - KBD-OUT-2
 	strcpy(kbd->kbdOut2.direction, "out");
 	retVal = gpioOpen(&(kbd->kbdOut2));
 	if (retVal < 0) return (-1);
 	gpioSetValue(&(kbd->kbdOut2), 1);
-	kbd->kbdOut3.gpioNum = 68;
+	kbd->kbdOut3.gpioNum = 66;
 	// P8_10 = GPIO2_4: 32*2+2=68 - KBD-OUT-3
 	strcpy(kbd->kbdOut3.direction, "out");
 	retVal = gpioOpen(&(kbd->kbdOut3));
 	if (retVal < 0) return (-1);
 	gpioSetValue(&(kbd->kbdOut3), 1);
-	kbd->kbdIn0.gpioNum = 45;
+	kbd->kbdIn0.gpioNum = 46;
 	// P8_11 = GPIO1_13: 32*1+13=45 - KBD-IN-0
 	strcpy(kbd->kbdIn0.direction, "in");
 	retVal = gpioOpen(&(kbd->kbdIn0));
 	if (retVal < 0) return (-1);
-	kbd->kbdIn1.gpioNum = 44;
+	kbd->kbdIn1.gpioNum = 47;
 	// P8_12 = GPIO1_12: 32*1+12=44 - KBD-IN-1
 	strcpy(kbd->kbdIn1.direction, "in");
 	retVal = gpioOpen(&(kbd->kbdIn1));
 	if (retVal < 0) return (-1);
-	kbd->kbdIn2.gpioNum = 47;
+	kbd->kbdIn2.gpioNum = 44;
 	// P8_15 = GPIO1_15: 32*1+15=47 - KBD-IN-2
 	strcpy(kbd->kbdIn2.direction, "in");
 	retVal = gpioOpen(&(kbd->kbdIn2));
 	if (retVal < 0) return (-1);
-	kbd->kbdIn3.gpioNum = 46;
+	kbd->kbdIn3.gpioNum = 45;
 	// P8_16 = GPIO1_14: 32*1+14=46 - KBD-IN-3
 	strcpy(kbd->kbdIn3.direction, "in");
 	retVal = gpioOpen(&(kbd->kbdIn3));
