@@ -1,6 +1,15 @@
 #include "TestFunctions.h"
 #include <cstdio>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <pthread.h>
+
 void testTCPServer()
 {
 	TCPServer* server = new TCPServer(inet_addr(HOST_IP), TCP_PORT);
@@ -76,8 +85,8 @@ void testADC() {
 	spiDescADC->spiNum = 1;
 	spiDescADC->bitsPerWord = 8;
 	spiDescADC->mode = 0;
-	spiDescADC->flags = 2;
-	spiDescADC->speed = 110000; // ???...
+	spiDescADC->flags = O_RDWR;
+	spiDescADC->speed = 1000000; 
 	spiDescADC->pinmux = spiADCRef;
 
 	retVal = spiSetPinmux(spiDescADC);
@@ -102,6 +111,7 @@ void testMotor(int dir)
 	H-bridge pin DIS is tied to GPIO2_12 (P8_39) = 76 (GPIO SW-number).
 	H-bridge pin ENBL is tied to GPIO2_15 (P8_38) = 79 (GPIO SW-number).
 	*/
+
 	/*
 	When ENBL is logic HIGH, the H-Bridge is operational.When ENBL is logic LOW, the H-Bridge outputs are tri-stated and placed in Sleep mode.
 	*/
@@ -139,19 +149,17 @@ void testMotor(int dir)
 	spiDescMotor->spiNum = 2;
 	spiDescMotor->bitsPerWord = 8;
 	spiDescMotor->mode = 1;
-	spiDescMotor->flags = 2;
-	spiDescMotor->speed = 1e6; // ???...
+	spiDescMotor->flags = O_RDWR;
+	spiDescMotor->speed = 1000000; 
 	spiDescMotor->pinmux = spiMotorRef;
 
-	retVal = spiSetPinmux(spiDescMotor);
+	retVal = spiSetPinmux(spiDescMotor); //Breakpoint setzen
 	retVal = spiOpen(spiDescMotor);
-	sleep(1);
-	//readBackValSPI = spiXfer16Bits(spiDescMotor, 0x0);
-	readBackValSPI = spiXfer16Bits(spiDescMotor, 0xFD98);
-	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x7D98);
-	while (true) {
-		readBackValSPI = spiXfer16Bits(spiDescMotor, 0xFD98);
-	};
+
+	readBackValSPI = spiXfer16Bits(spiDescMotor, 0xED18);
+	usleep(50);
+	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x6D18);
+	
 
 	/*
 	IN1, IN2: Logic input control of OUT1, OUT2
