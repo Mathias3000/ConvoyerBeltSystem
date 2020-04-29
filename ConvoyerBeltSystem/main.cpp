@@ -1,9 +1,12 @@
 #include <cstdio>
+#include "TestFunctions.h"
 
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
-    // start state maschine 
-    // TODO: see how to implement in the best way. Don't use god-classes: refer to OO design patterns
+
+    //testTCPServer();
+	//testMotor(0);
+	testADC();
     return 0;
 }
