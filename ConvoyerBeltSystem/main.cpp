@@ -5,8 +5,13 @@ int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
 
+
     //testTCPServer();
 	//testMotor(0);
 	testADC();
+
+    testKeyBoard();
+
+
     return 0;
 }

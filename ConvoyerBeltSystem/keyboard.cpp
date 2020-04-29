@@ -5,6 +5,8 @@ int keyCount;
 
 Keyboard :: Keyboard() {
 	printf("Keyboard Konstruktor!\n");	
+	kbdd = new kbdDescriptor();
+	initKeyboard(kbdd);
 	return;
 }
 
@@ -15,6 +17,6 @@ Keyboard :: ~Keyboard() {
 
 char Keyboard::getPressedKey( )
 {
-	printf(".\n"); //	Instead of printing dots the keyboard could be scanned here
-	return pressedKey;
+	return getKey(kbdd);
+
 }

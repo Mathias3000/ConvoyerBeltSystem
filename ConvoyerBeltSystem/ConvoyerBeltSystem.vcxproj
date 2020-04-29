@@ -74,23 +74,16 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <IncludePath>C:\Users\nicol\Documents\GitHub\ConvoyerBeltSystem\ConvoyerBeltSystem\Hardware Functions;C:\Users\nicol\Documents\GitHub\ConvoyerBeltSystem\ConvoyerBeltSystem;$(IncludePath)</IncludePath>
-    <ProjectPublicIncludePath>C:\Users\nicol\Documents\GitHub\ConvoyerBeltSystem\ConvoyerBeltSystem;$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
-  </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="ChainMode.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="cons.c" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="diaTimer.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Encoder.cpp" />
-    <ClCompile Include="Hardware Functions\cons.c" />
-    <ClCompile Include="Hardware Functions\funcs.c" />
-    <ClCompile Include="Hardware Functions\gpio.c" />
-    <ClCompile Include="Hardware Functions\pwm.c" />
-    <ClCompile Include="Hardware Functions\qep.c" />
-    <ClCompile Include="Hardware Functions\spi.c" />
+    <ClCompile Include="funcs.c" />
+    <ClCompile Include="gpio.c" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="ICommand.cpp" />
     <ClCompile Include="keyboard.cpp" />
@@ -102,8 +95,11 @@
     <ClCompile Include="MotorController.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Potentiometer.cpp" />
+    <ClCompile Include="pwm.c" />
+    <ClCompile Include="qep.c" />
     <ClCompile Include="setMyIP.cpp" />
     <ClCompile Include="SpeedProfile.cpp" />
+    <ClCompile Include="spi.c" />
     <ClCompile Include="stateMachine.cpp" />
     <ClCompile Include="stateTable.cpp" />
     <ClCompile Include="systemManager.cpp" />
@@ -115,17 +111,14 @@
   <ItemGroup>
     <ClInclude Include="ChainMode.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="cons.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="diaTimer.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Encoder.h" />
-    <ClInclude Include="Hardware Functions\cons.h" />
-    <ClInclude Include="Hardware Functions\funcs.h" />
-    <ClInclude Include="Hardware Functions\gpio.h" />
-    <ClInclude Include="Hardware Functions\pwm.h" />
-    <ClInclude Include="Hardware Functions\qep.h" />
-    <ClInclude Include="Hardware Functions\spi.h" />
+    <ClInclude Include="funcs.h" />
+    <ClInclude Include="gpio.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="keyboard.h" />
@@ -137,7 +130,10 @@
     <ClInclude Include="myFunctions.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="Potentiometer.h" />
+    <ClInclude Include="pwm.h" />
+    <ClInclude Include="qep.h" />
     <ClInclude Include="SpeedProfile.h" />
+    <ClInclude Include="spi.h" />
     <ClInclude Include="stateMachine.h" />
     <ClInclude Include="stateTable.h" />
     <ClInclude Include="systemManager.h" />

@@ -24,6 +24,7 @@ void SystemManager ::init() {
 	// MAXDIA = 9, MAXLINES = 66
 	// Should these be exceeded, please correct!
 
+
 	/*
 	1. Arraywith states, events and actions showing what shallhappen:Entry[i]: 
 	actState -nextState -event -time -action -conditionEach diagram has one array. 
@@ -42,11 +43,21 @@ void SystemManager ::init() {
 
 	//Chain Mode:
 	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction10,myConditionTrue);
+
+	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
+	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
+	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
+
+	myStateMachine->tab[1][0] = new TableEntry ("StateC","StateD","Trigg1",0,myAction10,myConditionTrue);
+
 	myStateMachine->tab[1][1] = new TableEntry ("StateD","StateD","Timer1",4000,myAction11,myCondition11);
 	myStateMachine->tab[1][2] = new TableEntry ("StateD","StateE","Timer1",4000,myAction12,myCondition12);
 	myStateMachine->tab[1][3] = new TableEntry ("StateE","StateC","Timer1",3000,myAction13,myConditionTrue);
 
+
 	//Follow Profile
+
+
 	myStateMachine->tab[2][0] = new TableEntry ("StateK","StateK","Timer2",500,myAction20,myConditionTrue);
 
 	// Initialize timer names for all diagrams
@@ -97,8 +108,11 @@ void SystemManager :: startStateMachine() {
 }
 
 void myAction00() {
+
 	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
-	n++;
+
+	printf(" StateA -> Transition00 -> StateA\n"); 
+>>>>>>> 84285679acec9efc1b6b8cbf1cc1bf1121725a0d	n++;
 	return;
 }
 
@@ -114,11 +128,13 @@ void myAction02() {
 	return;
 }
 
+
 void myAction03() {
 	printf(" StateB -> Transition02 -> StateA\n");
 	n = 0;
 	return;
 }
+
 
 void myAction10() {
 	printf(" StateC -> Transition10 -> StateD\n"); 
