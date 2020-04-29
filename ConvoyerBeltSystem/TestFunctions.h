@@ -2,6 +2,9 @@
 #include <string>
 #include <string.h>
 #include "TCPServer.h"
+#include "Display.h"
+#include "TelnetServer.h"
+#include "TCPClient.h"
 
 extern "C" {
 	#include <gpio.h>
@@ -22,5 +25,6 @@ void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 addre
 void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
+void testADC();
 
 

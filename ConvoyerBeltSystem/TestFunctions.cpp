@@ -1,6 +1,15 @@
 #include "TestFunctions.h"
 #include <cstdio>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <pthread.h>
+
 void testTCPServer()
 {
 	TCPServer* server = new TCPServer(inet_addr(HOST_IP), TCP_PORT);
@@ -52,8 +61,49 @@ void testTCPClient()
 	while (1){}
 }
 
+void testADC() {
+	unsigned short readBackValADC = 0;
+	int retVal = 0;
+	/*
+	CH0 - IN - Output from AD223 -> current measurement from Motorcontroller
+	CH1 - IN - Output from Poti
+	CH2 - Internal Poti (purpose?)
+	CH3 - Power_12V (purpose?)
+	DOUT -> TXB0104 Levelshifter B1 -> A1 -> SPI0_MISO
+	DIN -> SPI0_MOSI
+	CS, SCLK - SPI0
+	*/
+
+	spiPinmux spiADC;
+	spiPinmux& spiADCRef = spiADC;
+	strcpy(spiADCRef.CSpin, "P9_17_pinmux");
+	strcpy(spiADCRef.MISOpin, "P9_21_pinmux");
+	strcpy(spiADCRef.MOSIpin, "P9_18_pinmux");
+	strcpy(spiADCRef.SCLKpin, "P9_22_pinmux");
+
+	spiDescriptor* spiDescADC = new spiDescriptor;
+	spiDescADC->spiNum = 1;
+	spiDescADC->bitsPerWord = 8;
+	spiDescADC->mode = 0;
+	spiDescADC->flags = O_RDWR;
+	spiDescADC->speed = 1000000; 
+	spiDescADC->pinmux = spiADCRef;
+
+	retVal = spiSetPinmux(spiDescADC);
+	retVal = spiOpen(spiDescADC);
+
+	while (true)
+	{
+		readBackValADC = spiXfer8Bits(spiDescADC, 0x90); //Channel 1
+		readBackValADC = spiXfer16Bits(spiDescADC, 0x0);
+		sleep(0.1);
+	}
+}
+
 void testMotor(int dir)
 {
+	int retVal = 0;
+	unsigned short readBackValSPI = 0;
 	/*
 	Connection information:
 	H-bridge pin IN1 is tied to pwm7 pin A (P8_19).
@@ -61,12 +111,10 @@ void testMotor(int dir)
 	H-bridge pin DIS is tied to GPIO2_12 (P8_39) = 76 (GPIO SW-number).
 	H-bridge pin ENBL is tied to GPIO2_15 (P8_38) = 79 (GPIO SW-number).
 	*/
+
 	/*
 	When ENBL is logic HIGH, the H-Bridge is operational.When ENBL is logic LOW, the H-Bridge outputs are tri-stated and placed in Sleep mode.
 	*/
-	int retVal = 0;
-	unsigned short readBackValSPI = 0;
-
 	gpioDescriptor* bridgeEN = new gpioDescriptor; //(gpioDescriptor*)malloc(sizeof(gpioDescriptor));
 	bridgeEN->gpioNum = 79;
 	strcpy(bridgeEN->direction, "out");
@@ -83,6 +131,7 @@ void testMotor(int dir)
 	retVal = gpioSetValue(bridgeDIS, 0);
 
 	retVal = gpioGetValue(bridgeEN);
+	retVal = gpioGetValue(bridgeDIS);
 
 	spiPinmux spiMotor;
 	spiPinmux& spiMotorRef = spiMotor;
@@ -100,17 +149,17 @@ void testMotor(int dir)
 	spiDescMotor->spiNum = 2;
 	spiDescMotor->bitsPerWord = 8;
 	spiDescMotor->mode = 1;
-	spiDescMotor->flags = 2;
-	spiDescMotor->speed = 10e6; // ???...
-	spiDescMotor->pinmux = spiMotor;
+	spiDescMotor->flags = O_RDWR;
+	spiDescMotor->speed = 1000000; 
+	spiDescMotor->pinmux = spiMotorRef;
 
-	retVal = spiSetPinmux(spiDescMotor);
+	retVal = spiSetPinmux(spiDescMotor); //Breakpoint setzen
 	retVal = spiOpen(spiDescMotor);
+
+	readBackValSPI = spiXfer16Bits(spiDescMotor, 0xED18);
+	usleep(50);
+	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x6D18);
 	
-	//readBackValSPI = spiXfer16Bits(spiDescMotor, 0x0);
-	readBackValSPI = spiXfer16Bits(spiDescMotor, 0xFD98);
-	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x7D98);
-	while (true);
 
 	/*
 	IN1, IN2: Logic input control of OUT1, OUT2
