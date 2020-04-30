@@ -42,8 +42,16 @@ void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 addre
 void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
+
 void testADC();
 void testKeyBoard();
 void* testSM(void*);
+
+
+void testKeyBoard();
+
+void testADC();
+
+
 
 

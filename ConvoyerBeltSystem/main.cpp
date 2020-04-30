@@ -5,6 +5,7 @@
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
+
     //testTCPServer();
 	//testMotor(0);
 	//testADC();
@@ -19,5 +20,16 @@ int main()
 	
 	systemManagerTest->startStateMachine();
 	pthread_join(threadKeyboard, NULL);
+
+
+
+    testKeyBoard();
+
+
+    //testTCPServer();
+	//testMotor(0);
+	testADC();
+
+
     return 0;
 }

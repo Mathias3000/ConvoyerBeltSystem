@@ -24,6 +24,13 @@ void SystemManager ::init() {
 	// MAXDIA = 9, MAXLINES = 66
 	// Should these be exceeded, please correct!
 
+
+	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
+	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
+	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
+
+	myStateMachine->tab[1][0] = new TableEntry ("StateC","StateD","Trigg1",0,myAction10,myConditionTrue);
+
 	/*
 	1. Arraywith states, events and actions showing what shallhappen:Entry[i]: 
 	actState -nextState -event -time -action -conditionEach diagram has one array. 
@@ -41,12 +48,25 @@ void SystemManager ::init() {
 	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_Idle", "myMotorController.finishedProfile", 0, myAction03, myConditionTrue);
 
 	//Chain Mode:
+
 	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle", "Chain_Idle", "Set speed", 0, myAction10, myConditionTrue);
 	myStateMachine->tab[1][1] = new TableEntry ("Chain_Idle", "Requested", "Request from left", 0, myAction11, myConditionTrue);
 	myStateMachine->tab[1][2] = new TableEntry ("Requested", "Requested", "Timer1", 4000, myAction12, myCondition12);
 	myStateMachine->tab[1][3] = new TableEntry ("StateE", "StateC", "Timer1", 3000, myAction13, myConditionTrue);
 
 	//Follow Profile
+
+	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction10,myConditionTrue);
+
+	myStateMachine->tab[1][1] = new TableEntry ("StateD","StateD","Timer1",4000,myAction11,myCondition11);
+	myStateMachine->tab[1][2] = new TableEntry ("StateD","StateE","Timer1",4000,myAction12,myCondition12);
+	myStateMachine->tab[1][3] = new TableEntry ("StateE","StateC","Timer1",3000,myAction13,myConditionTrue);
+
+
+
+	//Follow Profile
+
+
 	myStateMachine->tab[2][0] = new TableEntry ("StateK","StateK","Timer2",500,myAction20,myConditionTrue);
 
 	// Initialize timer names for all diagrams
@@ -99,7 +119,16 @@ void SystemManager :: startStateMachine() {
 }
 
 void myAction00() {
+
 	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
+
+
+	printf(" StateA -> Transition00 -> StateA\n"); 
+
+	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
+
+	n++;
+
 	return;
 }
 
@@ -113,6 +142,9 @@ void myAction02() {
 	printf(" Local_Idle -> Transition02 -> FollowProfile\n"); 
 	return;
 }
+
+
+
 
 void myAction03() {
 	printf(" FollowProfile -> Transition03 -> Local_Idle\n");
