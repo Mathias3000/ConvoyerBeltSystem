@@ -2,6 +2,7 @@
 #include "TestFunctions.h"
 #include "systemManager.h"
 
+
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
@@ -10,7 +11,8 @@ int main()
 	//testMotor(0);
 	//testADC();
     //testKeyBoard();
-
+	//testKeyBoard();
+	//testTCPServer();
 	
 	SystemManager* systemManagerTest = new SystemManager;
 	systemManagerTest->init();
@@ -19,17 +21,7 @@ int main()
 	pthread_create(&threadKeyboard, NULL, testSM, NULL);
 	
 	systemManagerTest->startStateMachine();
-	pthread_join(threadKeyboard, NULL);
-
-
-
-    testKeyBoard();
-
-
-    //testTCPServer();
-	//testMotor(0);
-	testADC();
-
+	//pthread_join(threadKeyboard, NULL);
 
     return 0;
 }

@@ -71,7 +71,7 @@ void StateMachine :: runToCompletion() {
 		if (sem_wait(&semEvent) != 0)
 			perror ("Sem wait"); // Wait for an event to arrive
 		actualEvent = getEvent(); // Get the event from the queue
-//		printf(actualEvent.c_str()); // For debug purposes only
+		printf(actualEvent.c_str()); // For debug purposes only
 		for (d = 0; d < diagrams; d++) {
 			for (i = 0; i < lines[d]; i++) {
 				if ((actualState[d] == tab[d][i]->actState) && 

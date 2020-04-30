@@ -177,9 +177,10 @@ void testKeyBoard()
 	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_local", "myMotorController.finishedProfile", 0, myAction03, myConditionTrue);
 */
 
+Keyboard* k = new Keyboard();
+
 void* testSM(void*)
 {	
-	Keyboard* k = new Keyboard();
 	char readValue;
 	while (true)
 	{	
