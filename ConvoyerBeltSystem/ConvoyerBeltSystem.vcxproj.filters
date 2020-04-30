@@ -71,8 +71,7 @@
       <Filter>MotorController\Profile</Filter>
     </ClCompile>
 
-    <ClCompile Include="Hardware Functions\cons.c">
-      <Filter>Hardware Functions</Filter>
+   
 
     <ClCompile Include="MotorController.cpp">
       <Filter>MotorController</Filter>
@@ -80,8 +79,7 @@
     <ClCompile Include="cons.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
 
-    <ClCompile Include="Hardware Functions\cons.c">
-      <Filter>Hardware Functions</Filter>
+   
 
     </ClCompile>
     <ClCompile Include="funcs.c">
@@ -97,8 +95,7 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
 
-    <ClCompile Include="spi.c">
-      <Filter>FSM framework\HardwareFunctions</Filter>
+   
 
 
     <ClCompile Include="Hardware Functions\spi.c">
@@ -108,8 +105,7 @@
     <ClCompile Include="systemManager.cpp">
       <Filter>FSM framework</Filter>
 
-    <ClCompile Include="spi.c">
-      <Filter>FSM framework\HardwareFunctions</Filter>
+   
 
     </ClCompile>
     <ClCompile Include="main.cpp" />
@@ -188,9 +184,7 @@
       <Filter>MotorController\Profile</Filter>
     </ClInclude>
 
-    <ClInclude Include="Hardware Functions\cons.h">
-      <Filter>Hardware Functions</Filter>
-
+  
 
     <ClInclude Include="MotorController.h">
       <Filter>MotorController</Filter>
@@ -198,8 +192,7 @@
     <ClInclude Include="spi.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
 
-    <ClInclude Include="Hardware Functions\cons.h">
-      <Filter>Hardware Functions</Filter>
+ 
 
     </ClInclude>
     <ClInclude Include="cons.h">
@@ -215,8 +208,7 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
 
-    <ClInclude Include="qep.h">
-      <Filter>FSM framework\HardwareFunctions</Filter>
+  
 
 
     <ClInclude Include="Hardware Functions\spi.h">
@@ -226,8 +218,7 @@
     <ClInclude Include="systemManager.h">
       <Filter>FSM framework</Filter>
 
-    <ClInclude Include="qep.h">
-      <Filter>FSM framework\HardwareFunctions</Filter>
+   
 
 
     </ClInclude>
