@@ -24,7 +24,6 @@ void SystemManager ::init() {
 	// MAXDIA = 9, MAXLINES = 66
 	// Should these be exceeded, please correct!
 
-
 	/*
 	1. Arraywith states, events and actions showing what shallhappen:Entry[i]: 
 	actState -nextState -event -time -action -conditionEach diagram has one array. 
@@ -39,25 +38,15 @@ void SystemManager ::init() {
 	myStateMachine->tab[0][0] = new TableEntry ("Local_Idle", "Local_Idle", "command=speed", 0, myAction00, myConditionTrue);
 	myStateMachine->tab[0][1] = new TableEntry ("Local_Idle", "Local_Idle", "command=direction", 0, myAction01, myConditionTrue);	
 	myStateMachine->tab[0][2] = new TableEntry("Local_Idle", "FollowProfile", "command=followProfile", 0, myAction02, myConditionTrue);
-	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_local", "myMotorController.finishedProfile()", 0, myAction03, myConditionTrue);
+	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_Idle", "myMotorController.finishedProfile", 0, myAction03, myConditionTrue);
 
 	//Chain Mode:
-	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction10,myConditionTrue);
-
-	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
-	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
-	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
-
-	myStateMachine->tab[1][0] = new TableEntry ("StateC","StateD","Trigg1",0,myAction10,myConditionTrue);
-
-	myStateMachine->tab[1][1] = new TableEntry ("StateD","StateD","Timer1",4000,myAction11,myCondition11);
-	myStateMachine->tab[1][2] = new TableEntry ("StateD","StateE","Timer1",4000,myAction12,myCondition12);
-	myStateMachine->tab[1][3] = new TableEntry ("StateE","StateC","Timer1",3000,myAction13,myConditionTrue);
-
+	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle", "Chain_Idle", "Set speed", 0, myAction10, myConditionTrue);
+	myStateMachine->tab[1][1] = new TableEntry ("Chain_Idle", "Requested", "Request from left", 0, myAction11, myConditionTrue);
+	myStateMachine->tab[1][2] = new TableEntry ("Requested", "Requested", "Timer1", 4000, myAction12, myCondition12);
+	myStateMachine->tab[1][3] = new TableEntry ("StateE", "StateC", "Timer1", 3000, myAction13, myConditionTrue);
 
 	//Follow Profile
-
-
 	myStateMachine->tab[2][0] = new TableEntry ("StateK","StateK","Timer2",500,myAction20,myConditionTrue);
 
 	// Initialize timer names for all diagrams
@@ -67,32 +56,34 @@ void SystemManager ::init() {
 	myStateMachine->timerNames[2] = "Timer2";
 
 	// Initialize line numbers for all diagrams
-	myStateMachine->lines[0] = 3;
-	myStateMachine->lines[1] = 4;
-	myStateMachine->lines[2] = 1;
+	myStateMachine->lines[0] = 4;
+	myStateMachine->lines[1] = 0;
+	myStateMachine->lines[2] = 0;
 
 	// Initialize first state for all diagrams
-	myStateMachine->actualState[0] = "StateA";
+	myStateMachine->actualState[0] = "Local_Idle";
 	myStateMachine->actualState[1] = "StateC";
 	myStateMachine->actualState[2] = "StateK";
 	
 	// Set the actual number of diagrams
-	myStateMachine->diagrams = 3;
+	myStateMachine->diagrams = 1;
 
 	// Initialize state machine
 	myStateMachine->init();
 	
 	// Start timer for each diagram which needs one in the first state!
 	// In my case these are diagram 0 and 2
+	/*
 	myStateMachine->diaTimerTable[0]->startTimer(myStateMachine->tab[0][0]->eventTime);
 	myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
+	*/
 
 	// Initial actions can be done here, if needed!
 	n = 0;
 	m = 0;
 
 	// Create instance of my Keyboard
-	myKeyboard = new Keyboard;
+	//myKeyboard = new Keyboard;
 
 	return;
 }
@@ -108,30 +99,23 @@ void SystemManager :: startStateMachine() {
 }
 
 void myAction00() {
-
 	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
-
-	printf(" StateA -> Transition00 -> StateA\n"); 
->>>>>>> 84285679acec9efc1b6b8cbf1cc1bf1121725a0d	n++;
 	return;
 }
 
 void myAction01() {
-	printf(" StateA -> Transition01 -> StateB\n"); 
-	myStateMachine->sendEvent("Trigg1");
+	printf(" Local_Idle -> Transition01 -> Local_Idle\n"); 
+	//myStateMachine->sendEvent("Trigg1");
 	return;
 }
 
 void myAction02() {
-	printf(" StateB -> Transition02 -> StateA\n"); 
-	n = 0;
+	printf(" Local_Idle -> Transition02 -> FollowProfile\n"); 
 	return;
 }
 
-
 void myAction03() {
-	printf(" StateB -> Transition02 -> StateA\n");
-	n = 0;
+	printf(" FollowProfile -> Transition03 -> Local_Idle\n");
 	return;
 }
 
@@ -189,3 +173,4 @@ bool myCondition12() {
 	if (m >= 4) return true;
 	else return false;
 }
+

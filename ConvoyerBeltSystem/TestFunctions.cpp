@@ -1,14 +1,6 @@
 #include "TestFunctions.h"
 #include <cstdio>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <cstdio>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <pthread.h>
 
 void testTCPServer()
 {
@@ -176,4 +168,39 @@ void testKeyBoard()
 		this_thread::sleep_for(chrono::milliseconds(150));
 	}
 
+}
+
+/*
+	myStateMachine->tab[0][0] = new TableEntry ("Local_Idle", "Local_Idle", "command=speed", 0, myAction00, myConditionTrue);
+	myStateMachine->tab[0][1] = new TableEntry ("Local_Idle", "Local_Idle", "command=direction", 0, myAction01, myConditionTrue);
+	myStateMachine->tab[0][2] = new TableEntry("Local_Idle", "FollowProfile", "command=followProfile", 0, myAction02, myConditionTrue);
+	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_local", "myMotorController.finishedProfile", 0, myAction03, myConditionTrue);
+*/
+
+void* testSM(void*)
+{	
+	Keyboard* k = new Keyboard();
+	char readValue;
+	while (true)
+	{	
+		readValue = k->getPressedKey();
+		if (readValue == '3') {
+			myStateMachine->sendEvent("command=speed");
+			readValue = 0;
+		}
+		else if (readValue == '4') {
+			myStateMachine->sendEvent("command=direction");
+			readValue = 0;
+		}
+		else if (readValue == '5') {
+			myStateMachine->sendEvent("command=followProfile");
+			readValue = 0;
+		}
+		else if (readValue == '6') {
+			myStateMachine->sendEvent("myMotorController.finishedProfile");
+			readValue = 0;
+		}
+		sleep(0.5);
+	}
+	return NULL;
 }

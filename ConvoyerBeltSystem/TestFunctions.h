@@ -11,6 +11,16 @@
 
 #include "keyboard.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
+#include "stateMachine.h"
+#include <errno.h>
+#include <pthread.h>
+#include "systemManager.h"
+
 //#include "gpio.h"
 //#include "spi.h"
 //#include "pwm.h"
@@ -32,10 +42,8 @@ void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 addre
 void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
-<<<<<<< HEAD
 void testADC();
-=======
 void testKeyBoard();
->>>>>>> 84285679acec9efc1b6b8cbf1cc1bf1121725a0d
+void* testSM(void*);
 
 
