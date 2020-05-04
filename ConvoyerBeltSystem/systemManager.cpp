@@ -6,8 +6,10 @@
 #include "myFunctions.h"
 
 int n, m;
-StateMachine * myStateMachine;
-Keyboard* myKeyboard;
+extern StateMachine* myStateMachine;
+extern Keyboard* myKeyboard;
+
+
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -35,10 +37,12 @@ void SystemManager ::init() {
 	*/
 
 	//Local Mode: Actions noch umbenennen, ...
-	myStateMachine->tab[0][0] = new TableEntry ("Local_Idle", "Local_Idle", "command=speed", 0, myAction00, myConditionTrue);
-	myStateMachine->tab[0][1] = new TableEntry ("Local_Idle", "Local_Idle", "command=direction", 0, myAction01, myConditionTrue);	
-	myStateMachine->tab[0][2] = new TableEntry("Local_Idle", "FollowProfile", "command=followProfile", 0, myAction02, myConditionTrue);
-	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_Idle", "myMotorController.finishedProfile", 0, myAction03, myConditionTrue);
+	myStateMachine->tab[0][0] = new TableEntry("IDLE", "Local", "mode==local", 0, myAction00, myConditionTrue);
+	myStateMachine->tab[0][1] = new TableEntry ("Local", "Local", "command==speed", 0, myAction01, myConditionTrue);
+	myStateMachine->tab[0][2] = new TableEntry ("Local", "Local", "command==direction", 0, myAction02, myConditionTrue);	
+	myStateMachine->tab[0][3] = new TableEntry("Local", "FollowProfile", "command==followProfile", 0, myAction03, myConditionTrue);
+	myStateMachine->tab[0][4] = new TableEntry("FollowProfile", "Local", "myMotorController.finishedProfile", 0, myAction04, myConditionTrue);
+	myStateMachine->tab[0][5] = new TableEntry("Local", "Chain_Idle", "command==chain", 0, myAction05, myConditionTrue);
 
 	//Chain Mode:
 	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle", "Chain_Idle", "Set speed", 0, myAction10, myConditionTrue);
@@ -56,17 +60,17 @@ void SystemManager ::init() {
 	myStateMachine->timerNames[2] = "Timer2";
 
 	// Initialize line numbers for all diagrams
-	myStateMachine->lines[0] = 4;
-	myStateMachine->lines[1] = 0;
-	myStateMachine->lines[2] = 0;
+	myStateMachine->lines[0] = 6;
+	myStateMachine->lines[1] = 4;
+	myStateMachine->lines[2] = 1;
 
 	// Initialize first state for all diagrams
-	myStateMachine->actualState[0] = "Local_Idle";
+	myStateMachine->actualState[0] = "IDLE";
 	myStateMachine->actualState[1] = "StateC";
 	myStateMachine->actualState[2] = "StateK";
 	
 	// Set the actual number of diagrams
-	myStateMachine->diagrams = 1;
+	myStateMachine->diagrams = 3;
 
 	// Initialize state machine
 	myStateMachine->init();
@@ -79,12 +83,11 @@ void SystemManager ::init() {
 	*/
 
 	// Initial actions can be done here, if needed!
-	n = 0;
-	m = 0;
+	//n = 0;
+	//m = 0;
 
 	// Create instance of my Keyboard
-	//myKeyboard = new Keyboard;
-
+	myKeyboard = new Keyboard;
 	return;
 }
 
@@ -99,22 +102,32 @@ void SystemManager :: startStateMachine() {
 }
 
 void myAction00() {
-	printf(" Local_Idle -> Transition00 -> Local_Idle\n");
+	printf(" IDLE -> mode==local -> Local\n");
 	return;
 }
 
 void myAction01() {
-	printf(" Local_Idle -> Transition01 -> Local_Idle\n"); 
+	printf(" Local -> command==speed -> Local\n"); 
 	return;
 }
 
 void myAction02() {
-	printf(" Local_Idle -> Transition02 -> FollowProfile\n"); 
+	printf(" Local -> command==direction -> Local\n"); 
 	return;
 }
 
 void myAction03() {
-	printf(" FollowProfile -> Transition03 -> Local_Idle\n");
+	printf(" Local -> command==followProfile -> FollowProfile\n");
+	return;
+}
+
+void myAction04() {
+	printf(" FollowProfile -> myMotorController.finishedProfile -> Local\n");
+	return;
+}
+
+void myAction05() {
+	printf(" Local -> command==chain -> Chain_Idle\n");
 	return;
 }
 
@@ -142,7 +155,6 @@ void myAction13() {
 }
 
 void myAction20() {
-	myKeyboard->getPressedKey();
 	return;
 }
 

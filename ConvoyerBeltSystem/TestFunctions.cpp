@@ -1,6 +1,8 @@
 #include "TestFunctions.h"
 #include <cstdio>
 
+extern Keyboard* myKeyboard;
+extern SystemManager* systemManagerTest;
 
 void testTCPServer()
 {
@@ -170,38 +172,45 @@ void testKeyBoard()
 
 }
 
-/*
-	myStateMachine->tab[0][0] = new TableEntry ("Local_Idle", "Local_Idle", "command=speed", 0, myAction00, myConditionTrue);
-	myStateMachine->tab[0][1] = new TableEntry ("Local_Idle", "Local_Idle", "command=direction", 0, myAction01, myConditionTrue);
-	myStateMachine->tab[0][2] = new TableEntry("Local_Idle", "FollowProfile", "command=followProfile", 0, myAction02, myConditionTrue);
-	myStateMachine->tab[0][3] = new TableEntry("FollowProfile", "Local_local", "myMotorController.finishedProfile", 0, myAction03, myConditionTrue);
-*/
-
-Keyboard* k = new Keyboard();
-
 void* testSM(void*)
 {	
-	char readValue;
+	unsigned char readValue;
 	while (true)
 	{	
-		readValue = k->getPressedKey();
-		if (readValue == '3') {
-			myStateMachine->sendEvent("command=speed");
-			readValue = 0;
+		readValue = myKeyboard->getPressedKey();
+		if (readValue == '1') {
+			myStateMachine->sendEvent("mode==local");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '2') {
+			myStateMachine->sendEvent("command==speed");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '3') {
+			myStateMachine->sendEvent("command==direction");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
 		}
 		else if (readValue == '4') {
-			myStateMachine->sendEvent("command=direction");
-			readValue = 0;
+			myStateMachine->sendEvent("command==followProfile");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
 		}
 		else if (readValue == '5') {
-			myStateMachine->sendEvent("command=followProfile");
-			readValue = 0;
+			myStateMachine->sendEvent("myMotorController.finishedProfile");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
 		}
 		else if (readValue == '6') {
-			myStateMachine->sendEvent("myMotorController.finishedProfile");
-			readValue = 0;
+			myStateMachine->sendEvent("command==chain");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
 		}
-		sleep(0.5);
 	}
 	return NULL;
 }
+
+
+

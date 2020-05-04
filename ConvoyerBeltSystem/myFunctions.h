@@ -6,6 +6,8 @@ void myAction00();
 void myAction01();
 void myAction02();
 void myAction03();
+void myAction04();
+void myAction05();
 
 void myAction10();
 void myAction11();

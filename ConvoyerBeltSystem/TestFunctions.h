@@ -32,6 +32,8 @@ extern "C" {
 #include "pwm.h"
 }
 
+extern Keyboard* k;
+
 using namespace std;
 
 // Should be implemented: Maybe try TDD (test driven development)
