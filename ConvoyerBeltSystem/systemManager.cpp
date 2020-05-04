@@ -112,7 +112,7 @@ void myAction00() {
 	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
 
 	printf(" StateA -> Transition00 -> StateA\n"); 
->>>>>>> 84285679acec9efc1b6b8cbf1cc1bf1121725a0d	n++;
+	n++;
 	return;
 }
 
