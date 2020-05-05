@@ -8,7 +8,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
-
+#include "defines.h"
+#include "systemManager.h"
+#include <cmath>
 
 extern "C" {
 #include "gpio.h"
@@ -16,19 +18,23 @@ extern "C" {
 #include "pwm.h"
 }
 
+extern unsigned short stepCounterFollowProf; //declared in systemManager.cpp
+
 class Motor
 {
 public:
 	Motor();
 	~Motor();
 	int initMotor();
-	int setSpeed(int speed);
+	int setSpeed(int speed); //0-100
 	int getSpeed();
 	int startMotor(bool direction);
 	int stopMotor();
+	int followProfile(bool direction);
 private:
 	unsigned short readBackValSPI = 0;
-	int speed;
+	double speed = 0;
+	bool motorStopped = true;
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;

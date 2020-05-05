@@ -2,25 +2,27 @@
 #include "TestFunctions.h"
 #include "Motor.h"
 #include "MotorController.h"
+#include <pthread.h>
 
-Motor* myMotor;
 
 int main()
 {
-	int error = 0;
     printf("hello from ConvoyerBeltSystem!\n");
+	Motor* myMotor;
 	myMotor = new Motor;
-	error = myMotor->initMotor(); // test the initialization
-	myMotor->startMotor(0);
-	sleep(3);
-	myMotor->stopMotor();
 
+	pthread_t threadRamp;
+	//pthread_join(threadRamp, NULL);
+
+	myMotor->initMotor();
+	myMotor->setSpeed(35);
+	myMotor->stopMotor();
+	pthread_create(&threadRamp, NULL, followProfile, NULL);
+	myMotor->followProfile(Right);
+	
     //testTCPServer();
 	//testMotor(0);
 	//testADC();
-
     //testKeyBoard();
-
-
     return 0;
 }

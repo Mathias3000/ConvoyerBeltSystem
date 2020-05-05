@@ -3,19 +3,18 @@
 Motor::Motor()
 {
 	printf("Motor Konstruktor!");
-	IN1 = new gpioDescriptor;
-	pwmMotor = new pwmDescriptor;
-	spiDescMotor = new spiDescriptor;
-	bridgeEN = new gpioDescriptor;
-	bridgeDIS = new gpioDescriptor;
+	//Create instances for hardware usage
+	this->IN1 = new gpioDescriptor;
+	this->pwmMotor = new pwmDescriptor;
+	this->spiDescMotor = new spiDescriptor;
+	this->bridgeEN = new gpioDescriptor;
+	this->bridgeDIS = new gpioDescriptor;
 }
 
 int Motor::initMotor()
 {
-	//gpioDescriptor* bridgeEN = new gpioDescriptor;
 	this->bridgeEN->gpioNum = 79;
 	strcpy(this->bridgeEN->direction, "out");
-	//gpioDescriptor* bridgeDIS = new gpioDescriptor;
 	this->bridgeDIS->gpioNum = 76;
 	strcpy(this->bridgeDIS->direction, "out");
 
@@ -31,7 +30,6 @@ int Motor::initMotor()
 	strcpy(spiMotorRef.MOSIpin, "P9_30_pinmux");
 	strcpy(spiMotorRef.SCLKpin, "P9_31_pinmux");
 
-	//spiDescriptor* spiDescMotor = new spiDescriptor;
 	this->spiDescMotor->spiNum = 2;
 	this->spiDescMotor->bitsPerWord = 8;
 	this->spiDescMotor->mode = 1;
@@ -46,20 +44,18 @@ int Motor::initMotor()
 	usleep(50);
 	this->readBackValSPI = spiXfer16Bits(this->spiDescMotor, 0x6D18);
 
-	//gpioDescriptor* IN1 = new gpioDescriptor;
 	this->IN1->gpioNum = 22;
 	strcpy(this->IN1->direction, "out");
 	if (gpioOpen(this->IN1) < 0) return -1;
 	//default direction: 
 	if (gpioSetValue(this->IN1, 1) < 0) return -1;
 
-	//pwmDescriptor* pwmMotor = new pwmDescriptor;
 	strcpy(this->pwmMotor->pinNameB, "P8_13_pinmux");
 	this->pwmMotor->pwmNum = 7;
 	if (pwmSetPinmux_B(this->pwmMotor) < 0) return -1;
 	if (pwmOpen_B(this->pwmMotor) < 0) return -1;
 	if (pwmSetPeriod_B(this->pwmMotor, 50000) < 0) return -1;
-	if (pwmSetDuty_B(this->pwmMotor, 35000)) return -1;
+	//if (pwmSetDuty_B(this->pwmMotor, 35000)) return -1;
 	if (pwmSetPolarity_B(this->pwmMotor, 0)) return -1;
 	return 0;
 }
@@ -73,22 +69,76 @@ int Motor::setSpeed(int speed)
 	return 0;
 }
 
+int Motor::getSpeed()
+{
+	return this->speed;
+}
+
 int Motor::startMotor(bool direction)
 {	
-	//speed is missing!!!
 	if (direction == 0) {
 		gpioSetValue(this->IN1, 1);
-		pwmSetEnable_B(pwmMotor, 1);
+		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED);
+		pwmSetEnable_B(this->pwmMotor, 1);
+		this->motorStopped = false;
+		return 1;
 	}
-	if (direction == 1) {
+	else if (direction == 1) {
 		gpioSetValue(this->IN1, 0);
-		pwmSetEnable_B(pwmMotor, 1);
+		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED);
+		pwmSetEnable_B(this->pwmMotor, 1);
+		this->motorStopped = false;
+		return 1;
 	}
-	return 0;
+	else return -1;
 }
 
 int Motor::stopMotor()
 {
-	pwmSetEnable_B(pwmMotor, 0);
+	if (pwmSetEnable_B(pwmMotor, 0) < 0) return -1;
+	this->motorStopped = true;
+	return 0;
+}
+
+int Motor::followProfile(bool direction)
+{
+	unsigned short countPrev = 0;
+	double speed = 0;
+	if (direction == 0) {
+		gpioSetValue(this->IN1, 1);
+		pwmSetDuty_B(this->pwmMotor, 1);
+		pwmSetEnable_B(this->pwmMotor, 1);
+		this->motorStopped = false;
+	}
+	else if (direction == 1) {
+		gpioSetValue(this->IN1, 0);
+		pwmSetDuty_B(this->pwmMotor, 1);
+		pwmSetEnable_B(this->pwmMotor, 1);
+		this->motorStopped = false;
+	}
+	do {
+		if (countPrev != stepCounterFollowProf) {
+			//accelerate
+			if (stepCounterFollowProf <= RAMP_UP) {
+				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
+				speed = (speed + (this->speed / 50));
+			}
+			//steady speed
+			else if (stepCounterFollowProf <= RAMP_STEADY) {}
+			//decelerate
+			else if (stepCounterFollowProf < RAMP_DOWN) {
+				speed = (speed - (this->speed / 50));
+				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
+			}
+			//stop Motor
+			else if (stepCounterFollowProf >= RAMP_DOWN) {
+				this->stopMotor();
+				this->motorStopped = true;
+			}
+		}
+		countPrev = stepCounterFollowProf;
+	} while (stepCounterFollowProf <= 400 && this->motorStopped == false); //Motor muss auf jeden Fall stoppen, da this.motorStopped = true sonst nur in this.stopMotor() passieren kann...
+	
+		
 	return 0;
 }

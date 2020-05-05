@@ -1,13 +1,5 @@
 #include "TestFunctions.h"
-#include <cstdio>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <pthread.h>
 
 void testTCPServer()
 {
@@ -186,4 +178,11 @@ void testKeyBoard()
 		this_thread::sleep_for(chrono::milliseconds(150));
 	}
 
+}
+
+void* followProfile(void*) {
+	while (stepCounterFollowProf <= 400) {
+		stepCounterFollowProf = stepCounterFollowProf + 1;
+		usleep(20000);
+	}	
 }

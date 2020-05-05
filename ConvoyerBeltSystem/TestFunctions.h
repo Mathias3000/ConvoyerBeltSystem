@@ -8,8 +8,19 @@
 #include "Display.h"
 #include "TelnetServer.h"
 #include "TCPClient.h"
-
+#include "systemManager.h"
 #include "keyboard.h"
+
+#include <cstdio>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <errno.h>
+#include <pthread.h>
+
 
 //#include "gpio.h"
 //#include "spi.h"
@@ -34,6 +45,6 @@ void testPotentiometer();
 void testMotor(int dir);
 void testADC();
 void testKeyBoard();
-
+void* followProfile(void*);
 
 
