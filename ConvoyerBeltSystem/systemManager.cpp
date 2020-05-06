@@ -1,13 +1,10 @@
 
-#include "stateTable.h"
 #include "systemManager.h"
-#include "stateMachine.h"
-#include "keyboard.h"
-#include "myFunctions.h"
 
 int n, m;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
+unsigned short stepCounterFollowProf = 0;
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -25,6 +22,7 @@ void SystemManager ::init() {
 	// Should these be exceeded, please correct!
 
 
+
 	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
 	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
 	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
@@ -37,7 +35,7 @@ void SystemManager ::init() {
 	For each event there is one entry if the event has no conditions. 
 	Otherwise there can be n entries, depending on the number of conditions. 
 	If a condition evaluates to TRUE, the transition is taken. If no condition is needed,then condition shall beTRUE! 
-	The term „time“is only needed if the event is a timer.The time is to bespecified in ms.Data types: actState, nextState, event = C++-string; 
+	The term â€timeâ€œis only needed if the event is a timer.The time is to bespecified in ms.Data types: actState, nextState, event = C++-string; 
 	action, condition = function pointer; time = int.
 	*/
 
@@ -109,9 +107,10 @@ void SystemManager :: startStateMachine() {
 
 void myAction00() {
 
-	printf(" StateA -> Transition00 -> StateA\n"); 
 
 	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
+
+	printf(" StateA -> Transition00 -> StateA\n"); 
 
 	n++;
 	return;
