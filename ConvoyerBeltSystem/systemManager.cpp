@@ -22,13 +22,20 @@ void SystemManager ::init() {
 	// Should these be exceeded, please correct!
 
 
+
+	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
+	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
+	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
+
+	myStateMachine->tab[1][0] = new TableEntry ("StateC","StateD","Trigg1",0,myAction10,myConditionTrue);
+
 	/*
 	1. Arraywith states, events and actions showing what shallhappen:Entry[i]: 
 	actState -nextState -event -time -action -conditionEach diagram has one array. 
 	For each event there is one entry if the event has no conditions. 
 	Otherwise there can be n entries, depending on the number of conditions. 
 	If a condition evaluates to TRUE, the transition is taken. If no condition is needed,then condition shall beTRUE! 
-	The term „time“is only needed if the event is a timer.The time is to bespecified in ms.Data types: actState, nextState, event = C++-string; 
+	The term â€žtimeâ€œis only needed if the event is a timer.The time is to bespecified in ms.Data types: actState, nextState, event = C++-string; 
 	action, condition = function pointer; time = int.
 	*/
 
@@ -44,6 +51,7 @@ void SystemManager ::init() {
 	myStateMachine->tab[1][1] = new TableEntry ("StateD","StateD","Timer1",4000,myAction11,myCondition11);
 	myStateMachine->tab[1][2] = new TableEntry ("StateD","StateE","Timer1",4000,myAction12,myCondition12);
 	myStateMachine->tab[1][3] = new TableEntry ("StateE","StateC","Timer1",3000,myAction13,myConditionTrue);
+
 
 
 	//Follow Profile
@@ -99,9 +107,11 @@ void SystemManager :: startStateMachine() {
 
 void myAction00() {
 
+
 	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
 
 	printf(" StateA -> Transition00 -> StateA\n"); 
+
 	n++;
 	return;
 }
@@ -117,6 +127,7 @@ void myAction02() {
 	n = 0;
 	return;
 }
+
 
 
 void myAction03() {

@@ -14,6 +14,7 @@ int main()
 	pthread_t threadRamp;
 	//pthread_join(threadRamp, NULL);
 
+
 	myMotor->initMotor();
 	myMotor->setSpeed(35);
 	myMotor->stopMotor();
@@ -24,5 +25,14 @@ int main()
 	//testMotor(0);
 	//testADC();
     //testKeyBoard();
+
+    testKeyBoard();
+
+
+    //testTCPServer();
+	//testMotor(0);
+	testADC();
+
+
     return 0;
 }

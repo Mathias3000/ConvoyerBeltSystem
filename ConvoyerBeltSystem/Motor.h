@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <stdio.h>
 #include <string.h>
 #include <cstdio>
@@ -19,6 +20,12 @@ extern "C" {
 }
 
 extern unsigned short stepCounterFollowProf; //declared in systemManager.cpp
+
+//#include "gpio.h"
+extern "C" {
+#include "gpio.h"
+}
+
 
 class Motor
 {

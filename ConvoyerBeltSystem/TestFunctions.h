@@ -11,6 +11,7 @@
 #include "systemManager.h"
 #include "keyboard.h"
 
+
 #include <cstdio>
 
 #include <stdio.h>
@@ -21,11 +22,24 @@
 #include <errno.h>
 #include <pthread.h>
 
+#include "keyboard.h"
 
 //#include "gpio.h"
 //#include "spi.h"
 //#include "pwm.h"
 
+
+
+//#include "gpio.h"
+//#include "spi.h"
+//#include "pwm.h"
+
+
+extern "C" {
+#include "gpio.h"
+#include "spi.h"
+#include "pwm.h"
+}
 
 extern "C" {
 #include "gpio.h"
@@ -43,8 +57,12 @@ void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 addre
 void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
+
+void testKeyBoard();
+
 void testADC();
 void testKeyBoard();
 void* followProfile(void*); //Thread handler for test purposes of followProfile()
+
 
 
