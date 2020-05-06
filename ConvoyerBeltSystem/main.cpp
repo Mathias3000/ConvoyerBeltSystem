@@ -10,29 +10,15 @@ int main()
     printf("hello from ConvoyerBeltSystem!\n");
 	Motor* myMotor;
 	myMotor = new Motor;
-
-	pthread_t threadRamp;
-	//pthread_join(threadRamp, NULL);
-
-
 	myMotor->initMotor();
-	myMotor->setSpeed(35);
+	myMotor->setSpeed(50);
+	myMotor->startMotor(Right);
+	sleep(3);
 	myMotor->stopMotor();
-	pthread_create(&threadRamp, NULL, followProfile, NULL);
-	myMotor->followProfile(Right);
 	
     //testTCPServer();
 	//testMotor(0);
 	//testADC();
     //testKeyBoard();
-
-    testKeyBoard();
-
-
-    //testTCPServer();
-	//testMotor(0);
-	testADC();
-
-
     return 0;
 }

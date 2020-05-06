@@ -180,7 +180,7 @@ void testKeyBoard()
 
 }
 
-
+//thread handler for test purpose, should test followProfile()
 void* followProfile(void*) {
 	while (stepCounterFollowProf <= 400) {
 		stepCounterFollowProf = stepCounterFollowProf + 1;
@@ -188,16 +188,4 @@ void* followProfile(void*) {
 	}	
 }
 
-void testKeyBoard()
-{
-	Keyboard* k = new Keyboard();
-	char readValue;
-
-	while (true) {
-		readValue = k->getPressedKey();
-		cout << "Key pressed: " << readValue << endl;
-		this_thread::sleep_for(chrono::milliseconds(150));
-	}
-
-}
 

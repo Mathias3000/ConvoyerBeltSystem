@@ -28,19 +28,6 @@
 //#include "spi.h"
 //#include "pwm.h"
 
-
-
-//#include "gpio.h"
-//#include "spi.h"
-//#include "pwm.h"
-
-
-extern "C" {
-#include "gpio.h"
-#include "spi.h"
-#include "pwm.h"
-}
-
 extern "C" {
 #include "gpio.h"
 #include "spi.h"
