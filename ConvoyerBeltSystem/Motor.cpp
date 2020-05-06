@@ -2,7 +2,7 @@
 
 Motor::Motor()
 {
-	printf("Motor Konstruktor!");
+	printf("Motor Konstruktor!\n");
 	//Create instances for hardware usage
 	this->IN1 = new gpioDescriptor;
 	this->pwmMotor = new pwmDescriptor;

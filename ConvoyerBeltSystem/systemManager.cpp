@@ -2,16 +2,10 @@
 #include "systemManager.h"
 
 int n, m;
-<<<<<<< HEAD
-extern StateMachine* myStateMachine;
-extern Keyboard* myKeyboard;
-
-
-=======
+Motor* myMotor;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
 unsigned short stepCounterFollowProf = 0;
->>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -28,17 +22,6 @@ void SystemManager ::init() {
 	// MAXDIA = 9, MAXLINES = 66
 	// Should these be exceeded, please correct!
 
-<<<<<<< HEAD
-=======
-
-
-	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
-	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
-	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
-
-	myStateMachine->tab[1][0] = new TableEntry ("StateC","StateD","Trigg1",0,myAction10,myConditionTrue);
-
->>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 	/*
 	1. Arraywith states, events and actions showing what shallhappen:Entry[i]: 
 	actState -nextState -event -time -action -conditionEach diagram has one array. 
@@ -49,36 +32,22 @@ void SystemManager ::init() {
 	action, condition = function pointer; time = int.
 	*/
 
-	//Local Mode: Actions noch umbenennen, ...
+	//Local Mode: Actions noch umbenennen
 	myStateMachine->tab[0][0] = new TableEntry("IDLE", "Local", "mode==local", 0, myAction00, myConditionTrue);
 	myStateMachine->tab[0][1] = new TableEntry ("Local", "Local", "command==speed", 0, myAction01, myConditionTrue);
 	myStateMachine->tab[0][2] = new TableEntry ("Local", "Local", "command==direction", 0, myAction02, myConditionTrue);	
-	myStateMachine->tab[0][3] = new TableEntry("Local", "FollowProfile", "command==followProfile", 0, myAction03, myConditionTrue);
-	myStateMachine->tab[0][4] = new TableEntry("FollowProfile", "Local", "myMotorController.finishedProfile", 0, myAction04, myConditionTrue);
-	myStateMachine->tab[0][5] = new TableEntry("Local", "Chain_Idle", "command==chain", 0, myAction05, myConditionTrue);
+	myStateMachine->tab[0][3] = new TableEntry("Local", "Waiting", "command==followProfile", 0, myAction03, myConditionTrue);
+	myStateMachine->tab[0][4] = new TableEntry("Waiting", "Local", "myMotorController.finishedProfile", 0, myAction04, myConditionTrue);
 
-	//Chain Mode:
-<<<<<<< HEAD
-	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle", "Chain_Idle", "Set speed", 0, myAction10, myConditionTrue);
+	//Chain Mode
+	myStateMachine->tab[1][0] = new TableEntry ("IDLE", "Chain_Idle", "Set speed", 0, myAction10, myConditionTrue);
 	myStateMachine->tab[1][1] = new TableEntry ("Chain_Idle", "Requested", "Request from left", 0, myAction11, myConditionTrue);
 	myStateMachine->tab[1][2] = new TableEntry ("Requested", "Requested", "Timer1", 4000, myAction12, myCondition12);
 	myStateMachine->tab[1][3] = new TableEntry ("StateE", "StateC", "Timer1", 3000, myAction13, myConditionTrue);
 
 	//Follow Profile
-	myStateMachine->tab[2][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction20,myConditionTrue);
-=======
-	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction10,myConditionTrue);
-
-	myStateMachine->tab[1][1] = new TableEntry ("StateD","StateD","Timer1",4000,myAction11,myCondition11);
-	myStateMachine->tab[1][2] = new TableEntry ("StateD","StateE","Timer1",4000,myAction12,myCondition12);
-	myStateMachine->tab[1][3] = new TableEntry ("StateE","StateC","Timer1",3000,myAction13,myConditionTrue);
-
-
-
-	//Follow Profile
-
-	myStateMachine->tab[2][0] = new TableEntry ("StateK","StateK","Timer2",500,myAction20,myConditionTrue);
->>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
+	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "command==followProfile", 0, myAction20, myConditionTrue);
+	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "IDLE", "Timer2", 8000, myAction21, myConditionTrue);
 
 	// Initialize timer names for all diagrams
 	// Timer names shall have the name Timer followed by the diagram number
@@ -87,14 +56,14 @@ void SystemManager ::init() {
 	myStateMachine->timerNames[2] = "Timer2";
 
 	// Initialize line numbers for all diagrams
-	myStateMachine->lines[0] = 6;
+	myStateMachine->lines[0] = 5;
 	myStateMachine->lines[1] = 4;
-	myStateMachine->lines[2] = 1;
+	myStateMachine->lines[2] = 2;
 
 	// Initialize first state for all diagrams
 	myStateMachine->actualState[0] = "IDLE";
-	myStateMachine->actualState[1] = "StateC";
-	myStateMachine->actualState[2] = "StateK";
+	myStateMachine->actualState[1] = "IDLE";
+	myStateMachine->actualState[2] = "IDLE";
 	
 	// Set the actual number of diagrams
 	myStateMachine->diagrams = 3;
@@ -129,17 +98,7 @@ void SystemManager :: startStateMachine() {
 }
 
 void myAction00() {
-<<<<<<< HEAD
 	printf(" IDLE -> mode==local -> Local\n");
-=======
-
-
-	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
-
-	printf(" StateA -> Transition00 -> StateA\n"); 
-
-	n++;
->>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 	return;
 }
 
@@ -153,11 +112,6 @@ void myAction02() {
 	return;
 }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 void myAction03() {
 	printf(" Local -> command==followProfile -> FollowProfile\n");
 	return;
@@ -197,7 +151,14 @@ void myAction13() {
 }
 
 void myAction20() {
+	myMotor->startMotor(50);
 	return;
+}
+
+void myAction21()
+{
+	myMotor->stopMotor();
+	myStateMachine->sendEvent("myMotorController.finishedProfile");
 }
 
 bool myConditionTrue() {

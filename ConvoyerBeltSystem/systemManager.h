@@ -7,6 +7,7 @@
 #include "myFunctions.h"
 #include "stateTable.h"
 #include <stdio.h>
+#include "Motor.h"
 
 extern unsigned short stepCounterFollowProf;
 
