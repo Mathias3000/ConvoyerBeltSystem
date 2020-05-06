@@ -139,6 +139,5 @@ int Motor::followProfile(bool direction)
 		countPrev = stepCounterFollowProf;
 	} while (stepCounterFollowProf <= 400 && this->motorStopped == false); //Motor muss auf jeden Fall stoppen, da this.motorStopped = true sonst nur in this.stopMotor() passieren kann...
 	
-		
 	return 0;
 }

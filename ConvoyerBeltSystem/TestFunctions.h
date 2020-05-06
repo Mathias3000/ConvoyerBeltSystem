@@ -45,6 +45,6 @@ void testPotentiometer();
 void testMotor(int dir);
 void testADC();
 void testKeyBoard();
-void* followProfile(void*);
+void* followProfile(void*); //Thread handler for test purposes of followProfile()
 
 

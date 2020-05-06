@@ -25,12 +25,12 @@ class Motor
 public:
 	Motor();
 	~Motor();
-	int initMotor();
+	int initMotor(); //init the spi connection and configure with default values
 	int setSpeed(int speed); //0-100
-	int getSpeed();
-	int startMotor(bool direction);
+	int getSpeed(); 
+	int startMotor(bool direction); 
 	int stopMotor();
-	int followProfile(bool direction);
+	int followProfile(bool direction); //depends on polling a global variable named stepCounterFollowProf (timer should do the increment steps every 20ms)
 private:
 	unsigned short readBackValSPI = 0;
 	double speed = 0;
