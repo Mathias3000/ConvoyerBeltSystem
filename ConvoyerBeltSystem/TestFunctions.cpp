@@ -1,8 +1,9 @@
 #include "TestFunctions.h"
-#include <cstdio>
+
 
 extern Keyboard* myKeyboard;
 extern SystemManager* systemManagerTest;
+
 
 void testTCPServer()
 {
@@ -149,14 +150,25 @@ void testMotor(int dir)
 	usleep(50);
 	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x6D18);
 	
-	/*
-	IN1, IN2: Logic input control of OUT1, OUT2
-	Code example Pilsan:
-	pwmDescriptor* pwm = (pwmDescriptor*)malloc(sizeof(pwmDescriptor));
-	strcpy(pwm->pinNameA, "P8_19_pinmux");
-	strcpy(pwm->pinNameB, "P8_13_pinmux");
-	pwm->pwmNum = 7;
-	*/
+	//IN1 to set the direction via gpio pin
+	gpioDescriptor* IN1 = new gpioDescriptor;
+	IN1->gpioNum = 22;
+	strcpy(IN1->direction, "out");
+	gpioOpen(IN1);
+	retVal = gpioSetValue(IN1, 1);
+
+	//IN2 at pinB to drive the motor by pwm
+	pwmDescriptor* pwmMotor = new pwmDescriptor;
+	strcpy(pwmMotor->pinNameB, "P8_13_pinmux");
+	pwmMotor->pwmNum = 7;
+	retVal = pwmSetPinmux_B(pwmMotor);
+	retVal = pwmOpen_B(pwmMotor);
+	retVal = pwmSetPeriod_B(pwmMotor, 50000);
+	retVal = pwmSetDuty_B(pwmMotor, 35000);
+	retVal = pwmSetPolarity_B(pwmMotor, 0);
+	retVal = pwmSetEnable_B(pwmMotor, 1);
+	sleep(3);
+	retVal = pwmSetEnable_B(pwmMotor, 0);
 }
 
 void testKeyBoard()
@@ -171,6 +183,7 @@ void testKeyBoard()
 	}
 
 }
+
 
 void* testSM(void*)
 {	
@@ -210,6 +223,17 @@ void* testSM(void*)
 		}
 	}
 	return NULL;
+}
+
+
+
+
+//thread handler for test purpose, should test followProfile()
+void* followProfile(void*) {
+	while (stepCounterFollowProf <= 400) {
+		stepCounterFollowProf = stepCounterFollowProf + 1;
+		usleep(20000);
+	}	
 }
 
 

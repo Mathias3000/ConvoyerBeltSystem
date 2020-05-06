@@ -1,15 +1,17 @@
 
-#include "stateTable.h"
 #include "systemManager.h"
-#include "stateMachine.h"
-#include "keyboard.h"
-#include "myFunctions.h"
 
 int n, m;
+<<<<<<< HEAD
 extern StateMachine* myStateMachine;
 extern Keyboard* myKeyboard;
 
 
+=======
+StateMachine * myStateMachine;
+Keyboard* myKeyboard;
+unsigned short stepCounterFollowProf = 0;
+>>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -26,13 +28,24 @@ void SystemManager ::init() {
 	// MAXDIA = 9, MAXLINES = 66
 	// Should these be exceeded, please correct!
 
+<<<<<<< HEAD
+=======
+
+
+	myStateMachine->tab[0][0] = new TableEntry ("StateA","StateA","Timer0",2000,myAction00,myCondition00);
+	myStateMachine->tab[0][1] = new TableEntry ("StateA","StateB","Timer0",2000,myAction01,myCondition01);
+	myStateMachine->tab[0][2] = new TableEntry ("StateB","StateA","Trigg0",0,myAction02,myConditionTrue);
+
+	myStateMachine->tab[1][0] = new TableEntry ("StateC","StateD","Trigg1",0,myAction10,myConditionTrue);
+
+>>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 	/*
 	1. Arraywith states, events and actions showing what shallhappen:Entry[i]: 
 	actState -nextState -event -time -action -conditionEach diagram has one array. 
 	For each event there is one entry if the event has no conditions. 
 	Otherwise there can be n entries, depending on the number of conditions. 
 	If a condition evaluates to TRUE, the transition is taken. If no condition is needed,then condition shall beTRUE! 
-	The term „time“is only needed if the event is a timer.The time is to bespecified in ms.Data types: actState, nextState, event = C++-string; 
+	The term â€žtimeâ€œis only needed if the event is a timer.The time is to bespecified in ms.Data types: actState, nextState, event = C++-string; 
 	action, condition = function pointer; time = int.
 	*/
 
@@ -45,6 +58,7 @@ void SystemManager ::init() {
 	myStateMachine->tab[0][5] = new TableEntry("Local", "Chain_Idle", "command==chain", 0, myAction05, myConditionTrue);
 
 	//Chain Mode:
+<<<<<<< HEAD
 	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle", "Chain_Idle", "Set speed", 0, myAction10, myConditionTrue);
 	myStateMachine->tab[1][1] = new TableEntry ("Chain_Idle", "Requested", "Request from left", 0, myAction11, myConditionTrue);
 	myStateMachine->tab[1][2] = new TableEntry ("Requested", "Requested", "Timer1", 4000, myAction12, myCondition12);
@@ -52,6 +66,19 @@ void SystemManager ::init() {
 
 	//Follow Profile
 	myStateMachine->tab[2][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction20,myConditionTrue);
+=======
+	myStateMachine->tab[1][0] = new TableEntry ("Chain_Idle","Chain_Idle","Trigg1",0,myAction10,myConditionTrue);
+
+	myStateMachine->tab[1][1] = new TableEntry ("StateD","StateD","Timer1",4000,myAction11,myCondition11);
+	myStateMachine->tab[1][2] = new TableEntry ("StateD","StateE","Timer1",4000,myAction12,myCondition12);
+	myStateMachine->tab[1][3] = new TableEntry ("StateE","StateC","Timer1",3000,myAction13,myConditionTrue);
+
+
+
+	//Follow Profile
+
+	myStateMachine->tab[2][0] = new TableEntry ("StateK","StateK","Timer2",500,myAction20,myConditionTrue);
+>>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 
 	// Initialize timer names for all diagrams
 	// Timer names shall have the name Timer followed by the diagram number
@@ -102,7 +129,17 @@ void SystemManager :: startStateMachine() {
 }
 
 void myAction00() {
+<<<<<<< HEAD
 	printf(" IDLE -> mode==local -> Local\n");
+=======
+
+
+	printf(" Local_Idle -> Transition00 -> Local_Idle\n"); 
+
+	printf(" StateA -> Transition00 -> StateA\n"); 
+
+	n++;
+>>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 	return;
 }
 
@@ -116,6 +153,11 @@ void myAction02() {
 	return;
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 1ca4411daa15b7d5e322f19a98f89bbe5aea17f6
 void myAction03() {
 	printf(" Local -> command==followProfile -> FollowProfile\n");
 	return;

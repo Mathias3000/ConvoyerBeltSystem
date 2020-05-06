@@ -1,5 +1,6 @@
 #pragma once
 #include "defines.h"
+#include "Motor.h"
 
 using namespace std;
 
@@ -9,11 +10,13 @@ private:
 	double currentSpeed;
 	char currentState[MAX_STATE_NAME];
 	int currentSteps;
+	Motor* myMotor;
 	enum MotorState
 	{
 		movingLeft, movingRight, Stop
 	};
 public:
+	MotorController(Motor* Motor);
 	int followProfile(int direction);
 	int move(double speed, double time);
 	int stop(void);

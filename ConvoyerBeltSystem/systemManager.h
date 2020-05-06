@@ -2,6 +2,14 @@
 #ifndef SYSTEMMANAGER_H_
 #define SYSTEMMANAGER_H_
 
+#include "stateMachine.h"
+#include "keyboard.h"
+#include "myFunctions.h"
+#include "stateTable.h"
+#include <stdio.h>
+
+extern unsigned short stepCounterFollowProf;
+
 class SystemManager {
 public:
 	SystemManager();
