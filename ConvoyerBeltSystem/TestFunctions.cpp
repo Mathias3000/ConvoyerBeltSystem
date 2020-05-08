@@ -134,3 +134,10 @@ void testKeyBoard()
 	}
 
 }
+
+void testStateManagcer()
+{
+	StateMachine* sm = new StateMachine();
+	sm->runToCompletion();
+
+}

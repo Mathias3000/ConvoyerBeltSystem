@@ -1,5 +1,4 @@
 #include "SystemManager.h"
-#include "SystemManager.h"
 
 SystemManager::SystemManager()
 {

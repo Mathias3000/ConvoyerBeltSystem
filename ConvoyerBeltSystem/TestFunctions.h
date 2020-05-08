@@ -9,6 +9,7 @@
 #include "TelnetServer.h"
 #include "TCPClient.h"
 #include "keyboard.h"
+#include "SystemManager.h"
 
 //#include "gpio.h"
 //#include "spi.h"
@@ -31,5 +32,6 @@ void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 void testKeyBoard();
+void testStateManagcer();
 
 
