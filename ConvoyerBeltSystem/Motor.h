@@ -19,7 +19,7 @@ extern "C" {
 #include "pwm.h"
 }
 
-extern unsigned short stepCounterFollowProf; //declared in systemManager.cpp
+extern int stepCounterFollowProf; //declared in systemManager.cpp
 
 class Motor
 {
@@ -27,14 +27,20 @@ public:
 	Motor();
 	~Motor();
 	int initMotor(); //init the spi connection and configure with default values
-	int setSpeed(int speed); //0-100
-	int getSpeed(); 
+	int setSpeed(double speed); //0-100
+	int getSpeed();
+	int setDirection(bool direction);
 	int startMotor(bool direction); 
 	int stopMotor();
 	int followProfile(bool direction); //depends on polling a global variable named stepCounterFollowProf (timer should do the increment steps every 20ms)
+	
+	double getCurrentSpeed();
+	int getCurrentStatus();
+
 private:
 	unsigned short readBackValSPI = 0;
 	double speed = 0;
+	bool direction;
 	bool motorStopped = true;
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;

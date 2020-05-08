@@ -57,16 +57,21 @@ int Motor::initMotor()
 	if (pwmSetPeriod_B(this->pwmMotor, 50000) < 0) return -1;
 	//if (pwmSetDuty_B(this->pwmMotor, 35000)) return -1;
 	if (pwmSetPolarity_B(this->pwmMotor, 0)) return -1;
+	printf("SPI for Motor initialized!\n");
 	return 0;
 }
 
-int Motor::setSpeed(int speed)
+int Motor::setSpeed(double speed)
 {
 	if (speed >= 0 && speed <= 100) {
 		this->speed = speed;
+		return 0;
 	}
-	else return -1;
-	return 0;
+	else {
+		this->speed = 0;
+		printf("speed should be between 0 - 100!\n");
+		return -1;
+	}
 }
 
 int Motor::getSpeed()
@@ -118,6 +123,7 @@ int Motor::followProfile(bool direction)
 	}
 	do {
 		if (countPrev != stepCounterFollowProf) {
+			countPrev = stepCounterFollowProf;
 			//accelerate
 			if (stepCounterFollowProf <= RAMP_UP) {
 				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
@@ -136,8 +142,13 @@ int Motor::followProfile(bool direction)
 				this->motorStopped = true;
 			}
 		}
-		countPrev = stepCounterFollowProf;
 	} while (stepCounterFollowProf <= 400 && this->motorStopped == false); //Motor muss auf jeden Fall stoppen, da this.motorStopped = true sonst nur in this.stopMotor() passieren kann...
 	
+	return 0;
+}
+
+int Motor::setDirection(bool direction)
+{	
+	this->direction = direction;
 	return 0;
 }

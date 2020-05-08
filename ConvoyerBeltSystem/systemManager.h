@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "Motor.h"
 
-extern unsigned short stepCounterFollowProf;
+extern int stepCounterFollowProf;
 
 class SystemManager {
 public:

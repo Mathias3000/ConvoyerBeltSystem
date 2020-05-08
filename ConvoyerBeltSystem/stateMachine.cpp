@@ -67,14 +67,11 @@ std::string StateMachine :: getEvent() {
 void StateMachine :: runToCompletion() {
 	std::string actualEvent;
 	int d,i,j;
-	int counter = 0;
 	while (true) {
 		if (sem_wait(&semEvent) != 0)
 			perror ("Sem wait"); // Wait for an event to arrive
 		actualEvent = getEvent(); // Get the event from the queue
 		//printf(actualEvent.c_str()); // For debug purposes only
-		printf("\nTransition Nr.: %d\n", counter);
-		counter++;
 		for (d = 0; d < diagrams; d++) {
 			for (i = 0; i < lines[d]; i++) {
 				if ((actualState[d] == tab[d][i]->actState) && 

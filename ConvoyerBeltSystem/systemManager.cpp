@@ -2,10 +2,9 @@
 #include "systemManager.h"
 
 int n, m;
-Motor* myMotor;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
-unsigned short stepCounterFollowProf = 0;
+int stepCounterFollowProf = 0;
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -33,6 +32,7 @@ void SystemManager ::init() {
 	*/
 
 	//Local Mode: Actions noch umbenennen
+	
 	myStateMachine->tab[0][0] = new TableEntry("IDLE", "Local", "mode==local", 0, myAction00, myConditionTrue);
 	myStateMachine->tab[0][1] = new TableEntry ("Local", "Local", "command==speed", 0, myAction01, myConditionTrue);
 	myStateMachine->tab[0][2] = new TableEntry ("Local", "Local", "command==direction", 0, myAction02, myConditionTrue);	
@@ -46,8 +46,9 @@ void SystemManager ::init() {
 	myStateMachine->tab[1][3] = new TableEntry ("StateE", "StateC", "Timer1", 3000, myAction13, myConditionTrue);
 
 	//Follow Profile
-	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "command==followProfile", 0, myAction20, myConditionTrue);
-	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "IDLE", "Timer2", 8000, myAction21, myConditionTrue);
+	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "switchTofollowProfile", 0, myAction20, myConditionTrue); //start Motor
+	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, myAction21, stepsCompleted);
+	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, myAction22, myConditionTrue);
 
 	// Initialize timer names for all diagrams
 	// Timer names shall have the name Timer followed by the diagram number
@@ -58,7 +59,7 @@ void SystemManager ::init() {
 	// Initialize line numbers for all diagrams
 	myStateMachine->lines[0] = 5;
 	myStateMachine->lines[1] = 4;
-	myStateMachine->lines[2] = 2;
+	myStateMachine->lines[2] = 3;
 
 	// Initialize first state for all diagrams
 	myStateMachine->actualState[0] = "IDLE";
@@ -73,8 +74,9 @@ void SystemManager ::init() {
 	
 	// Start timer for each diagram which needs one in the first state!
 	// In my case these are diagram 0 and 2
+	
+	//myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
 	/*
-	myStateMachine->diaTimerTable[0]->startTimer(myStateMachine->tab[0][0]->eventTime);
 	myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
 	*/
 
@@ -113,12 +115,13 @@ void myAction02() {
 }
 
 void myAction03() {
-	printf(" Local -> command==followProfile -> FollowProfile\n");
+	printf(" Local -> command==followProfile -> Waiting\n");
+	myStateMachine->sendEvent("switchTofollowProfile");
 	return;
 }
 
 void myAction04() {
-	printf(" FollowProfile -> myMotorController.finishedProfile -> Local\n");
+	printf(" Waiting -> myMotorController.finishedProfile -> Local\n");
 	return;
 }
 
@@ -151,14 +154,34 @@ void myAction13() {
 }
 
 void myAction20() {
-	myMotor->startMotor(50);
+	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
 	return;
 }
 
 void myAction21()
 {
-	myMotor->stopMotor();
-	myStateMachine->sendEvent("myMotorController.finishedProfile");
+	stepCounterFollowProf = stepCounterFollowProf + 1;
+	printf("stepCounter: %d\n", stepCounterFollowProf);
+
+	//increment duty cycle...
+
+}
+
+void myAction22()
+{
+	printf("FollowProfile  -> Steps completed -> IDLE\n");
+}
+
+bool stepsCompleted()
+{
+	if (stepCounterFollowProf <= 400) {
+		return true;
+	}
+	else {
+		stepCounterFollowProf = 0;
+		myStateMachine->sendEvent("myMotorController.finishedProfile");
+		return false;
+	}
 }
 
 bool myConditionTrue() {

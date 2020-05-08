@@ -5,23 +5,22 @@
 #include "MotorController.h"
 #include <pthread.h>
 
-extern Motor* myMotor; //declared in systemManager
+Motor* myMotor = new Motor;
+SpeedProfile* mySpeedProfile = new SpeedProfile;
+MotorController* myMotorController = new MotorController(myMotor, mySpeedProfile);
 
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
 	
-	myMotor = new Motor;
-	myMotor->initMotor();
-	myMotor->setSpeed(50);
-	myMotor->stopMotor();
-	pthread_t threadKeyboard;
+	myMotorController->setSpeed(100);
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
+	pthread_t threadKeyboard;
 	pthread_create(&threadKeyboard, NULL, testSM, NULL);
 	systemManagerTest->startStateMachine();
-
+	
     //testTCPServer();
 	//testMotor(0);
 	//testADC();
