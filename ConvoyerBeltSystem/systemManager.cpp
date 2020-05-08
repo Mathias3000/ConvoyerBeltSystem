@@ -4,7 +4,7 @@
 int n, m;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
-int stepCounterFollowProf = 0;
+
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -31,8 +31,7 @@ void SystemManager ::init() {
 	action, condition = function pointer; time = int.
 	*/
 
-	//Local Mode: Actions noch umbenennen
-	
+	//Local Mode: *Actions noch umbenennen
 	myStateMachine->tab[0][0] = new TableEntry("IDLE", "Local", "mode==local", 0, myAction00, myConditionTrue);
 	myStateMachine->tab[0][1] = new TableEntry ("Local", "Local", "command==speed", 0, myAction01, myConditionTrue);
 	myStateMachine->tab[0][2] = new TableEntry ("Local", "Local", "command==direction", 0, myAction02, myConditionTrue);	
@@ -160,11 +159,9 @@ void myAction20() {
 
 void myAction21()
 {
-	stepCounterFollowProf = stepCounterFollowProf + 1;
-	printf("stepCounter: %d\n", stepCounterFollowProf);
-
+	myMotorController->incrementStepCounter();
+	printf("stepCounter: %d\n", myMotorController->getStepCounter());
 	//increment duty cycle...
-
 }
 
 void myAction22()
@@ -174,11 +171,11 @@ void myAction22()
 
 bool stepsCompleted()
 {
-	if (stepCounterFollowProf <= 400) {
+	if (myMotorController->getStepCounter() <= 400) {
 		return true;
 	}
 	else {
-		stepCounterFollowProf = 0;
+		myMotorController->resetStepCounter();
 		myStateMachine->sendEvent("myMotorController.finishedProfile");
 		return false;
 	}

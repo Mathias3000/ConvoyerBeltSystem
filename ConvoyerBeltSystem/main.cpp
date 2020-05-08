@@ -1,18 +1,25 @@
 #include <cstdio>
 #include "TestFunctions.h"
 #include "systemManager.h"
-#include "Motor.h"
 #include "MotorController.h"
 #include <pthread.h>
 
-Motor* myMotor = new Motor;
-SpeedProfile* mySpeedProfile = new SpeedProfile;
-MotorController* myMotorController = new MotorController(myMotor, mySpeedProfile);
+Controller* myController; 
+Encoder* myEncoder;
+Motor* myMotor;
+SpeedProfile* mySpeedProfile;
+MotorController* myMotorController;
 
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
 	
+	myController = new Controller;
+	myEncoder = new Encoder;
+	myMotor = new Motor(myEncoder, myController);
+	mySpeedProfile = new SpeedProfile;
+	myMotorController = new MotorController(myMotor, mySpeedProfile);
+
 	myMotorController->setSpeed(100);
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;

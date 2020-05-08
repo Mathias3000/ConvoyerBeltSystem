@@ -2,14 +2,15 @@
 #ifndef SYSTEMMANAGER_H_
 #define SYSTEMMANAGER_H_
 
+#include <stdio.h>
+
 #include "stateMachine.h"
 #include "keyboard.h"
 #include "myFunctions.h"
 #include "stateTable.h"
-#include <stdio.h>
-#include "Motor.h"
+#include "MotorController.h"
 
-extern int stepCounterFollowProf;
+extern MotorController* myMotorController;
 
 class SystemManager {
 public:
@@ -18,7 +19,6 @@ public:
 	void init();
 	void startStateMachine();
 private:
-	
 };
 
 #endif // SYSTEMMANAGER_H_

@@ -228,13 +228,4 @@ void* testSM(void*)
 
 
 
-//thread handler for test purpose, should test followProfile()
-void* followProfile(void*) {
-	while (stepCounterFollowProf <= 400) {
-		stepCounterFollowProf = stepCounterFollowProf + 1;
-		usleep(20000);
-	}	
-}
-
-
 

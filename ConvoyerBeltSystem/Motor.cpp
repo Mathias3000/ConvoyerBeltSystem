@@ -1,6 +1,6 @@
 #include "Motor.h"
 
-Motor::Motor()
+Motor::Motor(Encoder* encoder, Controller* controller) : myEncoder(encoder), myController(controller)
 {
 	printf("Motor Konstruktor!\n");
 	//Create instances for hardware usage
@@ -102,48 +102,6 @@ int Motor::stopMotor()
 {
 	if (pwmSetEnable_B(pwmMotor, 0) < 0) return -1;
 	this->motorStopped = true;
-	return 0;
-}
-
-int Motor::followProfile(bool direction)
-{
-	unsigned short countPrev = 0;
-	double speed = 0;
-	if (direction == 0) {
-		gpioSetValue(this->IN1, 1);
-		pwmSetDuty_B(this->pwmMotor, 1);
-		pwmSetEnable_B(this->pwmMotor, 1);
-		this->motorStopped = false;
-	}
-	else if (direction == 1) {
-		gpioSetValue(this->IN1, 0);
-		pwmSetDuty_B(this->pwmMotor, 1);
-		pwmSetEnable_B(this->pwmMotor, 1);
-		this->motorStopped = false;
-	}
-	do {
-		if (countPrev != stepCounterFollowProf) {
-			countPrev = stepCounterFollowProf;
-			//accelerate
-			if (stepCounterFollowProf <= RAMP_UP) {
-				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
-				speed = (speed + (this->speed / 50));
-			}
-			//steady speed
-			else if (stepCounterFollowProf <= RAMP_STEADY) {}
-			//decelerate
-			else if (stepCounterFollowProf < RAMP_DOWN) {
-				speed = (speed - (this->speed / 50));
-				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
-			}
-			//stop Motor
-			else if (stepCounterFollowProf >= RAMP_DOWN) {
-				this->stopMotor();
-				this->motorStopped = true;
-			}
-		}
-	} while (stepCounterFollowProf <= 400 && this->motorStopped == false); //Motor muss auf jeden Fall stoppen, da this.motorStopped = true sonst nur in this.stopMotor() passieren kann...
-	
 	return 0;
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <stdio.h>
 #include <string.h>
 #include <cstdio>
@@ -10,8 +9,9 @@
 #include <errno.h>
 #include <pthread.h>
 #include "defines.h"
-#include "systemManager.h"
 #include <cmath>
+#include "Encoder.h"
+#include "Controller.h"
 
 extern "C" {
 #include "gpio.h"
@@ -19,12 +19,10 @@ extern "C" {
 #include "pwm.h"
 }
 
-extern int stepCounterFollowProf; //declared in systemManager.cpp
-
 class Motor
 {
 public:
-	Motor();
+	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); //init the spi connection and configure with default values
 	int setSpeed(double speed); //0-100
@@ -32,8 +30,7 @@ public:
 	int setDirection(bool direction);
 	int startMotor(bool direction); 
 	int stopMotor();
-	int followProfile(bool direction); //depends on polling a global variable named stepCounterFollowProf (timer should do the increment steps every 20ms)
-	
+	//To dos:
 	double getCurrentSpeed();
 	int getCurrentStatus();
 
@@ -42,6 +39,8 @@ private:
 	double speed = 0;
 	bool direction;
 	bool motorStopped = true;
+	Encoder* myEncoder;
+	Controller* myController;
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;
