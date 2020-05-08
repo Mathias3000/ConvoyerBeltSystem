@@ -1,6 +1,9 @@
 #pragma once
 #include "keyboard.h"
 #include "stateMachine.h"
+#include <iostream>
+
+using namespace std;
 
 class SystemManager
 {
