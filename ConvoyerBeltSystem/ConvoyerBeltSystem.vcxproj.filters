@@ -92,6 +92,7 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">
@@ -187,6 +188,7 @@
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
+    <ClInclude Include="SystemManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FSM framework">

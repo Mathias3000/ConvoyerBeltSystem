@@ -1,15 +1,19 @@
+#pragma once
+#include "keyboard.h"
+#include "stateMachine.h"
 
-#ifndef SYSTEMMANAGER_H_
-#define SYSTEMMANAGER_H_
+class SystemManager
+{
+public: 
+	int n, m;
+	Keyboard* keyBoard;
+	StateMachine* stateMaschine;
 
-class SystemManager {
-public:
 	SystemManager();
 	~SystemManager();
 	void init();
-	void startStateMachine();
-private:
-	
+	void startStateMaschine();
+
+
 };
 
-#endif // SYSTEMMANAGER_H_

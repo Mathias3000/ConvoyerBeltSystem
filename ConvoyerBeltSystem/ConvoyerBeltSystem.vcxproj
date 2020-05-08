@@ -102,6 +102,7 @@
     <ClCompile Include="spi.c" />
     <ClCompile Include="stateMachine.cpp" />
     <ClCompile Include="stateTable.cpp" />
+    <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="TCPClient.cpp" />
     <ClCompile Include="TCPServer.cpp" />
     <ClCompile Include="TelnetServer.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="spi.h" />
     <ClInclude Include="stateMachine.h" />
     <ClInclude Include="stateTable.h" />
+    <ClInclude Include="SystemManager.h" />
     <ClInclude Include="TCPClient.h" />
     <ClInclude Include="TCPServer.h" />
     <ClInclude Include="TelnetServer.h" />
