@@ -6,6 +6,7 @@
 #include <thread>
 #include <mutex>
 #include "MotorController.h"
+#include "Helpers.h"
 
 using namespace std;
 

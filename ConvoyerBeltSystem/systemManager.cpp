@@ -114,7 +114,7 @@ void readKeyInputs()
 	while (true) {
 
 		readKey = myKeyBoard->getPressedKey();
-		this_thread::sleep_for(chrono::microseconds(50));
+		sleep(0.1);
 
 		// Evaluate
 		// -- Events		

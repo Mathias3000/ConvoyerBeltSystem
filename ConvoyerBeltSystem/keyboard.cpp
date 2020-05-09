@@ -17,6 +17,9 @@ Keyboard :: ~Keyboard() {
 
 char Keyboard::getPressedKey( )
 {
-	return getKey(kbdd);
+	char currentValue = getKey(kbdd);
+	sleep(0.05);	// implement a more elegant way of sleep: maybe timer
+
+	return currentValue;
 
 }
