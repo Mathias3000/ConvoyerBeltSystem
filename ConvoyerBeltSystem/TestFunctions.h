@@ -9,6 +9,8 @@
 #include "TCPClient.h"
 #include "keyboard.h"
 #include "SystemManager.h"
+#include "Potentiometer.h"
+#include "Helpers.h"
 
 extern "C" {
 #include "gpio.h"
@@ -27,6 +29,7 @@ void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 void testKeyBoard();
+void testPoti();
 void testSystemManagerWithThreads();
 
 

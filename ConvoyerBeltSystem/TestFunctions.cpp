@@ -130,9 +130,13 @@ void testKeyBoard()
 	while (true) {
 		readValue = k->getPressedKey();
 		cout << "Key pressed: " << readValue << endl;
-		this_thread::sleep_for(chrono::milliseconds(150));
+		
 	}
 
+}
+
+void testPoti()
+{
 }
 
 void testSystemManagerWithThreads()
