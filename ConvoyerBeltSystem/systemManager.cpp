@@ -1,10 +1,18 @@
 #include "SystemManager.h"
 
+
+// I need these global variables so that I can access them in my global action functions
+// Tip: use prefix "my" for testing with global variables
+
+
+int n, m;
+Keyboard* myKeyBoard = new Keyboard();
+StateMachine* myStateMaschine = new StateMachine();
+SpeedProfile* myProfile = new SpeedProfile();
+mutex mtxKeys;
+
 SystemManager::SystemManager()
 {
-	n = m = 0;
-	keyBoard = new Keyboard();
-	stateMaschine = new StateMachine();
 	init();
 }
 
@@ -18,53 +26,53 @@ void SystemManager::init()
 
 	// Define state charts
 	// Local Mode Chart
-	stateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, noAction, noCondition);
-	stateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed, noCondition);
-	stateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirection", 0, actionSetDirection, noCondition);
-	stateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile, noCondition);
-	stateMaschine->tab[0][4] = new TableEntry("FollowProfile", "Local", "motorControllerFinishedProfile", 0, noAction, noCondition);
-	stateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction, noCondition);
+	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, noAction1, noCondition);
+	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed1, noCondition);
+	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirection", 0, actionSetDirection, noCondition);
+	myStateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile1, noCondition);
+	myStateMaschine->tab[0][4] = new TableEntry("FollowProfile", "Local", "motorControllerFinishedProfile", 0, noAction2, noCondition);
+	myStateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction3, noCondition);	
 
-	// FollowProfile
-	stateMaschine->tab[1][0] = new TableEntry("FollowProfile", "Local", "Timer0", 20, actionSetSpeedAndSteps, conditionTotalSteps);
+	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils in Local und Chain einbauen
+	myStateMaschine->tab[1][0] = new TableEntry("FollowProfile", "Local", "Timer0", 20, actionSetSpeedAndSteps, conditionTotalSteps);		// put timer.start() to different actionFunction
 	
-	// Chain
-	stateMaschine->tab[2][0] = new TableEntry("Idle", "Chain", "RecvCmdChain", 0, noAction, noCondition);
-	stateMaschine->tab[2][1] = new TableEntry("Chain", "Chain", "RecvCmdSpeed", 0, actionSetSpeed, noCondition);
-	stateMaschine->tab[2][2] = new TableEntry("Chain", "Requested", "RecvCmdRequest", 0, noAction, noCondition);
-	stateMaschine->tab[2][3] = new TableEntry("Requested", "Requested", "RecvCmdRequest", 0, actionHandleRequest_Wait, noCondition);
-	stateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
-	stateMaschine->tab[2][5] = new TableEntry("ReceivingPayload", "ReceivingPayload", "RecvCmdRequest", 0, actionHandleRequest_Wait, noCondition);
-	stateMaschine->tab[2][6] = new TableEntry("ReceivingPayload", "FollowProfile", "SendRelease", 0, actionFollowProfile, noCondition);
-	stateMaschine->tab[2][7] = new TableEntry("FollowProfile", "FollowProfile", "RecvCmdRequest", 0, actionHandleRequest_Wait, noCondition);
-	stateMaschine->tab[2][8] = new TableEntry("FollowProfile", "Requesting", "motorControllerFinishedProfile", 0, actionSendRequest, noCondition);
-	stateMaschine->tab[2][9] = new TableEntry("Requesting", "Requesting", "RecvCmdRequest", 0, actionHandleRequest_Wait, noCondition);
-	stateMaschine->tab[2][10] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, actionMotorStop, noCondition);
-	stateMaschine->tab[2][11] = new TableEntry("Requesting", "PassLoad", "RecvCmdReady", 0, actionMotorMove, noCondition);
-	stateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop, noCondition);
+	// Chain Chart
+	myStateMaschine->tab[2][0] = new TableEntry("Idle", "Chain", "RecvCmdChain", 0, noAction4, noCondition);
+	myStateMaschine->tab[2][1] = new TableEntry("Chain", "Chain", "RecvCmdSpeed", 0, actionSetSpeed2, noCondition);
+	myStateMaschine->tab[2][2] = new TableEntry("Chain", "Requested", "RecvCmdRequest", 0, noAction5, noCondition);
+	myStateMaschine->tab[2][3] = new TableEntry("Requested", "Requested", "RecvCmdRequest", 0, actionHandleRequest_Wait1, noCondition);
+	myStateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
+	myStateMaschine->tab[2][5] = new TableEntry("ReceivingPayload", "ReceivingPayload", "RecvCmdRequest", 0, actionHandleRequest_Wait2, noCondition);
+	myStateMaschine->tab[2][6] = new TableEntry("ReceivingPayload", "FollowProfile", "SendRelease", 0, actionFollowProfile2, noCondition);
+	myStateMaschine->tab[2][7] = new TableEntry("FollowProfile", "FollowProfile", "RecvCmdRequest", 0, actionHandleRequest_Wait3, noCondition);
+	myStateMaschine->tab[2][8] = new TableEntry("FollowProfile", "Requesting", "motorControllerFinishedProfile", 0, actionSendRequest, noCondition);
+	myStateMaschine->tab[2][9] = new TableEntry("Requesting", "Requesting", "RecvCmdRequest", 0, actionHandleRequest_Wait4, noCondition);
+	myStateMaschine->tab[2][10] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, actionMotorStop1, noCondition);
+	myStateMaschine->tab[2][11] = new TableEntry("Requesting", "PassLoad", "RecvCmdReady", 0, actionMotorMove, noCondition);
+	myStateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop2, noCondition);
 
 	// Initialize timer names for all diagrams
-	stateMaschine->timerNames[0] = "Timer0";
+	myStateMaschine->timerNames[0] = "Timer0";
 
 	// Initialize line numbers for all diagrams
-	stateMaschine->lines[0] = 6;	// Anzahl der Teilen bei den Tabellen oben
-	stateMaschine->lines[1] = 1;
-	stateMaschine->lines[2] = 13;
+	myStateMaschine->lines[0] = 6;	// Anzahl der Teilen bei den Tabellen oben
+	myStateMaschine->lines[1] = 1;
+	myStateMaschine->lines[2] = 13;
 
 	// Initialize first state for all diagrams
-	stateMaschine->actualState[0] = "Idle";
-	stateMaschine->actualState[1] = "FollowProfile";
-	stateMaschine->actualState[2] = "Idle";
+	myStateMaschine->actualState[0] = "Idle";
+	myStateMaschine->actualState[1] = "FollowProfile";
+	myStateMaschine->actualState[2] = "Idle";
 
 	// Set the actual number of diagrams
-	stateMaschine->diagrams = 3;
+	myStateMaschine->diagrams = 3;
 
 	// Initialize state machine
-	stateMaschine->init();
+	myStateMaschine->init();
 
 	// Start timer for each diagram which needs one in the first state!
 	// In my case these are diagram 0 and 2
-	stateMaschine->diaTimerTable[0]->startTimer(stateMaschine->tab[1][0]->eventTime);
+	myStateMaschine->diaTimerTable[0]->startTimer(myStateMaschine->tab[1][0]->eventTime);
 
 	// Initial actions can be done here, if needed!
 	n = 0;
@@ -74,61 +82,197 @@ void SystemManager::init()
 
 void SystemManager::startStateMaschine()
 {
-	stateMaschine->runToCompletion();
+	mtx.lock();
+	myStateMaschine->runToCompletion();
+	mtx.unlock();
+}
+
+// Function for reading keyInputs
+void readKeyInputs()
+{
+	char readKey;
+
+	while (true) {
+
+		readKey = myKeyBoard->getPressedKey();
+		this_thread::sleep_for(chrono::microseconds(50));
+
+		// Evaluate
+		// -- Events		
+		// [1] RecvCmdLocal
+		// [2] RecvCmdSpeed
+		// [3] RecvCmdDirection
+		// [4] RecvCmdFollowProfile
+		// [5] motorControllerFinishedProfile
+		// [6] RecvCmdChain
+		// [7] RecvCmdRequest
+		// [8] motorControllerReadToRecvPayload
+		// [9] SendRelease
+		// [0] motorControllerFinishedProfile
+		// [A] RecvCmdWait
+		// [B] RecvCmdReady
+		// [C] RecvCmdRelease
+		
+		mtxKeys.lock();
+		switch (readKey)
+		{
+		case '0':
+			myStateMaschine->sendEvent("motorControllerFinishedProfile");
+			break;
+		case '1':
+			myStateMaschine->sendEvent("RecvCmdLocal");
+			break;
+		case '2':
+			myStateMaschine->sendEvent("RecvCmdSpeed");
+			break;
+		case '3':
+			myStateMaschine->sendEvent("RecvCmdDirection");
+			break;
+		case '4':
+			myStateMaschine->sendEvent("RecvCmdFollowProfile");
+			break;
+		case '5':
+			myStateMaschine->sendEvent("motorControllerFinishedProfile");
+			break;
+		case '6':
+			myStateMaschine->sendEvent("RecvCmdChain");
+			break;
+		case '7':
+			myStateMaschine->sendEvent("RecvCmdRequest");
+			break;
+		case '8':
+			myStateMaschine->sendEvent("motorControllerReadToRecvPayload");
+			break;
+		case '9':
+			myStateMaschine->sendEvent("SendRelease");
+			break;
+		case 'A':
+			myStateMaschine->sendEvent("RecvCmdWait");
+			break;
+		case 'B':
+			myStateMaschine->sendEvent("RecvCmdReady");
+			break;
+		case 'C':
+			myStateMaschine->sendEvent("RecvCmdReleased");
+			break;
+
+		default:
+			break;
+		}
+		mtxKeys.unlock();
+
+	}
+
 }
 
 
 
 // Defining global functions
 // ACTIONS
-void noAction() {
-	cout << "No action" << endl;
+void noAction1() {
+	cout << "\nIdle --> Local" << endl;
+	cout << "No action\n" << endl;
 	return;
 }
 
-void actionSetSpeed() {
-	
-	cout << "Set speed. " << endl;
+void noAction2() {
+	cout << "\nFollowProfile --> Local" << endl;
+	cout << "No action\n" << endl;
+	return;
+}
+
+void noAction3() {
+	cout << "\nLocal --> Chain" << endl;
+	cout << "No action\n" << endl;
+	return;
+}
+
+void noAction4() {
+	cout << "\nIdle --> Chain" << endl;
+	cout << "No action\n" << endl;
+	return;
+}
+
+void noAction5() {
+	cout << "\nChain --> Requested" << endl;
+	cout << "No action\n" << endl;
+	return;
+}
+
+void actionSetSpeed1() {
+	cout << "\nLocal --> Local" << endl;
+	cout << "Set speed. \n" << endl;
+}
+
+void actionSetSpeed2() {
+	cout << "\nChain --> Chain" << endl;
+	cout << "Set speed. \n" << endl;
 }
 
 void actionSetDirection(){
-
-	cout << "Set direction. " << endl;
+	cout << "\nLocal --> Local" << endl;
+	cout << "Set direction. \n" << endl;
 }
 
-void actionFollowProfile() {
+void actionFollowProfile1() {
+	cout << "\nLocal --> FollowProfile" << endl;
+	cout << "Start following profile.\n " << endl;
+}
 
-	cout << "Start following profile. " << endl;
+void actionFollowProfile2() {
+	cout << "\nReceivingPayload --> FollowProfile" << endl;
+	cout << "Start following profile. \n" << endl;
 }
 
 void actionSetSpeedAndSteps() {
-
-	cout << "Set speed and increment steps" << endl;;
+	cout << "\nFollowProfile --> Local" << endl;
+	myProfile->step++;
+	cout << "Set speed and increment steps\n" << endl;;
 }
 
-void actionHandleRequest_Wait() {
+void actionHandleRequest_Wait1() {
+	cout << "\nRequested --> Requested" << endl;
+	cout << "Handling reqeuest ... sending wait ... \n" << endl;
+}
 
-	cout << "Handling reqeuest ... sending wait ... " << endl;
+void actionHandleRequest_Wait2() {
+	cout << "\nReceivingPayload --> ReceivingPayload" << endl;
+	cout << "Handling reqeuest ... sending wait ... \n" << endl;
+}
+
+void actionHandleRequest_Wait3() {
+	cout << "\nFollowProfile --> FollowProfile" << endl;
+	cout << "Handling reqeuest ... sending wait ... \n" << endl;
+}
+
+void actionHandleRequest_Wait4() {
+	cout << "\nRequesting --> Requesting" << endl;
+	cout << "Handling reqeuest ... sending wait ... \n" << endl;
 }
 
 void actionHandleRequest_Ready() {
-
-	cout << "Handling reqeuest ... sending ready ... " << endl;
+	cout << "\nRequested --> ReceivingPayload" << endl;
+	cout << "Handling reqeuest ... sending ready ... \n" << endl;
 }
 
 void actionSendRequest() {
-
-	cout << "Sending request ... " << endl;
+	cout << "\nFollowProfile --> Requesting" << endl;
+	cout << "Sending request ... \n" << endl;
 }
 
-void actionMotorStop() {
+void actionMotorStop1() {
+	cout << "\nRequesting --> Requesting" << endl;
+	cout << "Motor stopped. \n" << endl;
+}
 
-	cout << "Motor stopped. " << endl;
+void actionMotorStop2() {
+	cout << "\nRequesting --> Requesting" << endl;
+	cout << "Motor stopped. \n" << endl;
 }
 
 void actionMotorMove() {
-
-	cout << "Motor moving slowly ... " << endl;
+	cout << "\nPassLoad --> Chain" << endl;
+	cout << "Motor moving slowly ... \n" << endl;
 }
 
 
@@ -140,5 +284,7 @@ bool noCondition() {
 bool conditionTotalSteps(){
 
 	cout << "Total steps > 400 " << endl;
-	return true;	// Change for later implementation
+	if(myProfile->step >= 400)
+		return true;	
+	return false;
 }
