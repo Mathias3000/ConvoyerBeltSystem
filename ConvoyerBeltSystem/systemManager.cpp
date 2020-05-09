@@ -84,6 +84,7 @@ void SystemManager::startStateMaschine()
 {
 	mtx.lock();
 	myStateMaschine->runToCompletion();
+	this_thread::sleep_for(chrono::microseconds(50));
 	mtx.unlock();
 }
 
@@ -283,7 +284,7 @@ bool noCondition() {
 
 bool conditionTotalSteps(){
 
-	cout << "Total steps > 400 " << endl;
+	// cout << "Total steps > 400 " << endl;
 	if(myProfile->step >= 400)
 		return true;	
 	return false;
