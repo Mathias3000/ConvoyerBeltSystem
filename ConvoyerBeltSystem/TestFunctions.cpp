@@ -135,9 +135,22 @@ void testKeyBoard()
 
 }
 
-void testStateManagcer()
+void testSystemManager()
 {
-	StateMachine* sm = new StateMachine();
-	sm->runToCompletion();
+	SystemManager* sm = new SystemManager();
+	cout << "Starting State Maschine ... " << endl;
+	cout << "Initialization completed. " << endl;
+	thread smThread(&SystemManager::startStateMaschine, sm);
+	thread keyInputThread(readKeyInputs);
+
+	if (smThread.joinable()) {
+		smThread.join();
+	}
+	if (keyInputThread.joinable()) {
+		keyInputThread.join();
+	}
 
 }
+
+
+

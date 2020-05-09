@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <string.h>
 #include <chrono>
 #include <thread>
 
@@ -10,10 +9,6 @@
 #include "TCPClient.h"
 #include "keyboard.h"
 #include "SystemManager.h"
-
-//#include "gpio.h"
-//#include "spi.h"
-//#include "pwm.h"
 
 extern "C" {
 #include "gpio.h"
@@ -32,6 +27,6 @@ void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 void testKeyBoard();
-void testStateManagcer();
+void testSystemManager();
 
 
