@@ -5,6 +5,7 @@
 #include "SpeedProfile.h"
 #include <thread>
 #include <mutex>
+#include "MotorController.h"
 
 using namespace std;
 

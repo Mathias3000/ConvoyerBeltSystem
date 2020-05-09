@@ -8,7 +8,9 @@
 int n, m;
 Keyboard* myKeyBoard = new Keyboard();
 StateMachine* myStateMaschine = new StateMachine();
+
 SpeedProfile* myProfile = new SpeedProfile();
+MotorController* motorCtrl = new MotorController();
 mutex mtxKeys;
 
 SystemManager::SystemManager()
@@ -51,6 +53,22 @@ void SystemManager::init()
 	myStateMaschine->tab[2][11] = new TableEntry("Requesting", "PassLoad", "RecvCmdReady", 0, actionMotorMove, noCondition);
 	myStateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop2, noCondition);
 
+	// Potentiometer/Keyboard Chart for Polling
+	// every 50ms check if poti value has changed "significantly"; If it has -> sendEvent for changing speed
+	// OR: define Key to accept/validate the chosen value of poti
+
+	// Display Chart for visualization
+	// Get currect state 
+	// OR: just print it out continuousyl
+
+	// TCP Server/Client: They send Event when they reveive something. No need for polling. 
+	// Example: Telnet Server
+	// - receives data
+	// - unpack
+	// - set global variables?
+	// - sendEvent to the queue
+
+
 	// Initialize timer names for all diagrams
 	myStateMaschine->timerNames[0] = "Timer0";
 
@@ -82,10 +100,10 @@ void SystemManager::init()
 
 void SystemManager::startStateMaschine()
 {
-	mtx.lock();
+	// mtx.lock();
 	myStateMaschine->runToCompletion();
 	this_thread::sleep_for(chrono::microseconds(50));
-	mtx.unlock();
+	// mtx.unlock();
 }
 
 // Function for reading keyInputs
@@ -114,7 +132,8 @@ void readKeyInputs()
 		// [B] RecvCmdReady
 		// [C] RecvCmdRelease
 		
-		mtxKeys.lock();
+
+		// mtxKeys.lock();
 		switch (readKey)
 		{
 		case '0':
@@ -160,8 +179,7 @@ void readKeyInputs()
 		default:
 			break;
 		}
-		mtxKeys.unlock();
-
+		// mtxKeys.unlock();
 	}
 
 }
@@ -202,17 +220,17 @@ void noAction5() {
 
 void actionSetSpeed1() {
 	cout << "\nLocal --> Local" << endl;
-	cout << "Set speed. \n" << endl;
+	motorCtrl->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
 }
 
 void actionSetSpeed2() {
 	cout << "\nChain --> Chain" << endl;
-	cout << "Set speed. \n" << endl;
+	motorCtrl->setSpeed(200);
 }
 
 void actionSetDirection(){
 	cout << "\nLocal --> Local" << endl;
-	cout << "Set direction. \n" << endl;
+	motorCtrl->setDirection(1);
 }
 
 void actionFollowProfile1() {
