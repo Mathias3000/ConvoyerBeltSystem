@@ -1,6 +1,10 @@
 #include "TestFunctions.h"
 
 
+extern Keyboard* myKeyboard;
+extern SystemManager* systemManagerTest;
+
+
 void testTCPServer()
 {
 	TCPServer* server = new TCPServer(inet_addr(HOST_IP), TCP_PORT);
@@ -180,12 +184,48 @@ void testKeyBoard()
 
 }
 
-//thread handler for test purpose, should test followProfile()
-void* followProfile(void*) {
-	while (stepCounterFollowProf <= 400) {
-		stepCounterFollowProf = stepCounterFollowProf + 1;
-		usleep(20000);
-	}	
+
+void* testSM(void*)
+{	
+	unsigned char readValue;
+	while (true)
+	{	
+		readValue = myKeyboard->getPressedKey();
+		if (readValue == '1') {
+			myStateMachine->sendEvent("mode==local");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '2') {
+			myStateMachine->sendEvent("command==speed");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '3') {
+			myStateMachine->sendEvent("command==direction");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '4') {
+			myStateMachine->sendEvent("command==followProfile");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '5') {
+			myStateMachine->sendEvent("myMotorController.finishedProfile");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '6') {
+			myStateMachine->sendEvent("command==chain");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+	}
+	return NULL;
 }
+
+
+
 
 

@@ -18,5 +18,4 @@ Keyboard :: ~Keyboard() {
 char Keyboard::getPressedKey( )
 {
 	return getKey(kbdd);
-
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <stdio.h>
 #include <string.h>
 #include <cstdio>
@@ -10,8 +9,9 @@
 #include <errno.h>
 #include <pthread.h>
 #include "defines.h"
-#include "systemManager.h"
 #include <cmath>
+#include "Encoder.h"
+#include "Controller.h"
 
 extern "C" {
 #include "gpio.h"
@@ -19,27 +19,36 @@ extern "C" {
 #include "pwm.h"
 }
 
-extern unsigned short stepCounterFollowProf; //declared in systemManager.cpp
-
 class Motor
 {
 public:
-	Motor();
+	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); //init the spi connection and configure with default values
-	int setSpeed(int speed); //0-100
-	int getSpeed(); 
+	int setSpeed(double speed); //0-100
+	int getSpeed();
+	int setDirection(bool direction);
 	int startMotor(bool direction); 
 	int stopMotor();
-	int followProfile(bool direction); //depends on polling a global variable named stepCounterFollowProf (timer should do the increment steps every 20ms)
-private:
-	unsigned short readBackValSPI = 0;
-	double speed = 0;
-	bool motorStopped = true;
+	bool isStopped();
+	
+	//To dos:
+	double getCurrentSpeed();
+	int getCurrentStatus();
+
+	//no good design, needs fixing: 
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;
 	gpioDescriptor* bridgeEN;
 	gpioDescriptor* bridgeDIS;
+	bool motorStopped = true;
+
+private:
+	unsigned short readBackValSPI = 0;
+	double speed = 0;
+	bool direction;
+	Encoder* myEncoder;
+	Controller* myController;
 };
 
