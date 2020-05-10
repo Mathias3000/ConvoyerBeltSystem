@@ -33,7 +33,7 @@ bitsPerWord: is used to hold the bits per word size of SPI. Usually 8
 mode: is used to hold the mode of SPI (clock edge and clock polarity)
       For spi0: mode=0, for spi1: mode=1
 speed: is used to hold the speed of SPI (bit per second)
-flags: mode of operation. In both caeses O_RDWR is needed.
+flags: mode of operation. In both cases O_RDWR is needed.
 */
 typedef struct {
 	int fd;
