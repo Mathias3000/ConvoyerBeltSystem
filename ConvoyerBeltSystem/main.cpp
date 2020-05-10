@@ -6,7 +6,7 @@ int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
 
-    testSystemManagerWithThreads();
+    testPotentiometer();
 
     return 0;
 }
