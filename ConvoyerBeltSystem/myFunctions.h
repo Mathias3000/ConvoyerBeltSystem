@@ -5,6 +5,9 @@
 void myAction00();
 void myAction01();
 void myAction02();
+void myAction03();
+void myAction04();
+void myAction05();
 
 void myAction10();
 void myAction11();
@@ -12,10 +15,15 @@ void myAction12();
 void myAction13();
 
 void myAction20();
+void myAction21();
+void myAction22();
+bool stepsCompleted();
 
 void myAction30();
 
 bool myConditionTrue();
+
+
 
 bool myCondition00();
 bool myCondition01();

@@ -8,17 +8,44 @@
 #include "Display.h"
 #include "TelnetServer.h"
 #include "TCPClient.h"
+#include "systemManager.h"
 #include "keyboard.h"
+
+
+#include <cstdio>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <errno.h>
+#include <pthread.h>
+
+#include "keyboard.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
+#include "stateMachine.h"
+#include <errno.h>
+#include <pthread.h>
+#include "systemManager.h"
 
 //#include "gpio.h"
 //#include "spi.h"
 //#include "pwm.h"
+
 
 extern "C" {
 #include "gpio.h"
 #include "spi.h"
 #include "pwm.h"
 }
+
+extern Keyboard* k;
 
 using namespace std;
 
@@ -30,6 +57,19 @@ void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 addre
 void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
+
+
+void testADC();
 void testKeyBoard();
+void* testSM(void*);
+
+
+
+void testKeyBoard();
+
+void testADC();
+void testKeyBoard();
+void* followProfile(void*); //Thread handler for test purposes of followProfile()
+
 
 
