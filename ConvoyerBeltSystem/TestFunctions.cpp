@@ -52,6 +52,20 @@ void testTCPClient()
 	while (1){}
 }
 
+void testPotentiometer()
+{
+	Potentiometer* poti = new Potentiometer;
+	int readValue = 0;
+
+	while (true) {
+
+		readValue = poti->getValue();
+		cout << "value of poti : " << readValue << endl;
+
+		sleep(0.35);
+	}
+}
+
 void testMotor(int dir)
 {
 	/*
@@ -135,9 +149,6 @@ void testKeyBoard()
 
 }
 
-void testPoti()
-{
-}
 
 void testSystemManagerWithThreads()
 {

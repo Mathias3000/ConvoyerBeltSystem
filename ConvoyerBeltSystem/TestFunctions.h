@@ -29,7 +29,6 @@ void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 void testKeyBoard();
-void testPoti();
 void testSystemManagerWithThreads();
 
 
