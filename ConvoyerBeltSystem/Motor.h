@@ -30,21 +30,25 @@ public:
 	int setDirection(bool direction);
 	int startMotor(bool direction); 
 	int stopMotor();
+	bool isStopped();
+	
 	//To dos:
 	double getCurrentSpeed();
 	int getCurrentStatus();
 
-private:
-	unsigned short readBackValSPI = 0;
-	double speed = 0;
-	bool direction;
-	bool motorStopped = true;
-	Encoder* myEncoder;
-	Controller* myController;
+	//no good design, needs fixing: 
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;
 	gpioDescriptor* bridgeEN;
 	gpioDescriptor* bridgeDIS;
+	bool motorStopped = true;
+
+private:
+	unsigned short readBackValSPI = 0;
+	double speed = 0;
+	bool direction;
+	Encoder* myEncoder;
+	Controller* myController;
 };
 

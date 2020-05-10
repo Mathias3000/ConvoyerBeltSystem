@@ -105,6 +105,12 @@ int Motor::stopMotor()
 	return 0;
 }
 
+/*
+void Motor::setStopped()
+{
+	this->motorStopped = true;
+}
+*/
 int Motor::setDirection(bool direction)
 {	
 	this->direction = direction;

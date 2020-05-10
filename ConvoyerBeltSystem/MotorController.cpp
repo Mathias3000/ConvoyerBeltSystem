@@ -13,6 +13,37 @@ int MotorController::setSpeed(double speed)
 
 int MotorController::followProfile(int direction)
 {
+	this->myMotor->setDirection(direction);
+	pwmSetDuty_B(this->myMotor->pwmMotor, 1);
+	pwmSetEnable_B(this->myMotor->pwmMotor, 1);
+	this->myMotor->motorStopped = false;
+
+	if (direction == Right) {
+		gpioSetValue(this->myMotor->IN1, 1);
+	}
+	else if (direction == Left) {
+		gpioSetValue(this->myMotor->IN1, 0);
+	}
+
+	double speed = 0;
+	while (this->mySpeedProfile->getStepCounter() <= 400 && this->myMotor->motorStopped == false)
+	{	
+		//accelerate
+		if (this->mySpeedProfile->getStepCounter() <= RAMP_UP) {
+			pwmSetDuty_B(this->myMotor->pwmMotor, speed * PWM_PER / MAX_SPEED);
+			speed = (speed + (this->myMotor->getSpeed() / 50));
+		}
+
+		//steady
+		else if (this->mySpeedProfile->getStepCounter() <= RAMP_STEADY) {}
+
+		//decelarate
+		else if (this->mySpeedProfile->getStepCounter() <= RAMP_DOWN) {
+			speed = (speed - (this->myMotor->getSpeed() / 50));
+			pwmSetDuty_B(this->myMotor->pwmMotor, speed * PWM_PER / MAX_SPEED);
+		}
+	}
+	this->myMotor->motorStopped = true;
 	/*
 	int Motor::followProfile(bool direction)
 {

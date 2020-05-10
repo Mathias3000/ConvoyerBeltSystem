@@ -4,7 +4,7 @@
 #include "MotorController.h"
 #include <pthread.h>
 
-Controller* myController; 
+Controller* myController;
 Encoder* myEncoder;
 Motor* myMotor;
 SpeedProfile* mySpeedProfile;
@@ -19,7 +19,6 @@ int main()
 	myMotor = new Motor(myEncoder, myController);
 	mySpeedProfile = new SpeedProfile;
 	myMotorController = new MotorController(myMotor, mySpeedProfile);
-
 	myMotorController->setSpeed(100);
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;

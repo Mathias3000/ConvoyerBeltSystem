@@ -5,7 +5,6 @@ int n, m;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
 
-
 SystemManager :: SystemManager() {
 	// Create the instance
 	return;
