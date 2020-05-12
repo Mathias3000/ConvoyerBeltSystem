@@ -9,8 +9,6 @@
 #include "TelnetServer.h"
 #include "TCPClient.h"
 #include "systemManager.h"
-#include "keyboard.h"
-
 
 #include <cstdio>
 
@@ -18,21 +16,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-
 #include <errno.h>
 #include <pthread.h>
-
-#include "keyboard.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <cstdio>
-#include <fcntl.h>
-#include <unistd.h>
-#include "stateMachine.h"
-#include <errno.h>
-#include <pthread.h>
-#include "systemManager.h"
 
 //#include "gpio.h"
 //#include "spi.h"
@@ -58,18 +43,15 @@ void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 
-
 void testADC();
 void testKeyBoard();
 void* testSM(void*);
-
-
-
+void* testQEP(void*);
 void testKeyBoard();
 
 void testADC();
 void testKeyBoard();
-void* followProfile(void*); //Thread handler for test purposes of followProfile()
+
 
 
 

@@ -8,8 +8,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
-#include "defines.h"
 #include <cmath>
+#include "defines.h"
 #include "Encoder.h"
 #include "Controller.h"
 
@@ -27,26 +27,24 @@ public:
 	int initMotor(); //init the spi connection and configure with default values
 	int setSpeed(double speed); //0-100
 	int getSpeed();
-	int setDirection(bool direction);
+	int setDirection(Direction direction);
 	int startMotor(bool direction); 
 	int stopMotor();
-	bool isStopped();
+	MotorState setStatus(MotorState motorstate);
+	MotorState getStatus();
+	long getCurrentSpeed();
 	
-	//To dos:
-	double getCurrentSpeed();
-	int getCurrentStatus();
-
 	//no good design, needs fixing: 
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;
 	gpioDescriptor* bridgeEN;
 	gpioDescriptor* bridgeDIS;
-	bool motorStopped = true;
-
+	
 private:
-	unsigned short readBackValSPI = 0;
-	double speed = 0;
+	MotorState state;
+	unsigned short readBackValSPI;
+	double speed;
 	bool direction;
 	Encoder* myEncoder;
 	Controller* myController;

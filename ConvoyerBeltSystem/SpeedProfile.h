@@ -1,4 +1,5 @@
 #pragma once
+
 class SpeedProfile
 {
 public:
@@ -8,6 +9,6 @@ public:
 	int getStepCounter();
 	int resetStepCounter();
 private:
-	int stepCounterFollowProf = 0;
+	int stepCounterFollowProf;
 };
 
