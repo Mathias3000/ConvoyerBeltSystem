@@ -2,6 +2,7 @@
 #include "TestFunctions.h"
 #include "systemManager.h"
 
+using namespace std;
 
 int main()
 {
@@ -20,11 +21,11 @@ int main()
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
-	pthread_t threadQEP;
-	pthread_create(&threadQEP, NULL, testQEP, NULL);
-	pthread_t threadKeyboard;
-	pthread_create(&threadKeyboard, NULL, testSM, NULL);
+
+	thread threadKeyboard(testSM);
+	thread threadQEP(testQEP);
 	systemManagerTest->startStateMachine();
+	
     //testTCPServer();
 	//testMotor(0);
 	//testADC();

@@ -45,8 +45,8 @@ void testMotor(int dir);
 
 void testADC();
 void testKeyBoard();
-void* testSM(void*);
-void* testQEP(void*);
+void testSM();
+void testQEP();
 void testKeyBoard();
 
 void testADC();

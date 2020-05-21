@@ -183,7 +183,7 @@ void testKeyBoard()
 
 }
 
-void* testSM(void*)
+void testSM(void)
 {	
 	unsigned char readValue;
 	while (true)
@@ -225,15 +225,9 @@ void* testSM(void*)
 			readValue = 0x0;
 		}
 	}
-	return NULL;
 }
 
-void* testQEP(void*) {
-	while (true) {
-		long ticks = myMotorController->getCurrentSpeed();
-		usleep(10000);
-	}
+void testQEP() {
+	printf("%d", myMotorController->getCurrentSpeed());
+	sleep(0.5);
 }
-
-
-

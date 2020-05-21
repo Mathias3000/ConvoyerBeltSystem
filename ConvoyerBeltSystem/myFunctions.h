@@ -17,7 +17,7 @@ void myAction13();
 void followProfile();
 void updateSteps();
 void stopMotor();
-bool profileFinished();
+bool isProfileFinished();
 
 void myAction30();
 

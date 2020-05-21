@@ -7,7 +7,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-#include <pthread.h>
 #include <cmath>
 #include "defines.h"
 #include "Encoder.h"
@@ -27,13 +26,13 @@ public:
 	int initMotor(); //init the spi connection and configure with default values
 	int setSpeed(double speed); //0-100
 	int getSpeed();
-	int setDirection(Direction direction);
+	Direction setDirection(Direction direction);
+	Direction getDirection();
 	int startMotor(bool direction); 
 	int stopMotor();
+	long getCurrentSpeed();
 	MotorState setStatus(MotorState motorstate);
 	MotorState getStatus();
-	long getCurrentSpeed();
-	
 	//no good design, needs fixing: 
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
@@ -45,7 +44,7 @@ private:
 	MotorState state;
 	unsigned short readBackValSPI;
 	double speed;
-	bool direction;
+	Direction direction;
 	Encoder* myEncoder;
 	Controller* myController;
 };

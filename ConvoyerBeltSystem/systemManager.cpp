@@ -46,7 +46,7 @@ void SystemManager ::init() {
 
 	//Follow Profile
 	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "switchTofollowProfile", 0, followProfile, myConditionTrue); 
-	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, updateSteps, profileFinished);
+	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, updateSteps, isProfileFinished);
 	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, stopMotor, myConditionTrue);
 
 	// Initialize timer names for all diagrams
@@ -154,14 +154,14 @@ void myAction13() {
 
 void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
-	myMotorController->initProfile(Right);
+	myMotorController->setDirection(Right);
+	myMotorController->startProfile();
 	return;
 }
 
 void updateSteps()
 {
 	myMotorController->incrementStepCounter();
-	myMotorController->updateMotorDuty();
 }
 
 void stopMotor()
@@ -170,9 +170,9 @@ void stopMotor()
 	myMotorController->stop();
 }
 
-bool profileFinished()
+bool isProfileFinished()
 {
-	if (myMotorController->getStepCounter() <= 400 && myMotorController->getMotorState() == false) {
+	if (myMotorController->getMotorState() != Stop ) {
 		return true;
 	}
 	else {

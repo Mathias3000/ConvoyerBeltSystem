@@ -63,7 +63,7 @@ int Motor::initMotor()
 
 int Motor::setSpeed(double speed)
 {
-	if (speed >= 0 && speed <= 100) {
+	if (speed > 0 && speed <= 100) {
 		this->speed = speed;
 		return 0;
 	}
@@ -117,11 +117,22 @@ MotorState Motor::getStatus()
 
 long Motor::getCurrentSpeed()
 {
-	return this->myEncoder->getSpeed();
+	return this->myEncoder->getSpeedRPM();
 }
 
-int Motor::setDirection(Direction direction)
+Direction Motor::setDirection(Direction direction)
 {	
 	this->direction = direction;
-	return 0;
+	if (direction == Right) {
+		gpioSetValue(this->IN1, 1);
+	}
+	else if (direction == Left) {
+		gpioSetValue(this->IN1, 0);
+	}
+	return direction;
+}
+
+Direction Motor::getDirection()
+{
+	return this->direction;
 }

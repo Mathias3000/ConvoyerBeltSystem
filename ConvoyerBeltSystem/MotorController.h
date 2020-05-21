@@ -1,7 +1,6 @@
 #pragma once
 
-#include <pthread.h>
-
+#include <thread>
 #include "defines.h"
 #include "Motor.h"
 #include "SpeedProfile.h"
@@ -11,26 +10,29 @@ using namespace std;
 class MotorController
 {
 public:
-	MotorController(Motor* motor, SpeedProfile* profile);
-	int setSpeed(double speed);
-	int initProfile(Direction direction); //to set the gpio for direction and refresh myMotor.state
-	int move(bool Direction); //time neccessary?
-	int stop();
-
+	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
+	int setSpeed(double speed); 
+	Direction setDirection(Direction direction);
+	int move(bool Direction); //starts motor in Direction
+	int stop(); //resets the step counter! Neccessary to memorize step counter?!
+	MotorState getMotorState();
 	int getStepCounter();
 	int resetStepCounter();
 	int incrementStepCounter();
-	int updateMotorDuty();
-	MotorState getMotorState();
+	int startProfile();
 	long getCurrentSpeed();
 	//To do:
-	bool readyToRecvPayload(void);
-	bool finishedProfile(void);
+	bool readyToRecvPayload();
+	bool finishedProfile();
 private:
+	//notwendig?
+	int followProfile();
+	bool profileRunning;
 	int stepIncrements;
-	double currentSpeed;
-	char currentState[MAX_STATE_NAME];
 	int currentSteps;
+	double currentSpeed;
+	//current State not used for now:
+	char currentState[MAX_STATE_NAME];
 	Motor* myMotor;
 	SpeedProfile* mySpeedProfile;
 };
