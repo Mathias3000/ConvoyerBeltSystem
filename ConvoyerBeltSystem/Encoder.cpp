@@ -5,8 +5,8 @@ Encoder::Encoder()
 	printf("Encoder Konstruktor!\n");
 	this->qepMotor = new qepDescriptor;
 	this->init();
-	thread threadPollEncoder(Encoder::pollEncoder, this);
-	thread threadCalcSpeed(Encoder::calcSpeed, this);
+	threadPollEncoder = thread(&Encoder::pollEncoder, this);
+	threadCalcSpeed = thread(&Encoder::calcSpeed, this);
 }
 
 int Encoder::init()

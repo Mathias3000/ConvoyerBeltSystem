@@ -16,7 +16,7 @@ int main()
 	myMotor = new Motor(myEncoder, myController);
 	mySpeedProfile = new SpeedProfile;
 	myMotorController = new MotorController(myMotor, mySpeedProfile);
-	myMotorController->setSpeed(50);
+	myMotorController->setSpeed(100);
 	myMotor->stopMotor();
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;

@@ -21,6 +21,8 @@ private:
 	void pollEncoder(); 
 	void calcSpeed();
 	int init();
+	thread threadPollEncoder;
+	thread threadCalcSpeed;
 public:
 	Encoder();
 	long getSpeedRPM();
