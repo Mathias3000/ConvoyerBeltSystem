@@ -14,10 +14,10 @@ void myAction11();
 void myAction12();
 void myAction13();
 
-void myAction20();
-void myAction21();
-void myAction22();
-bool stepsCompleted();
+void followProfile();
+void updateSteps();
+void stopMotor();
+bool isProfileFinished();
 
 void myAction30();
 

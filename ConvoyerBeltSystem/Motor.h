@@ -7,9 +7,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-#include <pthread.h>
-#include "defines.h"
 #include <cmath>
+#include "defines.h"
 #include "Encoder.h"
 #include "Controller.h"
 
@@ -24,30 +23,27 @@ class Motor
 public:
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
-	int initMotor(); //init the spi connection and configure with default values
+	int initMotor(); 
 	int setSpeed(double speed); //0-100
 	int getSpeed();
-	int setDirection(bool direction);
+	int setDirection(Direction direction);
+	Direction getDirection();
 	int startMotor(bool direction); 
 	int stopMotor();
-	bool isStopped();
-	
-	//To dos:
 	double getCurrentSpeed();
-	int getCurrentStatus();
-
-	//no good design, needs fixing: 
+	MotorState setStatus(MotorState motorstate);
+	MotorState getStatus();
+	//no good design, needs fixing!: 
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;
 	gpioDescriptor* bridgeEN;
 	gpioDescriptor* bridgeDIS;
-	bool motorStopped = true;
-
 private:
-	unsigned short readBackValSPI = 0;
-	double speed = 0;
-	bool direction;
+	unsigned short readBackValSPI;
+	double speed;
+	MotorState state;
+	Direction direction;
 	Encoder* myEncoder;
 	Controller* myController;
 };

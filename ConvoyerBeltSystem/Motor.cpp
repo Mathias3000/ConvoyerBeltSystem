@@ -63,7 +63,7 @@ int Motor::initMotor()
 
 int Motor::setSpeed(double speed)
 {
-	if (speed >= 0 && speed <= 100) {
+	if (speed > 0 && speed <= 100) {
 		this->speed = speed;
 		return 0;
 	}
@@ -85,14 +85,14 @@ int Motor::startMotor(bool direction)
 		gpioSetValue(this->IN1, 1);
 		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED);
 		pwmSetEnable_B(this->pwmMotor, 1);
-		this->motorStopped = false;
+		this->state = movingRight;
 		return 1;
 	}
 	else if (direction == 1) {
 		gpioSetValue(this->IN1, 0);
 		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED);
 		pwmSetEnable_B(this->pwmMotor, 1);
-		this->motorStopped = false;
+		this->state = movingLeft;
 		return 1;
 	}
 	else return -1;
@@ -101,18 +101,39 @@ int Motor::startMotor(bool direction)
 int Motor::stopMotor()
 {
 	if (pwmSetEnable_B(pwmMotor, 0) < 0) return -1;
-	this->motorStopped = true;
+	this->state = Stop;
 	return 0;
 }
 
-/*
-void Motor::setStopped()
+MotorState Motor::setStatus(MotorState motorstate)
 {
-	this->motorStopped = true;
+	return this->state = motorstate;
 }
-*/
-int Motor::setDirection(bool direction)
+
+MotorState Motor::getStatus()
+{
+	return this->state;
+}
+
+double Motor::getCurrentSpeed()
+{
+	return this->myEncoder->getSpeedRPM();
+}
+
+int Motor::setDirection(Direction direction)
 {	
 	this->direction = direction;
-	return 0;
+	int err = 0; 
+	if (direction == Right) {
+		if(gpioSetValue(this->IN1, 1) < 0) return err;
+	}
+	else if (direction == Left) {
+		if(gpioSetValue(this->IN1, 0) < 0) return err;
+	}
+	return err;
+}
+
+Direction Motor::getDirection()
+{
+	return this->direction;
 }

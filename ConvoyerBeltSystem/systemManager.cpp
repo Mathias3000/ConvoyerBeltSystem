@@ -4,6 +4,7 @@
 int n, m;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
+MotorController* myMotorController;
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -44,9 +45,9 @@ void SystemManager ::init() {
 	myStateMachine->tab[1][3] = new TableEntry ("StateE", "StateC", "Timer1", 3000, myAction13, myConditionTrue);
 
 	//Follow Profile
-	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "switchTofollowProfile", 0, myAction20, myConditionTrue); //start Motor
-	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, myAction21, stepsCompleted);
-	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, myAction22, myConditionTrue);
+	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "switchTofollowProfile", 0, followProfile, myConditionTrue); 
+	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, updateSteps, isProfileFinished);
+	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, stopMotor, myConditionTrue);
 
 	// Initialize timer names for all diagrams
 	// Timer names shall have the name Timer followed by the diagram number
@@ -151,30 +152,31 @@ void myAction13() {
 	return;
 }
 
-void myAction20() {
+void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
+	myMotorController->setDirection(Left);
+	myMotorController->startProfile();
 	return;
 }
 
-void myAction21()
+void updateSteps()
 {
 	myMotorController->incrementStepCounter();
-	printf("stepCounter: %d\n", myMotorController->getStepCounter());
-	//increment duty cycle...
 }
 
-void myAction22()
+void stopMotor()
 {
 	printf("FollowProfile  -> Steps completed -> IDLE\n");
+	myMotorController->stop();
 }
 
-bool stepsCompleted()
+bool isProfileFinished()
 {
-	if (myMotorController->getStepCounter() <= 400) {
+	if (myMotorController->getMotorState() != Stop ) {
 		return true;
 	}
 	else {
-		myMotorController->resetStepCounter();
+		myMotorController->stop();
 		myStateMachine->sendEvent("myMotorController.finishedProfile");
 		return false;
 	}

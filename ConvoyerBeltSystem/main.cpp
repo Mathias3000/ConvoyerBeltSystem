@@ -1,32 +1,31 @@
 #include <cstdio>
 #include "TestFunctions.h"
 #include "systemManager.h"
-#include "MotorController.h"
-#include <pthread.h>
 
-Controller* myController;
-Encoder* myEncoder;
-Motor* myMotor;
-SpeedProfile* mySpeedProfile;
-MotorController* myMotorController;
+using namespace std;
 
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
-	
+	Encoder* myEncoder;
+	Motor* myMotor;
+	SpeedProfile* mySpeedProfile;
+	Controller* myController;
 	myController = new Controller;
 	myEncoder = new Encoder;
 	myMotor = new Motor(myEncoder, myController);
 	mySpeedProfile = new SpeedProfile;
 	myMotorController = new MotorController(myMotor, mySpeedProfile);
 	myMotorController->setSpeed(100);
+	myMotor->stopMotor();
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
-	pthread_t threadKeyboard;
-	pthread_create(&threadKeyboard, NULL, testSM, NULL);
+	thread threadKeyboard(testSM);
+
 	systemManagerTest->startStateMachine();
 	
+	//thread threadQEP(testQEP);
     //testTCPServer();
 	//testMotor(0);
 	//testADC();

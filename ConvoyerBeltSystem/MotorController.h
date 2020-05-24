@@ -1,4 +1,6 @@
 #pragma once
+
+#include <thread>
 #include "defines.h"
 #include "Motor.h"
 #include "SpeedProfile.h"
@@ -8,29 +10,27 @@ using namespace std;
 class MotorController
 {
 public:
-	enum MotorState
-	{
-		movingLeft, movingRight, Stop
-	};
-	MotorController(Motor* motor, SpeedProfile* profile);
-	int setSpeed(double speed);
-	int followProfile(int direction); //followProfile() is still in Motor.h -> change to SpeedProfile
-	int move(bool Direction); //time neccessary?
-	int stop();
-
+	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
+	int setSpeed(int speed); 
+	int setDirection(Direction direction);
+	int move(bool Direction); 
+	int stop(); //resets the step counter! Neccessary to memorize step counter?!
+	MotorState getMotorState();
 	int getStepCounter();
 	int resetStepCounter();
 	int incrementStepCounter();
+	int startProfile();
+	double getCurrentSpeed();
 
-	//To do:
-	double getCurrentSpeed(void);
-	MotorState getCurrentMotorState(void);
-	bool readyToRecvPayload(void);
-	bool finishedProfile(void);
+	bool readyToRecvPayload();
+	bool finishedProfile();
 private:
+	int followProfile();
+	bool profileRunning;
+	int currentSteps;
 	double currentSpeed;
 	char currentState[MAX_STATE_NAME];
-	int currentSteps;
+	thread workProfile;
 	Motor* myMotor;
 	SpeedProfile* mySpeedProfile;
 };

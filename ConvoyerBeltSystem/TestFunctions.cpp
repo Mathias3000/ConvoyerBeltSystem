@@ -1,6 +1,5 @@
 #include "TestFunctions.h"
 
-
 extern Keyboard* myKeyboard;
 extern SystemManager* systemManagerTest;
 
@@ -184,8 +183,7 @@ void testKeyBoard()
 
 }
 
-
-void* testSM(void*)
+void testSM(void)
 {	
 	unsigned char readValue;
 	while (true)
@@ -221,11 +219,18 @@ void* testSM(void*)
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
+		else if (readValue == 'F') {
+			myMotorController->stop();
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
 	}
-	return NULL;
 }
 
-
-
-
-
+void testQEP() {
+	while (true)
+	{
+		printf("%0.2f \n", myMotorController->getCurrentSpeed());
+		usleep(500000);
+	}
+}
