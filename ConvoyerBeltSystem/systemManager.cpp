@@ -154,7 +154,7 @@ void myAction13() {
 
 void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
-	myMotorController->setDirection(Right);
+	myMotorController->setDirection(Left);
 	myMotorController->startProfile();
 	return;
 }

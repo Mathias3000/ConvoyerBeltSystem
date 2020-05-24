@@ -4,17 +4,15 @@ MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(
 {
 	printf("MotorController Konstruktor!\n");
 	this->myMotor->initMotor();
-	thread threadProfile(&MotorController::followProfile, this);
-	threadProfile.detach();
+	this->workProfile = thread(&MotorController::followProfile, this);
 }
 
-int MotorController::setSpeed(double speed)
+int MotorController::setSpeed(int speed)
 {
-	this->stepIncrements = speed / 50;
 	return this->myMotor->setSpeed(speed);
 }
 
-Direction MotorController::setDirection(Direction direction)
+int MotorController::setDirection(Direction direction)
 {
 	return myMotor->setDirection(direction);
 }
@@ -49,41 +47,51 @@ int MotorController::incrementStepCounter()
 
 int MotorController::startProfile()
 {
-	this->profileRunning = true;
+	if (this->profileRunning == true){
+		printf("Profile already running!");
+		return -1;
+	}
+	else if (this->profileRunning == false)
+	{
+		this->profileRunning = true;
+		return 0;
+	}
 }
 
 int MotorController::followProfile()
 {	
-	unsigned int steps;
-	pwmSetDuty_B(this->myMotor->pwmMotor, 1);
-	pwmSetEnable_B(this->myMotor->pwmMotor, 1);
+	
 	while (true)
 	{
 		if (this->profileRunning == true) {
+			unsigned int steps = 0;
+			pwmSetDuty_B(this->myMotor->pwmMotor, 1);
+			pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 			if (myMotor->getDirection() == Right) {
 				this->myMotor->setStatus(movingRight);
 			}
 			else if (myMotor->getDirection() == Left) {
 				this->myMotor->setStatus(movingLeft);
 			}
-			while (steps <= 400 && this->myMotor->getStatus() != Stop) {
+			while (steps < 400 && this->myMotor->getStatus() != Stop) {
 				steps = this->mySpeedProfile->getStepCounter();
 				//accelerate
 				if (steps <= RAMP_UP) {
-					pwmSetDuty_B(this->myMotor->pwmMotor, (this->stepIncrements * steps * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_UP)));
+					int value = (steps * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_UP));
+					pwmSetDuty_B(this->myMotor->pwmMotor, value);
 				}
 				//steady
 				else if (steps <= RAMP_STEADY) {}
 				//decelerate
 				else if (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
-					pwmSetDuty_B(this->myMotor->pwmMotor, (this->stepIncrements * (400 - steps) * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_DOWN)));
+					pwmSetDuty_B(this->myMotor->pwmMotor, (400 - steps) * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_DOWN));
 				}
 			}
-			this->profileRunning = false;
 			this->resetStepCounter();
-			this->myMotor->setStatus(Stop);
+			this->myMotor->stopMotor();
+			this->profileRunning = false;
 		}
-		usleep(10000);
+		usleep(100);
 	}
 	return 0;
 }
@@ -93,7 +101,7 @@ MotorState MotorController::getMotorState()
 	return this->myMotor->getStatus();
 }
 
-long MotorController::getCurrentSpeed()
+double MotorController::getCurrentSpeed()
 {
 	return this->myMotor->getCurrentSpeed();
 }

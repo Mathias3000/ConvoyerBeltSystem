@@ -26,7 +26,7 @@ void Encoder::pollEncoder()
 {	
 	while (true)
 	{
-		encVal = qepGetPosition(this->qepMotor);
+		this->encVal = qepGetPosition(this->qepMotor);
 		usleep(ENC_DELAY_USEC);
 	}
 }
@@ -35,14 +35,14 @@ void Encoder::calcSpeed()
 {
 	while (true)
 	{
-		speed = encVal / ENC_TICKS_PER_TURN * (1 / ENC_DELAY_SEC) * 60;
+		this->rpm = ((encVal * (1 / ENC_DELAY_SEC) * 60) / ENC_TICKS_PER_TURN);
 		usleep(ENC_DELAY_USEC / 2);
 	}
 }
 	
-long Encoder::getSpeedRPM()
+double Encoder::getSpeedRPM()
 {
-	return this->speed;
+	return this->rpm;
 }
 
 

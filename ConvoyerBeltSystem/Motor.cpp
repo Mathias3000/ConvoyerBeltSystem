@@ -115,21 +115,22 @@ MotorState Motor::getStatus()
 	return this->state;
 }
 
-long Motor::getCurrentSpeed()
+double Motor::getCurrentSpeed()
 {
 	return this->myEncoder->getSpeedRPM();
 }
 
-Direction Motor::setDirection(Direction direction)
+int Motor::setDirection(Direction direction)
 {	
 	this->direction = direction;
+	int err = 0; 
 	if (direction == Right) {
-		gpioSetValue(this->IN1, 1);
+		if(gpioSetValue(this->IN1, 1) < 0) return err;
 	}
 	else if (direction == Left) {
-		gpioSetValue(this->IN1, 0);
+		if(gpioSetValue(this->IN1, 0) < 0) return err;
 	}
-	return direction;
+	return err;
 }
 
 Direction Motor::getDirection()

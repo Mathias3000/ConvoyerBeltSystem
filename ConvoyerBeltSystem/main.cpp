@@ -21,11 +21,11 @@ int main()
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
-
 	thread threadKeyboard(testSM);
-	thread threadQEP(testQEP);
+
 	systemManagerTest->startStateMachine();
 	
+	//thread threadQEP(testQEP);
     //testTCPServer();
 	//testMotor(0);
 	//testADC();

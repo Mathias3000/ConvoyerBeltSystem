@@ -228,6 +228,9 @@ void testSM(void)
 }
 
 void testQEP() {
-	printf("%d", myMotorController->getCurrentSpeed());
-	sleep(0.5);
+	while (true)
+	{
+		printf("%0.2f \n", myMotorController->getCurrentSpeed());
+		usleep(500000);
+	}
 }

@@ -23,27 +23,26 @@ class Motor
 public:
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
-	int initMotor(); //init the spi connection and configure with default values
+	int initMotor(); 
 	int setSpeed(double speed); //0-100
 	int getSpeed();
-	Direction setDirection(Direction direction);
+	int setDirection(Direction direction);
 	Direction getDirection();
 	int startMotor(bool direction); 
 	int stopMotor();
-	long getCurrentSpeed();
+	double getCurrentSpeed();
 	MotorState setStatus(MotorState motorstate);
 	MotorState getStatus();
-	//no good design, needs fixing: 
+	//no good design, needs fixing!: 
 	gpioDescriptor* IN1;
 	pwmDescriptor* pwmMotor;
 	spiDescriptor* spiDescMotor;
 	gpioDescriptor* bridgeEN;
 	gpioDescriptor* bridgeDIS;
-	
 private:
-	MotorState state;
 	unsigned short readBackValSPI;
 	double speed;
+	MotorState state;
 	Direction direction;
 	Encoder* myEncoder;
 	Controller* myController;
