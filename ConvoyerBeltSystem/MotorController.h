@@ -11,7 +11,8 @@ class MotorController
 {
 public:
 	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
-	int setSpeed(int speed); 
+	int setSpeedPercent(int speed); 
+	int getConfiguredSpeedPercent();
 	int setDirection(Direction direction);
 	int move(bool Direction); 
 	int stop(); //resets the step counter! Neccessary to memorize step counter?!
@@ -21,6 +22,8 @@ public:
 	int incrementStepCounter();
 	int startProfile();
 	double getCurrentSpeed();
+
+	void oneStep();
 
 	bool readyToRecvPayload();
 	bool finishedProfile();

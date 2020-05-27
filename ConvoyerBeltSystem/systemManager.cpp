@@ -74,11 +74,6 @@ void SystemManager ::init() {
 	// Start timer for each diagram which needs one in the first state!
 	// In my case these are diagram 0 and 2
 	
-	//myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
-	/*
-	myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
-	*/
-
 	// Initial actions can be done here, if needed!
 	//n = 0;
 	//m = 0;
@@ -162,6 +157,7 @@ void followProfile() {
 void updateSteps()
 {
 	myMotorController->incrementStepCounter();
+	myMotorController->oneStep();
 }
 
 void stopMotor()
@@ -177,6 +173,7 @@ bool isProfileFinished()
 	}
 	else {
 		myMotorController->stop();
+		myMotorController->resetStepCounter();
 		myStateMachine->sendEvent("myMotorController.finishedProfile");
 		return false;
 	}

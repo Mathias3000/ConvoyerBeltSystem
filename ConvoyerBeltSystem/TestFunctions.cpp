@@ -183,6 +183,31 @@ void testKeyBoard()
 
 }
 
+void testController()
+{	
+	int a = 0;
+	while (true)
+	{
+		double referenceSpeed = myMotorController->getConfiguredSpeedPercent();
+		referenceSpeed = (referenceSpeed / 100) * 3200;
+		double measuredSpeed = abs(myMotorController->getCurrentSpeed());
+		if (measuredSpeed < 10 && measuredSpeed > -10) measuredSpeed = 0;
+		double error = referenceSpeed - measuredSpeed;
+		error = ((error / 3200) * 7);
+		Discrete_U.u = error;
+		myMotorController->oneStep();
+		double controllerOutput = Discrete_Y.y;
+		if (a >= 20) {
+			printf("Controller Output: %0.2f\n", Discrete_Y.y);
+			a = 0;
+		}
+		a++;
+		usleep(5000);
+	}	
+}
+
+
+
 void testSM(void)
 {	
 	unsigned char readValue;
@@ -220,7 +245,12 @@ void testSM(void)
 			readValue = 0x0;
 		}
 		else if (readValue == 'F') {
-			myMotorController->stop();
+			myMotorController->setSpeedPercent(0);
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == 'E') {
+			myMotorController->setSpeedPercent(50);
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}

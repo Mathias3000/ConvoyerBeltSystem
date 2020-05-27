@@ -31,6 +31,9 @@ public:
 	int startMotor(bool direction); 
 	int stopMotor();
 	double getCurrentSpeed();
+
+	void oneStep();
+
 	MotorState setStatus(MotorState motorstate);
 	MotorState getStatus();
 	//no good design, needs fixing!: 

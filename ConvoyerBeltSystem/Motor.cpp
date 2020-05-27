@@ -63,7 +63,7 @@ int Motor::initMotor()
 
 int Motor::setSpeed(double speed)
 {
-	if (speed > 0 && speed <= 100) {
+	if (speed >= 0 && speed <= 100) {
 		this->speed = speed;
 		return 0;
 	}
@@ -118,6 +118,11 @@ MotorState Motor::getStatus()
 double Motor::getCurrentSpeed()
 {
 	return this->myEncoder->getSpeedRPM();
+}
+
+void Motor::oneStep()
+{	
+	myController->oneStep();
 }
 
 int Motor::setDirection(Direction direction)

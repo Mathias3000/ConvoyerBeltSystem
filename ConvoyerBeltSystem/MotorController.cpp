@@ -4,12 +4,17 @@ MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(
 {
 	printf("MotorController Konstruktor!\n");
 	this->myMotor->initMotor();
-	this->workProfile = thread(&MotorController::followProfile, this);
+	//this->workProfile = thread(&MotorController::followProfile, this);
 }
 
-int MotorController::setSpeed(int speed)
+int MotorController::setSpeedPercent(int speed)
 {
 	return this->myMotor->setSpeed(speed);
+}
+
+int MotorController::getConfiguredSpeedPercent()
+{
+	return this->myMotor->getSpeed();
 }
 
 int MotorController::setDirection(Direction direction)
@@ -60,21 +65,25 @@ int MotorController::startProfile()
 
 int MotorController::followProfile()
 {	
-	
+	unsigned int steps = 0;
+	double referenceVal, measuredVal, error;
+	pwmSetDuty_B(this->myMotor->pwmMotor, 1);
+	pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 	while (true)
 	{
 		if (this->profileRunning == true) {
-			unsigned int steps = 0;
-			pwmSetDuty_B(this->myMotor->pwmMotor, 1);
-			pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 			if (myMotor->getDirection() == Right) {
 				this->myMotor->setStatus(movingRight);
 			}
 			else if (myMotor->getDirection() == Left) {
 				this->myMotor->setStatus(movingLeft);
 			}
+			steps = 0;
 			while (steps < 400 && this->myMotor->getStatus() != Stop) {
 				steps = this->mySpeedProfile->getStepCounter();
+				referenceVal = 
+				measuredVal = 
+				error = 
 				//accelerate
 				if (steps <= RAMP_UP) {
 					int value = (steps * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_UP));
@@ -87,11 +96,11 @@ int MotorController::followProfile()
 					pwmSetDuty_B(this->myMotor->pwmMotor, (400 - steps) * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_DOWN));
 				}
 			}
-			this->resetStepCounter();
 			this->myMotor->stopMotor();
+			this->resetStepCounter();
 			this->profileRunning = false;
 		}
-		usleep(100);
+		usleep(250);
 	}
 	return 0;
 }
@@ -104,6 +113,11 @@ MotorState MotorController::getMotorState()
 double MotorController::getCurrentSpeed()
 {
 	return this->myMotor->getCurrentSpeed();
+}
+
+void MotorController::oneStep()
+{
+	myMotor->oneStep();
 }
 
  

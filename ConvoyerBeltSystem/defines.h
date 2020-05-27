@@ -14,9 +14,12 @@
 
 #define ENC_TICKS_PER_TURN 2000
 #define DEG_PER_TICK 0.18
+
 #define ENC_DELAY_SEC 0.02
 #define ENC_DELAY_USEC 20000
-#define ENC_DEALY_NSEC 20000000
+#define ENC_DELAY_NSEC 20000000
+#define ENC_DELAY_READ_QEP 10000	//Read the qep every x us
+#define ENC_DELAY_CALC_SPEED 50000	//Calculate the speed every x us
 
 typedef enum
 {
