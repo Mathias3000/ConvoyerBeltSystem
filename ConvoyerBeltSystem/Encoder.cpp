@@ -34,8 +34,10 @@ void Encoder::pollEncoder()
 void Encoder::calcSpeed()
 {
 	while (true)
-	{
-		this->rpm = ((encVal * (1 / ENC_DELAY_SEC) * 60) / ENC_TICKS_PER_TURN);
+	{	
+		double rpm = (((encVal * (1 / ENC_DELAY_SEC) * 60) / ENC_TICKS_PER_TURN));
+		if (rpm < 0) rpm = rpm * (-1); 
+		this->rpm = rpm;
 		usleep(ENC_DELAY_CALC_SPEED);
 	}
 }

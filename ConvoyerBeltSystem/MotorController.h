@@ -14,6 +14,7 @@ public:
 	int setSpeedPercent(int speed); 
 	int getConfiguredSpeedPercent();
 	int setDirection(Direction direction);
+	int setMotorDutyCycle(int duty);
 	int move(bool Direction); 
 	int stop(); //resets the step counter! Neccessary to memorize step counter?!
 	MotorState getMotorState();
@@ -29,7 +30,7 @@ public:
 	bool finishedProfile();
 private:
 	int followProfile();
-	bool profileRunning;
+	bool profileRunning = false;
 	int currentSteps;
 	double currentSpeed;
 	char currentState[MAX_STATE_NAME];

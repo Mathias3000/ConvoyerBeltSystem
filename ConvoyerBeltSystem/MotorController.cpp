@@ -4,7 +4,7 @@ MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(
 {
 	printf("MotorController Konstruktor!\n");
 	this->myMotor->initMotor();
-	//this->workProfile = thread(&MotorController::followProfile, this);
+	this->workProfile = thread(&MotorController::followProfile, this);
 }
 
 int MotorController::setSpeedPercent(int speed)
@@ -20,6 +20,12 @@ int MotorController::getConfiguredSpeedPercent()
 int MotorController::setDirection(Direction direction)
 {
 	return myMotor->setDirection(direction);
+}
+
+int MotorController::setMotorDutyCycle(int duty)
+{
+	int err = myMotor->setDutyCycle(duty);
+	return err;
 }
 
 int MotorController::move(bool direction)
@@ -53,7 +59,7 @@ int MotorController::incrementStepCounter()
 int MotorController::startProfile()
 {
 	if (this->profileRunning == true){
-		printf("Profile already running!");
+		printf("Profile already running!\n");
 		return -1;
 	}
 	else if (this->profileRunning == false)
@@ -66,12 +72,13 @@ int MotorController::startProfile()
 int MotorController::followProfile()
 {	
 	unsigned int steps = 0;
-	double referenceVal, measuredVal, error;
+	double output;
 	pwmSetDuty_B(this->myMotor->pwmMotor, 1);
 	pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 	while (true)
 	{
 		if (this->profileRunning == true) {
+			
 			if (myMotor->getDirection() == Right) {
 				this->myMotor->setStatus(movingRight);
 			}
@@ -79,21 +86,23 @@ int MotorController::followProfile()
 				this->myMotor->setStatus(movingLeft);
 			}
 			steps = 0;
+			int speed = this->getConfiguredSpeedPercent();
+			int value;
 			while (steps < 400 && this->myMotor->getStatus() != Stop) {
 				steps = this->mySpeedProfile->getStepCounter();
-				referenceVal = 
-				measuredVal = 
-				error = 
+				//output = Discrete_Y.y;
+				//printf("%0.2f\n", output);
 				//accelerate
 				if (steps <= RAMP_UP) {
-					int value = (steps * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_UP));
+					value = (steps * PWM_PER * speed / (MAX_SPEED * RAMP_UP));
 					pwmSetDuty_B(this->myMotor->pwmMotor, value);
 				}
 				//steady
 				else if (steps <= RAMP_STEADY) {}
 				//decelerate
 				else if (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
-					pwmSetDuty_B(this->myMotor->pwmMotor, (400 - steps) * PWM_PER * this->myMotor->getSpeed() / (MAX_SPEED * RAMP_DOWN));
+					value = (400 - steps) * PWM_PER * speed / (MAX_SPEED * RAMP_DOWN);
+					pwmSetDuty_B(this->myMotor->pwmMotor, value);
 				}
 			}
 			this->myMotor->stopMotor();

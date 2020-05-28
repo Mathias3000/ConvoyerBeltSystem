@@ -55,13 +55,13 @@ int Motor::initMotor()
 	if (pwmSetPinmux_B(this->pwmMotor) < 0) return -1;
 	if (pwmOpen_B(this->pwmMotor) < 0) return -1;
 	if (pwmSetPeriod_B(this->pwmMotor, 50000) < 0) return -1;
-	//if (pwmSetDuty_B(this->pwmMotor, 35000)) return -1;
+	//if (pwmSetDuty_B(this->pwmMotor, 0)) return -1;
 	if (pwmSetPolarity_B(this->pwmMotor, 0)) return -1;
 	printf("SPI for Motor initialized!\n");
 	return 0;
 }
 
-int Motor::setSpeed(double speed)
+int Motor::setSpeed(int speed)
 {
 	if (speed >= 0 && speed <= 100) {
 		this->speed = speed;
@@ -77,6 +77,11 @@ int Motor::setSpeed(double speed)
 int Motor::getSpeed()
 {
 	return this->speed;
+}
+
+int Motor::setDutyCycle(int duty)
+{
+	return pwmSetDuty_B(this->pwmMotor, duty);
 }
 
 int Motor::startMotor(bool direction)

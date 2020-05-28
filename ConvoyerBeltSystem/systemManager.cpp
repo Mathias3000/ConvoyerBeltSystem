@@ -156,8 +156,14 @@ void followProfile() {
 
 void updateSteps()
 {
-	myMotorController->incrementStepCounter();
+	/*
+	double measuredVal = myMotorController->getCurrentSpeed();
+	measuredVal = ((measuredVal / 3200) * 100);
+	double error = (((myMotorController->getConfiguredSpeedPercent() - measuredVal) * 7 ) / 100);
+	Discrete_U.u = error;
 	myMotorController->oneStep();
+	*/
+	myMotorController->incrementStepCounter();
 }
 
 void stopMotor()

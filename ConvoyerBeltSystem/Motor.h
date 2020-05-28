@@ -24,8 +24,9 @@ public:
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); 
-	int setSpeed(double speed); //0-100
+	int setSpeed(int speed); //0-100
 	int getSpeed();
+	int setDutyCycle(int duty);
 	int setDirection(Direction direction);
 	Direction getDirection();
 	int startMotor(bool direction); 
@@ -44,7 +45,7 @@ public:
 	gpioDescriptor* bridgeDIS;
 private:
 	unsigned short readBackValSPI;
-	double speed;
+	int speed;
 	MotorState state;
 	Direction direction;
 	Encoder* myEncoder;

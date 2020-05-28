@@ -185,28 +185,23 @@ void testKeyBoard()
 
 void testController()
 {	
-	int a = 0;
 	while (true)
 	{
-		double referenceSpeed = myMotorController->getConfiguredSpeedPercent();
-		referenceSpeed = (referenceSpeed / 100) * 3200;
-		double measuredSpeed = abs(myMotorController->getCurrentSpeed());
-		if (measuredSpeed < 10 && measuredSpeed > -10) measuredSpeed = 0;
-		double error = referenceSpeed - measuredSpeed;
-		error = ((error / 3200) * 7);
-		Discrete_U.u = error;
-		myMotorController->oneStep();
-		double controllerOutput = Discrete_Y.y;
-		if (a >= 20) {
-			printf("Controller Output: %0.2f\n", Discrete_Y.y);
-			a = 0;
+		if (myMotorController->getConfiguredSpeedPercent() > 0) {
+			double speedConfigured = (double)(((myMotorController->getConfiguredSpeedPercent() * 3115) / 100));
+			double currrentSpeed = myMotorController->getCurrentSpeed();
+			double error =  speedConfigured - currrentSpeed;
+			//error = (error / 445);
+			Discrete_U.u = error;
+			myMotorController->oneStep();
+			double volt = (Discrete_Y.y);
+			double duty = (volt * 50000) / 7;
+			printf("outputy duty: %0.2f\n", duty); 
+			myMotorController->setMotorDutyCycle((int)duty);
 		}
-		a++;
-		usleep(5000);
+		usleep(20000);
 	}	
 }
-
-
 
 void testSM(void)
 {	
@@ -230,6 +225,7 @@ void testSM(void)
 			readValue = 0x0;
 		}
 		else if (readValue == '4') {
+			myMotorController->setSpeedPercent(50);
 			myStateMachine->sendEvent("command==followProfile");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
@@ -246,11 +242,19 @@ void testSM(void)
 		}
 		else if (readValue == 'F') {
 			myMotorController->setSpeedPercent(0);
+			//myMotorController->stop();
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == 'E') {
 			myMotorController->setSpeedPercent(50);
+			//myMotorController->move(Right);
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == 'D') {
+			myMotorController->setSpeedPercent(100);
+			//myMotorController->move(Right);
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
@@ -260,7 +264,8 @@ void testSM(void)
 void testQEP() {
 	while (true)
 	{
-		printf("%0.2f \n", myMotorController->getCurrentSpeed());
+		printf("Current speed in volts %0.2f \n Controller output in volts: %0.2f\n", ((myMotorController->getCurrentSpeed() * 7) /3200),
+			Discrete_Y.y);
 		usleep(500000);
 	}
 }
