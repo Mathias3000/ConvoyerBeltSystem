@@ -11,14 +11,14 @@
 using namespace std;
 
 
-class SystemManager
+class StateManager
 {
 public: 
 
 	mutex mtx;
 
-	SystemManager();
-	~SystemManager();
+	StateManager();
+	~StateManager();
 	void init();
 	void startStateMaschine();
 
@@ -51,4 +51,3 @@ void actionMotorMove();
 
 bool noCondition();
 bool conditionTotalSteps();
-

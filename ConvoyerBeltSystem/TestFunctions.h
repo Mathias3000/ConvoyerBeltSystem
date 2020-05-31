@@ -8,7 +8,7 @@
 #include "TelnetServer.h"
 #include "TCPClient.h"
 #include "keyboard.h"
-#include "SystemManager.h"
+#include "StateManager.h"
 #include "Potentiometer.h"
 #include "Helpers.h"
 
@@ -25,10 +25,9 @@ void testTCPServer();		// test with socketTest tool: address 192.168.7.2 with po
 void testDisplay();			// shows some possible output of motor state
 void testTelnet();			// test with CMD line: telnet 192.168.7.2 4444
 void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 address with port 5555
-void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 void testKeyBoard();
-void testSystemManagerWithThreads();
+void testStateManagerWithThreads();
 
 

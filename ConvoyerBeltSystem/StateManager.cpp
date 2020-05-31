@@ -1,5 +1,4 @@
-#include "SystemManager.h"
-
+#include "StateManager.h"
 
 // I need these global variables so that I can access them in my global action functions
 // Tip: use prefix "my" for testing with global variables
@@ -13,31 +12,30 @@ SpeedProfile* myProfile = new SpeedProfile();
 MotorController* motorCtrl = new MotorController();
 mutex mtxKeys;
 
-SystemManager::SystemManager()
+StateManager::StateManager()
 {
 	init();
 }
 
-SystemManager::~SystemManager()
+StateManager::~StateManager()
 {
 	delete this;
 }
 
-void SystemManager::init()
+void StateManager::init()
 {
-
 	// Define state charts
-	// Local Mode Chart
+// Local Mode Chart
 	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, noAction1, noCondition);
 	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed1, noCondition);
 	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirection", 0, actionSetDirection, noCondition);
 	myStateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile1, noCondition);
 	myStateMaschine->tab[0][4] = new TableEntry("FollowProfile", "Local", "motorControllerFinishedProfile", 0, noAction2, noCondition);
-	myStateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction3, noCondition);	
+	myStateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction3, noCondition);
 
 	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils in Local und Chain einbauen
 	myStateMaschine->tab[1][0] = new TableEntry("FollowProfile", "Local", "Timer0", 20, actionSetSpeedAndSteps, conditionTotalSteps);		// put timer.start() to different actionFunction
-	
+
 	// Chain Chart
 	myStateMaschine->tab[2][0] = new TableEntry("Idle", "Chain", "RecvCmdChain", 0, noAction4, noCondition);
 	myStateMaschine->tab[2][1] = new TableEntry("Chain", "Chain", "RecvCmdSpeed", 0, actionSetSpeed2, noCondition);
@@ -95,16 +93,16 @@ void SystemManager::init()
 	// Initial actions can be done here, if needed!
 	n = 0;
 	m = 0;
-
 }
 
-void SystemManager::startStateMaschine()
+void StateManager::startStateMaschine()
 {
 	// mtx.lock();
 	myStateMaschine->runToCompletion();
 	this_thread::sleep_for(chrono::microseconds(50));
 	// mtx.unlock();
 }
+
 
 // Function for reading keyInputs
 void readKeyInputs()
@@ -131,7 +129,7 @@ void readKeyInputs()
 		// [A] RecvCmdWait
 		// [B] RecvCmdReady
 		// [C] RecvCmdRelease
-		
+
 
 		// mtxKeys.lock();
 		switch (readKey)
@@ -228,7 +226,7 @@ void actionSetSpeed2() {
 	motorCtrl->setSpeed(200);
 }
 
-void actionSetDirection(){
+void actionSetDirection() {
 	cout << "\nLocal --> Local" << endl;
 	motorCtrl->setDirection(1);
 }
@@ -300,10 +298,10 @@ bool noCondition() {
 	return true;
 }
 
-bool conditionTotalSteps(){
+bool conditionTotalSteps() {
 
 	// cout << "Total steps > 400 " << endl;
-	if(myProfile->step >= 400)
-		return true;	
+	if (myProfile->step >= 400)
+		return true;
 	return false;
 }
