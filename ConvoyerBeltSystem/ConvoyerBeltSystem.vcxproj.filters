@@ -88,13 +88,13 @@
     <ClCompile Include="qep.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
-    <ClCompile Include="spi.c">
-      <Filter>FSM framework\HardwareFunctions</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="StateManager.cpp">
+    <ClCompile Include="MotorController.cpp" />
+    <ClCompile Include="systemManager.cpp">
       <Filter>FSM framework</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="StateManager.cpp"/>
+    <ClCompile Include="spi.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">
@@ -187,12 +187,14 @@
     <ClInclude Include="pwm.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
-    <ClInclude Include="qep.h">
-      <Filter>FSM framework\HardwareFunctions</Filter>
+    <ClInclude Include="MotorController.h" />
+    <ClInclude Include="systemManager.h">
+      <Filter>FSM framework</Filter>
     </ClInclude>
     <ClInclude Include="StateManager.h">
       <Filter>FSM framework</Filter>
     </ClInclude>
+    <ClInclude Include="qep.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FSM framework">

@@ -1,5 +1,9 @@
 #include "TestFunctions.h"
-#include <cstdio>
+
+
+extern Keyboard* myKeyboard;
+extern SystemManager* systemManagerTest;
+
 
 void testTCPServer()
 {
@@ -52,6 +56,7 @@ void testTCPClient()
 	while (1){}
 }
 
+
 void testPotentiometer()
 {
 	Potentiometer* poti = new Potentiometer;
@@ -65,9 +70,49 @@ void testPotentiometer()
 		sleep(350);
 	}
 }
+void testADC() {
+	unsigned short readBackValADC = 0;
+	int retVal = 0;
+	/*
+	CH0 - IN - Output from AD223 -> current measurement from Motorcontroller
+	CH1 - IN - Output from Poti
+	CH2 - Internal Poti (purpose?)
+	CH3 - Power_12V (purpose?)
+	DOUT -> TXB0104 Levelshifter B1 -> A1 -> SPI0_MISO
+	DIN -> SPI0_MOSI
+	CS, SCLK - SPI0
+	*/
+
+	spiPinmux spiADC;
+	spiPinmux& spiADCRef = spiADC;
+	strcpy(spiADCRef.CSpin, "P9_17_pinmux");
+	strcpy(spiADCRef.MISOpin, "P9_21_pinmux");
+	strcpy(spiADCRef.MOSIpin, "P9_18_pinmux");
+	strcpy(spiADCRef.SCLKpin, "P9_22_pinmux");
+
+	spiDescriptor* spiDescADC = new spiDescriptor;
+	spiDescADC->spiNum = 1;
+	spiDescADC->bitsPerWord = 8;
+	spiDescADC->mode = 0;
+	spiDescADC->flags = O_RDWR;
+	spiDescADC->speed = 1000000; 
+	spiDescADC->pinmux = spiADCRef;
+
+	retVal = spiSetPinmux(spiDescADC);
+	retVal = spiOpen(spiDescADC);
+
+	while (true)
+	{
+		readBackValADC = spiXfer8Bits(spiDescADC, 0x90); //Channel 1
+		readBackValADC = spiXfer16Bits(spiDescADC, 0x0);
+		sleep(100);
+	}
+}
 
 void testMotor(int dir)
 {
+	int retVal = 0;
+	unsigned short readBackValSPI = 0;
 	/*
 	Connection information:
 	H-bridge pin IN1 is tied to pwm7 pin A (P8_19).
@@ -75,12 +120,10 @@ void testMotor(int dir)
 	H-bridge pin DIS is tied to GPIO2_12 (P8_39) = 76 (GPIO SW-number).
 	H-bridge pin ENBL is tied to GPIO2_15 (P8_38) = 79 (GPIO SW-number).
 	*/
+
 	/*
 	When ENBL is logic HIGH, the H-Bridge is operational.When ENBL is logic LOW, the H-Bridge outputs are tri-stated and placed in Sleep mode.
 	*/
-	int retVal = 0;
-	unsigned short readBackValSPI = 0;
-
 	gpioDescriptor* bridgeEN = new gpioDescriptor; //(gpioDescriptor*)malloc(sizeof(gpioDescriptor));
 	bridgeEN->gpioNum = 79;
 	strcpy(bridgeEN->direction, "out");
@@ -97,6 +140,7 @@ void testMotor(int dir)
 	retVal = gpioSetValue(bridgeDIS, 0);
 
 	retVal = gpioGetValue(bridgeEN);
+	retVal = gpioGetValue(bridgeDIS);
 
 	spiPinmux spiMotor;
 	spiPinmux& spiMotorRef = spiMotor;
@@ -104,36 +148,41 @@ void testMotor(int dir)
 	strcpy(spiMotorRef.MISOpin, "P9_29_pinmux");
 	strcpy(spiMotorRef.MOSIpin, "P9_30_pinmux");
 	strcpy(spiMotorRef.SCLKpin, "P9_31_pinmux");
-	/*
-	strcpy(spiMotor->CSpin, "P9_28_pinmux");
-	strcpy(spiMotor->MISOpin, "P9_29_pinmux");
-	strcpy(spiMotor->MOSIpin, "P9_30_pinmux");
-	strcpy(spiMotor->SCLKpin, "P9_31_pinmux");
-	*/
+	
 	spiDescriptor* spiDescMotor = new spiDescriptor;
 	spiDescMotor->spiNum = 2;
 	spiDescMotor->bitsPerWord = 8;
 	spiDescMotor->mode = 1;
-	spiDescMotor->flags = 2;
-	spiDescMotor->speed = 10e6; // ???...
-	spiDescMotor->pinmux = spiMotor;
+	spiDescMotor->flags = O_RDWR;
+	spiDescMotor->speed = 1000000; 
+	spiDescMotor->pinmux = spiMotorRef;
 
-	retVal = spiSetPinmux(spiDescMotor);
+	retVal = spiSetPinmux(spiDescMotor); //Breakpoint setzen
 	retVal = spiOpen(spiDescMotor);
-	
-	//readBackValSPI = spiXfer16Bits(spiDescMotor, 0x0);
-	readBackValSPI = spiXfer16Bits(spiDescMotor, 0xFD98);
-	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x7D98);
-	while (true);
 
-	/*
-	IN1, IN2: Logic input control of OUT1, OUT2
-	Code example Pilsan:
-	pwmDescriptor* pwm = (pwmDescriptor*)malloc(sizeof(pwmDescriptor));
-	strcpy(pwm->pinNameA, "P8_19_pinmux");
-	strcpy(pwm->pinNameB, "P8_13_pinmux");
-	pwm->pwmNum = 7;
-	*/
+	readBackValSPI = spiXfer16Bits(spiDescMotor, 0xED18);
+	usleep(50);
+	readBackValSPI = spiXfer16Bits(spiDescMotor, 0x6D18);
+	
+	//IN1 to set the direction via gpio pin
+	gpioDescriptor* IN1 = new gpioDescriptor;
+	IN1->gpioNum = 22;
+	strcpy(IN1->direction, "out");
+	gpioOpen(IN1);
+	retVal = gpioSetValue(IN1, 1);
+
+	//IN2 at pinB to drive the motor by pwm
+	pwmDescriptor* pwmMotor = new pwmDescriptor;
+	strcpy(pwmMotor->pinNameB, "P8_13_pinmux");
+	pwmMotor->pwmNum = 7;
+	retVal = pwmSetPinmux_B(pwmMotor);
+	retVal = pwmOpen_B(pwmMotor);
+	retVal = pwmSetPeriod_B(pwmMotor, 50000);
+	retVal = pwmSetDuty_B(pwmMotor, 35000);
+	retVal = pwmSetPolarity_B(pwmMotor, 0);
+	retVal = pwmSetEnable_B(pwmMotor, 1);
+	sleep(3);
+	retVal = pwmSetEnable_B(pwmMotor, 0);
 }
 
 void testKeyBoard()
@@ -148,6 +197,7 @@ void testKeyBoard()
 	}
 
 }
+
 
 void testStateManagerWithThreads()
 {
@@ -165,5 +215,43 @@ void testStateManagerWithThreads()
 	}
 }
 
-
+void* testSM(void*)
+{	
+	unsigned char readValue;
+	while (true)
+	{	
+		readValue = myKeyboard->getPressedKey();
+		if (readValue == '1') {
+			myStateMachine->sendEvent("mode==local");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '2') {
+			myStateMachine->sendEvent("command==speed");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '3') {
+			myStateMachine->sendEvent("command==direction");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '4') {
+			myStateMachine->sendEvent("command==followProfile");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '5') {
+			myStateMachine->sendEvent("myMotorController.finishedProfile");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == '6') {
+			myStateMachine->sendEvent("command==chain");
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+	}
+	return NULL;
+}
 
