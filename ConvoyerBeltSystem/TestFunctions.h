@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <string.h>
 #include <chrono>
 #include <thread>
 
@@ -10,6 +9,11 @@
 #include "TCPClient.h"
 #include "systemManager.h"
 #include "keyboard.h"
+
+#include "StateManager.h"
+#include "Potentiometer.h"
+#include "Helpers.h"
+
 
 
 #include <cstdio>
@@ -39,6 +43,7 @@
 //#include "pwm.h"
 
 
+
 extern "C" {
 #include "gpio.h"
 #include "spi.h"
@@ -54,13 +59,13 @@ void testTCPServer();		// test with socketTest tool: address 192.168.7.2 with po
 void testDisplay();			// shows some possible output of motor state
 void testTelnet();			// test with CMD line: telnet 192.168.7.2 4444
 void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 address with port 5555
-void testKeyPad();
 void testPotentiometer();
 void testMotor(int dir);
 
 
 void testADC();
 void testKeyBoard();
+
 void* testSM(void*);
 
 
@@ -70,6 +75,7 @@ void testKeyBoard();
 void testADC();
 void testKeyBoard();
 void* followProfile(void*); //Thread handler for test purposes of followProfile()
+
 
 
 

@@ -1,7 +1,7 @@
 
 #include "systemManager.h"
 
-int n, m;
+extern int n, m;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
 

@@ -101,6 +101,7 @@
     <ClCompile Include="SpeedProfile.cpp" />
     <ClCompile Include="spi.c" />
     <ClCompile Include="stateMachine.cpp" />
+    <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="stateTable.cpp" />
     <ClCompile Include="systemManager.cpp" />
     <ClCompile Include="TCPClient.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="SpeedProfile.h" />
     <ClInclude Include="spi.h" />
     <ClInclude Include="stateMachine.h" />
+    <ClInclude Include="StateManager.h" />
     <ClInclude Include="stateTable.h" />
     <ClInclude Include="systemManager.h" />
     <ClInclude Include="TCPClient.h" />

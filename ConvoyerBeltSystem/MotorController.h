@@ -1,5 +1,6 @@
 #pragma once
 #include "defines.h"
+#include <iostream>
 #include "Motor.h"
 #include "SpeedProfile.h"
 
@@ -12,8 +13,10 @@ public:
 	{
 		movingLeft, movingRight, Stop
 	};
+	MotorController();
 	MotorController(Motor* motor, SpeedProfile* profile);
 	int setSpeed(double speed);
+	int setDirection(int direction);
 	int followProfile(int direction); //followProfile() is still in Motor.h -> change to SpeedProfile
 	int move(bool Direction); //time neccessary?
 	int stop();

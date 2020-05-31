@@ -93,6 +93,7 @@
       <Filter>FSM framework</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="StateManager.cpp"/>
     <ClCompile Include="spi.c" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +189,9 @@
     </ClInclude>
     <ClInclude Include="MotorController.h" />
     <ClInclude Include="systemManager.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
       <Filter>FSM framework</Filter>
     </ClInclude>
     <ClInclude Include="qep.h" />

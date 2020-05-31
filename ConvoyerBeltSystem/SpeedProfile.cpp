@@ -1,5 +1,10 @@
 #include "SpeedProfile.h"
 
+
+SpeedProfile::SpeedProfile()
+{
+	step = 0;
+}
 int SpeedProfile::incrementStepCounter()
 {
 	this->stepCounterFollowProf += 1;

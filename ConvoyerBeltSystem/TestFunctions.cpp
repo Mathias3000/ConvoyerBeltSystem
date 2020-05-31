@@ -56,6 +56,20 @@ void testTCPClient()
 	while (1){}
 }
 
+
+void testPotentiometer()
+{
+	Potentiometer* poti = new Potentiometer;
+	int readValue = 0;
+
+	while (true) {
+
+		readValue = poti->getValue();
+		cout << "value of poti : " << readValue << endl;
+
+		sleep(350);
+	}
+}
 void testADC() {
 	unsigned short readBackValADC = 0;
 	int retVal = 0;
@@ -91,7 +105,7 @@ void testADC() {
 	{
 		readBackValADC = spiXfer8Bits(spiDescADC, 0x90); //Channel 1
 		readBackValADC = spiXfer16Bits(spiDescADC, 0x0);
-		sleep(0.1);
+		sleep(100);
 	}
 }
 
@@ -179,11 +193,27 @@ void testKeyBoard()
 	while (true) {
 		readValue = k->getPressedKey();
 		cout << "Key pressed: " << readValue << endl;
-		this_thread::sleep_for(chrono::milliseconds(150));
+		
 	}
 
 }
 
+
+void testStateManagerWithThreads()
+{
+	StateManager* sm = new StateManager();
+	cout << "\n\nStarting State Maschine ... " << endl;
+	cout << "Initialization completed. \n" << endl;
+	thread smThread(&StateManager::startStateMaschine, sm);
+	thread keyInputThread(readKeyInputs);
+
+	if (smThread.joinable()) {
+		smThread.join();
+	}
+	if (keyInputThread.joinable()) {
+		keyInputThread.join();
+	}
+}
 
 void* testSM(void*)
 {	
@@ -224,8 +254,4 @@ void* testSM(void*)
 	}
 	return NULL;
 }
-
-
-
-
 

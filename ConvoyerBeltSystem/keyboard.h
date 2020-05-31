@@ -1,6 +1,9 @@
 
 #ifndef KEYBOARD_H_
 #define KEYBOARD_H_
+#include "Helpers.h"
+
+using namespace std;
 
 extern "C" {
 #include "gpio.h"

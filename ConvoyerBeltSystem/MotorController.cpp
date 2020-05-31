@@ -1,5 +1,8 @@
 #include "MotorController.h"
 
+MotorController::MotorController()
+{
+}
 MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(motor), mySpeedProfile(profile)
 {
 	printf("MotorController Konstruktor!\n");
@@ -8,7 +11,14 @@ MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(
 
 int MotorController::setSpeed(double speed)
 {
+
 	return this->myMotor->setSpeed(speed);
+}
+
+int MotorController::setDirection(int direction)
+{
+	cout << "Direction set to " << direction << ". " << endl;
+	return 0;
 }
 
 int MotorController::followProfile(int direction)
@@ -114,3 +124,4 @@ int MotorController::incrementStepCounter()
 {
 	return this->mySpeedProfile->incrementStepCounter();
 }
+
