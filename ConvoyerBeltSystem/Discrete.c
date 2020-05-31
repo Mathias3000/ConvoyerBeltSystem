@@ -44,7 +44,7 @@ void Discrete_step(void)
    *  Inport: '<Root>/u'
    */
   rtb_Sum = 0.0008 * Discrete_U.u + Discrete_DW.Integrator_DSTATE;
-
+  //rtb_Sum = 0.0008 * Discrete_U.u + Discrete_DW.Integrator_DSTATE;
   /* Saturate: '<S38>/Saturation' */
   if (rtb_Sum > 7.0) {
     Discrete_Y.y = 7.0;
@@ -62,6 +62,8 @@ void Discrete_step(void)
    *  Inport: '<Root>/u'
    *  Sum: '<S24>/SumI2'
    *  Sum: '<S24>/SumI4'
+	Discrete_DW.Integrator_DSTATE += ((Discrete_Y.y - rtb_Sum) * 0.04 + 0.04 *
+	Discrete_U.u) * 0.02;
    */
   Discrete_DW.Integrator_DSTATE += ((Discrete_Y.y - rtb_Sum) * 0.04 + 0.04 *
     Discrete_U.u) * 0.02;

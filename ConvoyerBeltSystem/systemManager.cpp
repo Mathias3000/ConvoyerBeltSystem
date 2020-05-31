@@ -149,20 +149,12 @@ void myAction13() {
 
 void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
-	myMotorController->setDirection(Left);
 	myMotorController->startProfile();
 	return;
 }
 
 void updateSteps()
 {
-	/*
-	double measuredVal = myMotorController->getCurrentSpeed();
-	measuredVal = ((measuredVal / 3200) * 100);
-	double error = (((myMotorController->getConfiguredSpeedPercent() - measuredVal) * 7 ) / 100);
-	Discrete_U.u = error;
-	myMotorController->oneStep();
-	*/
 	myMotorController->incrementStepCounter();
 }
 
@@ -170,14 +162,22 @@ void stopMotor()
 {
 	printf("FollowProfile  -> Steps completed -> IDLE\n");
 	myMotorController->stop();
+	myMotorController->resetStepCounter();
 }
 
 bool isProfileFinished()
 {
-	if (myMotorController->getMotorState() != Stop ) {
+	int steps = myMotorController->getStepCounter();
+	if (myMotorController->getMotorState() == Stop)
+	{
+		myStateMachine->sendEvent("myMotorController.finishedProfile");
+		return false;
+	}
+	else if (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN))
+	{
 		return true;
 	}
-	else {
+	else if (steps > (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
 		myMotorController->stop();
 		myMotorController->resetStepCounter();
 		myStateMachine->sendEvent("myMotorController.finishedProfile");

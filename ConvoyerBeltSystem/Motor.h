@@ -24,7 +24,7 @@ public:
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); 
-	int setSpeed(int speed); //0-100
+	int setSpeedRPM(int speed); 
 	int getSpeed();
 	int setDutyCycle(int duty);
 	int setDirection(Direction direction);

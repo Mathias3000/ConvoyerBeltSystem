@@ -14,7 +14,6 @@ class Controller
 {
 public:
 	int setValue(double value);
-
 	void oneStep();
 };
 
