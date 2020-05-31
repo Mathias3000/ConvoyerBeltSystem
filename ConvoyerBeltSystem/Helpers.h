@@ -10,6 +10,6 @@ using namespace std;
 // Unique string/word mannipulations
 // etc. 
 
-void sleep(double seconds);
+void sleep(int milliseconds);
 
 

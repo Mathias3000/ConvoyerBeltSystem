@@ -62,7 +62,7 @@ void testPotentiometer()
 		readValue = poti->getValue();
 		cout << "value of poti : " << readValue << endl;
 
-		sleep(0.35);
+		sleep(350);
 	}
 }
 
