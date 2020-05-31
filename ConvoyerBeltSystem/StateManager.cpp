@@ -112,7 +112,7 @@ void readKeyInputs()
 	while (true) {
 
 		readKey = myKeyBoard->getPressedKey();
-		sleep(0.1);
+		sleep(100);
 
 		// Evaluate
 		// -- Events		
