@@ -25,7 +25,7 @@ StateManager::~StateManager()
 void StateManager::init()
 {
 	// Define state charts
-// Local Mode Chart
+	// Local Mode Chart
 	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, noAction1, noCondition);
 	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed1, noCondition);
 	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirection", 0, actionSetDirection, noCondition);
@@ -53,7 +53,7 @@ void StateManager::init()
 
 	// Potentiometer/Keyboard Chart for Polling
 	// every 50ms check if poti value has changed "significantly"; If it has -> sendEvent for changing speed
-	// OR: define Key to accept/validate the chosen value of poti
+	// OR: define Key to accept/validate the chosen value of poti -> But this action can be called in each state of 
 
 	// Display Chart for visualization
 	// Get currect state 
