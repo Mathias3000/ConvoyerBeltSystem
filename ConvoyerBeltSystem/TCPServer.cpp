@@ -8,6 +8,10 @@ TCPServer::TCPServer(in_addr_t IPAddress, int port) {
 	init();
 }
 
+TCPServer::TCPServer()
+{
+}
+
 int TCPServer::init() {
 
 	// create a socket

@@ -7,6 +7,10 @@ TCPClient::TCPClient(in_addr_t serverAddress, int port)
     init();
 }
 
+TCPClient::TCPClient()
+{
+}
+
 int TCPClient::init()
 {
 

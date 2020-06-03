@@ -25,6 +25,7 @@ private:
 
 public: 
 	TCPClient(in_addr_t serverAddress, int port);
+	TCPClient();
 	int init();
 
 

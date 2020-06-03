@@ -37,6 +37,7 @@ private:
 
 public: 
 	TCPServer(in_addr_t IPAddress, int port);
+	TCPServer();
 	~TCPServer();
 	char* recv();
 
