@@ -8,7 +8,7 @@ int n, m;
 Keyboard* myKeyBoard;
 StateMachine* myStateMaschine;
 
-MotorController* motorController;
+extern MotorController* motorController;
 mutex mtxKeys;
 
 // temp global variable for communcation
@@ -62,6 +62,8 @@ void StateManager::init()
 	myStateMaschine->tab[2][10] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, actionMotorStop1, noCondition);
 	myStateMaschine->tab[2][11] = new TableEntry("Requesting", "PassLoad", "RecvCmdReady", 0, actionMotorMove, noCondition);
 	myStateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop2, noCondition);
+
+	// Additional StateChart for KeyPad: Polling needs to be performed!
 
 	// Potentiometer/Keyboard Chart for Polling
 	// every 50ms check if poti value has changed "significantly"; If it has -> sendEvent for changing speed
