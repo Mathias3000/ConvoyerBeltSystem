@@ -1,5 +1,7 @@
 #include "MotorController.h"
 
+// extern MotorController* motorController;
+
 MotorController::MotorController()
 {
 }

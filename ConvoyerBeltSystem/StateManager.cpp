@@ -4,17 +4,29 @@
 // Tip: use prefix "my" for testing with global variables
 
 
-int n, m;
-Keyboard* myKeyBoard = new Keyboard();
-StateMachine* myStateMaschine = new StateMachine();
+int n, m;		
+Keyboard* myKeyBoard;
+StateMachine* myStateMaschine;
 
-SpeedProfile* myProfile = new SpeedProfile();
-MotorController* motorCtrl = new MotorController();
+MotorController* motorController;
 mutex mtxKeys;
+
+// temp global variable for communcation
+// maybe this can be avoid. Need to check 
+TelnetServer* telnetServer = new TelnetServer();
+TCPServer* tcpServer = new TCPServer();
+TCPClient* tcpClient = new TCPClient();
 
 StateManager::StateManager()
 {
-	init();
+	myKeyBoard = new Keyboard();
+	myStateMaschine = new StateMachine();
+	encoder = new Encoder();
+	controller = new Controller();
+	motor = new Motor(encoder, controller);
+	speedProfile = new SpeedProfile();
+	motorController = new MotorController(motor, speedProfile);
+	init();		// init seperat ausführen. Anscheinend kann es zu unbekannten Fehlern führen, wenn man es im ctor ausführt
 }
 
 StateManager::~StateManager()
@@ -41,7 +53,7 @@ void StateManager::init()
 	myStateMaschine->tab[2][1] = new TableEntry("Chain", "Chain", "RecvCmdSpeed", 0, actionSetSpeed2, noCondition);
 	myStateMaschine->tab[2][2] = new TableEntry("Chain", "Requested", "RecvCmdRequest", 0, noAction5, noCondition);
 	myStateMaschine->tab[2][3] = new TableEntry("Requested", "Requested", "RecvCmdRequest", 0, actionHandleRequest_Wait1, noCondition);
-	myStateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
+	myStateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadyToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
 	myStateMaschine->tab[2][5] = new TableEntry("ReceivingPayload", "ReceivingPayload", "RecvCmdRequest", 0, actionHandleRequest_Wait2, noCondition);
 	myStateMaschine->tab[2][6] = new TableEntry("ReceivingPayload", "FollowProfile", "SendRelease", 0, actionFollowProfile2, noCondition);
 	myStateMaschine->tab[2][7] = new TableEntry("FollowProfile", "FollowProfile", "RecvCmdRequest", 0, actionHandleRequest_Wait3, noCondition);
@@ -159,7 +171,7 @@ void readKeyInputs()
 			myStateMaschine->sendEvent("RecvCmdRequest");
 			break;
 		case '8':
-			myStateMaschine->sendEvent("motorControllerReadToRecvPayload");
+			myStateMaschine->sendEvent("motorControllerReadyToRecvPayload");
 			break;
 		case '9':
 			myStateMaschine->sendEvent("SendRelease");
@@ -218,17 +230,17 @@ void noAction5() {
 
 void actionSetSpeed1() {
 	cout << "\nLocal --> Local" << endl;
-	motorCtrl->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
+	motorController->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
 }
 
 void actionSetSpeed2() {
 	cout << "\nChain --> Chain" << endl;
-	motorCtrl->setSpeed(200);
+	motorController->setSpeed(200);
 }
 
 void actionSetDirection() {
 	cout << "\nLocal --> Local" << endl;
-	motorCtrl->setDirection(1);
+	motorController->setDirection(motorController->direction);
 }
 
 void actionFollowProfile1() {
@@ -243,7 +255,7 @@ void actionFollowProfile2() {
 
 void actionSetSpeedAndSteps() {
 	cout << "\nFollowProfile --> Local" << endl;
-	myProfile->step++;
+	// myProfile->step++;
 	cout << "Set speed and increment steps\n" << endl;;
 }
 
@@ -301,7 +313,7 @@ bool noCondition() {
 bool conditionTotalSteps() {
 
 	// cout << "Total steps > 400 " << endl;
-	if (myProfile->step >= 400)
-		return true;
+	//if (myProfile->step >= 400)
+	//	return true;
 	return false;
 }

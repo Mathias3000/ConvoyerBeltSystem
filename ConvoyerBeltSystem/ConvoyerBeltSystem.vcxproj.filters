@@ -99,6 +99,9 @@
     <ClCompile Include="StateManager.cpp">
       <Filter>FSM framework</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Communication\UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">
@@ -200,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Communication\UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,9 +6,14 @@
 
 using namespace std;
 
+
+
 class MotorController
 {
 public:
+
+	int direction = 1;		// 1 = right & 0 = left
+
 	enum MotorState
 	{
 		movingLeft, movingRight, Stop
@@ -30,6 +35,7 @@ public:
 	MotorState getCurrentMotorState(void);
 	bool readyToRecvPayload(void);
 	bool finishedProfile(void);
+
 private:
 	double currentSpeed;
 	char currentState[MAX_STATE_NAME];

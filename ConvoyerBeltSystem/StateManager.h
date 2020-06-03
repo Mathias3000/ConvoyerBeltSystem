@@ -6,13 +6,26 @@
 #include <thread>
 #include <mutex>
 #include "MotorController.h"
+#include "Motor.h"
+#include "SpeedProfile.h"
+#include "Encoder.h"
+#include "Controller.h"
 #include "Helpers.h"
+#include "TelnetServer.h"
+#include "TCPServer.h"
+#include "TCPClient.h"
 
 using namespace std;
 
 
 class StateManager
 {
+private: 
+	Motor* motor;
+	SpeedProfile* speedProfile;
+	Encoder* encoder;
+	Controller* controller;
+
 public: 
 
 	mutex mtx;
