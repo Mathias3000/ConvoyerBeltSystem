@@ -20,10 +20,12 @@ int main()
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
+
+	//myMotorController->setSpeedInRPM(100);
+
 	thread threadKeyboard(testSM);
 	//thread threadTestController(testController);
 	thread threadQEP(testQEP);
-
 
 	systemManagerTest->startStateMachine();
 	//testTCPServer();

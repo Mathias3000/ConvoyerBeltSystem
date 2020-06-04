@@ -46,7 +46,7 @@ public:
 private:
 	unsigned short readBackValSPI;
 	int speed;
-	MotorState state;
+	MotorState state = Stop;
 	Direction direction;
 	Encoder* myEncoder;
 	Controller* myController;

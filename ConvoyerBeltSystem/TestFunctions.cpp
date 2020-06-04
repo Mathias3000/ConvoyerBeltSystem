@@ -189,7 +189,7 @@ void testController()
 	while (true)
 	{
 		int speedConfigured = myMotorController->getConfiguredSpeedRPM();
-		int currrentSpeed = myMotorController->getCurrentSpeedInRPM();
+		int currrentSpeed = myMotorController->getCurrentSpeedRPM();
 		int error = speedConfigured - currrentSpeed;
 		//error = (error / 445);
 		Discrete_U.u = error;
@@ -223,7 +223,6 @@ void testSM(void)
 			readValue = 0x0;
 		}
 		else if (readValue == '4') {
-			myMotorController->setSpeedInRPM(2200);
 			myStateMachine->sendEvent("command==followProfile");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
@@ -252,23 +251,27 @@ void testSM(void)
 		}
 		else if (readValue == 'F') {
 			myMotorController->setSpeedInRPM(0);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
 			myMotorController->stop();
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == 'E') {
 			myMotorController->setSpeedInRPM(100);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == 'D') {
 			myMotorController->setSpeedInRPM(1000);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
 			//myMotorController->move(Right);
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == 'C') {
 			myMotorController->setSpeedInRPM(2200);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
 			//myMotorController->move(Right);
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
@@ -284,15 +287,10 @@ void testQEP() {
 	{	
 		state = myMotorController->getMotorState();
 		if (state == movingLeft || state == movingRight) {
-			speed = myMotorController->getCurrentSpeedInRPM();
+			speed = myMotorController->getCurrentSpeedRPM();
 			steps = myMotorController->getStepCounter();
 			printf("%0.2f, %d, \n", speed, steps);
 		}
-		/*
-		if (speed > 2) {
-			printf("%0.2f, %d, \n", speed, steps);
-		}
-		*/
 		usleep(20000);
 	}
 }

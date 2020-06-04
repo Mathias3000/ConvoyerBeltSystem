@@ -149,6 +149,12 @@ void myAction13() {
 
 void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
+	if (myMotorController->getConfiguredDirection() == Right) {
+		myMotorController->setMotorState(movingRight);
+	}
+	else if (myMotorController->getConfiguredDirection() == Left) {
+		myMotorController->setMotorState(movingLeft);
+	}
 	myMotorController->startProfile();
 	return;
 }
@@ -168,7 +174,9 @@ void stopMotor()
 bool isProfileFinished()
 {
 	int steps = myMotorController->getStepCounter();
-	if (myMotorController->getMotorState() == Stop)
+	MotorState state = myMotorController->getMotorState();
+	Direction direction = myMotorController->getConfiguredDirection();
+	if (Stop == state)
 	{
 		myStateMachine->sendEvent("myMotorController.finishedProfile");
 		return false;

@@ -11,20 +11,22 @@ class MotorController
 {
 public:
 	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
+	//move for time 1s !!! implementieren!
+	int move(Direction Direction);
+	int stop(); //resets the step counter! Neccessary to memorize step counter?!
 	int setSpeedInRPM(int speed); 
 	int getConfiguredSpeedRPM();
+	double getCurrentSpeedRPM();
+	int setMotorDutyCycle(int duty);
+	int enableMotorPWM();
 	Direction getConfiguredDirection();
 	int setDirection(Direction direction);
-	int setMotorDutyCycle(int duty);
-	int move(bool Direction); 
-	int enableMotorPWM();
-	int stop(); //resets the step counter! Neccessary to memorize step counter?!
 	MotorState getMotorState();
+	int setMotorState(MotorState state);
 	int getStepCounter();
 	int resetStepCounter();
 	int incrementStepCounter();
 	int startProfile();
-	double getCurrentSpeedInRPM();
 	//int updateController();
 	void oneStep();
 
@@ -36,7 +38,7 @@ private:
 	int currentSteps;
 	double currentSpeed;
 	char currentState[MAX_STATE_NAME];
-	thread workProfile;
+	thread threadFollowProfile;
 	Motor* myMotor;
 	SpeedProfile* mySpeedProfile;
 };

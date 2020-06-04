@@ -83,10 +83,10 @@ int Motor::setDutyCycle(int duty)
 {
 	int err; 
 	if (duty < 0) {
-		err = pwmSetDuty_B(this->pwmMotor, 0);
+		err = this->stopMotor();
 	}
 	else
-	{
+	{	
 		err = pwmSetDuty_B(this->pwmMotor, duty);
 	}
 	return err;
