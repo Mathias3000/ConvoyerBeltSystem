@@ -120,7 +120,7 @@ int Motor::stopMotor()
 
 MotorState Motor::setStatus(MotorState motorstate)
 {
-	return this->state = motorstate;
+	return (this->state = motorstate);
 }
 
 MotorState Motor::getStatus()

@@ -155,7 +155,14 @@ void followProfile() {
 	else if (myMotorController->getConfiguredDirection() == Left) {
 		myMotorController->setMotorState(movingLeft);
 	}
-	myMotorController->startProfile();
+	if (myMotorController->getConfiguredSpeedRPM() != 0) {
+		myMotorController->startProfile();
+	}
+	else
+	{
+		printf("speed not set!\n");
+		myMotorController->setMotorState(Stop);
+	}
 	return;
 }
 
