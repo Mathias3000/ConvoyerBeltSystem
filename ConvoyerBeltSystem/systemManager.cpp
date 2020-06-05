@@ -47,7 +47,7 @@ void SystemManager ::init() {
 	//Follow Profile
 	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "switchTofollowProfile", 0, followProfile, myConditionTrue); 
 	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, updateSteps, isProfileFinished);
-	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, stopMotor, myConditionTrue);
+	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, profileFinished, myConditionTrue);
 
 	// Initialize timer names for all diagrams
 	// Timer names shall have the name Timer followed by the diagram number
@@ -171,11 +171,11 @@ void updateSteps()
 	myMotorController->incrementStepCounter();
 }
 
-void stopMotor()
+void profileFinished()
 {
 	printf("FollowProfile  -> Steps completed -> IDLE\n");
-	myMotorController->stop();
-	myMotorController->resetStepCounter();
+	//myMotorController->stop();
+	//myMotorController->resetStepCounter();
 }
 
 bool isProfileFinished()
@@ -183,7 +183,7 @@ bool isProfileFinished()
 	int steps = myMotorController->getStepCounter();
 	MotorState state = myMotorController->getMotorState();
 	Direction direction = myMotorController->getConfiguredDirection();
-	if (Stop == state)
+	if (state == Stop)
 	{
 		myStateMachine->sendEvent("myMotorController.finishedProfile");
 		return false;

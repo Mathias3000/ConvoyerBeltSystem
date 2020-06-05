@@ -89,12 +89,13 @@ int MotorController::followProfile()
 	while (true)
 	{
 		if (this->profileRunning == true) {
-			pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 			steps = 0;
 			MotorState debugState = myMotor->getStatus();
 			int speed = this->getConfiguredSpeedRPM();
 			int desiredSpeed, currentSpeed, error;
 			Discrete_initialize();
+			this->myMotor->setDutyCycle(0);
+			pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 			while (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN) && this->myMotor->getStatus() != Stop) {
 				steps = this->mySpeedProfile->getStepCounter();
 				//accelerate
@@ -125,11 +126,12 @@ int MotorController::followProfile()
 			}
 			if (400 <= steps) {
 				this->myMotor->stopMotor();
+				this->myMotor->setStatus(Stop);
 				this->resetStepCounter();
 			}
 			this->profileRunning = false;
 		}
-		usleep(500);
+		usleep(5000);
 	}
 	return 0;
 }

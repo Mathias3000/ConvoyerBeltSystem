@@ -252,7 +252,7 @@ void testSM(void)
 		else if (readValue == 'F') {
 			myMotorController->setSpeedInRPM(0);
 			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
-			myMotorController->stop();
+			//myMotorController->stop();
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
