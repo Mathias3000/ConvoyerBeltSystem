@@ -68,6 +68,7 @@ void StateMachine :: runToCompletion() {
 	printf("State Machine starting...!\n");
 	std::string actualEvent;
 	int d,i,j;
+
 	while (true) {
 		if (sem_wait(&semEvent) != 0)
 			perror ("Sem wait"); // Wait for an event to arrive
@@ -79,7 +80,7 @@ void StateMachine :: runToCompletion() {
 						(actualEvent == tab[d][i]->myEvent) && 
 						((*tab[d][i]->condition)() == true)) { // Call the condition function which returns bool
 					actualState[d] = tab[d][i]->nextState;
-					(*tab[d][i]->action)(); //Call the funtion defined by pointer action
+					(*tab[d][i]->action)(); //Call the funtion defined by pointer action									
 					for (j = 0; j < lines[d]; j++) {
 						if ((actualState[d] == tab[d][j]->actState) && 
 								(tab[d][j]->myEvent == (diaTimerTable[d]->timerName))) {

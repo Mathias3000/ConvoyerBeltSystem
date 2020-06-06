@@ -2,6 +2,7 @@
 
 #include <thread>
 #include "defines.h"
+#include <iostream>
 #include "Motor.h"
 #include "SpeedProfile.h"
 
@@ -10,6 +11,7 @@ using namespace std;
 class MotorController
 {
 public:
+
 	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
 	//move for time 1s !!! implementieren!
 	int move(Direction Direction);
@@ -23,6 +25,19 @@ public:
 	int setDirection(Direction direction);
 	MotorState getMotorState();
 	int setMotorState(MotorState state);
+
+	enum MotorState
+	{
+		movingLeft, movingRight, Stop
+	};
+	MotorController();
+	MotorController(Motor* motor, SpeedProfile* profile);
+	
+	int setDirection(int direction);
+	int move(bool Direction); //time neccessary?
+	int stop();
+
+
 	int getStepCounter();
 	int resetStepCounter();
 	int incrementStepCounter();

@@ -1,5 +1,8 @@
 #include "MotorController.h"
 
+MotorController::MotorController()
+{
+}
 MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(motor), mySpeedProfile(profile)
 {
 	printf("MotorController Konstruktor!\n");
@@ -9,12 +12,20 @@ MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(
 
 int MotorController::setSpeedInRPM(int speed)
 {
+
 	return this->myMotor->setSpeedRPM(speed);
 }
 
 int MotorController::getConfiguredSpeedRPM()
+
+
+	return this->myMotor->setSpeed(speed);
+}
+
+int MotorController::setDirection(int direction)
 {
-	return this->myMotor->getSpeed();
+	cout << "Direction set to " << direction << ". " << endl;
+	return 0;
 }
 
 Direction MotorController::getConfiguredDirection()
@@ -66,6 +77,7 @@ int MotorController::incrementStepCounter()
 {
 	return this->mySpeedProfile->incrementStepCounter();
 }
+
 
 int MotorController::startProfile()
 {
@@ -158,4 +170,5 @@ void MotorController::oneStep()
 }
 
  
+
 
