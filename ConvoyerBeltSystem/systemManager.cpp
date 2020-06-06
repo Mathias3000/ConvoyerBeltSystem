@@ -47,7 +47,7 @@ void SystemManager ::init() {
 	//Follow Profile
 	myStateMachine->tab[2][0] = new TableEntry("IDLE", "FollowProfile", "switchTofollowProfile", 0, followProfile, myConditionTrue); 
 	myStateMachine->tab[2][1] = new TableEntry ("FollowProfile", "FollowProfile", "Timer2", 20, updateSteps, isProfileFinished);
-	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, stopMotor, myConditionTrue);
+	myStateMachine->tab[2][2] = new TableEntry("FollowProfile", "IDLE", "Timer2", 20, profileFinished, myConditionTrue);
 
 	// Initialize timer names for all diagrams
 	// Timer names shall have the name Timer followed by the diagram number
@@ -74,11 +74,6 @@ void SystemManager ::init() {
 	// Start timer for each diagram which needs one in the first state!
 	// In my case these are diagram 0 and 2
 	
-	//myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
-	/*
-	myStateMachine->diaTimerTable[2]->startTimer(myStateMachine->tab[2][0]->eventTime);
-	*/
-
 	// Initial actions can be done here, if needed!
 	//n = 0;
 	//m = 0;
@@ -154,8 +149,20 @@ void myAction13() {
 
 void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
-	myMotorController->setDirection(Left);
-	myMotorController->startProfile();
+	if (myMotorController->getConfiguredDirection() == Right) {
+		myMotorController->setMotorState(movingRight);
+	}
+	else if (myMotorController->getConfiguredDirection() == Left) {
+		myMotorController->setMotorState(movingLeft);
+	}
+	if (myMotorController->getConfiguredSpeedRPM() != 0) {
+		myMotorController->startProfile();
+	}
+	else
+	{
+		printf("speed not set!\n");
+		myMotorController->setMotorState(Stop);
+	}
 	return;
 }
 
@@ -164,19 +171,30 @@ void updateSteps()
 	myMotorController->incrementStepCounter();
 }
 
-void stopMotor()
+void profileFinished()
 {
 	printf("FollowProfile  -> Steps completed -> IDLE\n");
-	myMotorController->stop();
+	//myMotorController->stop();
+	//myMotorController->resetStepCounter();
 }
 
 bool isProfileFinished()
 {
-	if (myMotorController->getMotorState() != Stop ) {
+	int steps = myMotorController->getStepCounter();
+	MotorState state = myMotorController->getMotorState();
+	Direction direction = myMotorController->getConfiguredDirection();
+	if (state == Stop)
+	{
+		myStateMachine->sendEvent("myMotorController.finishedProfile");
+		return false;
+	}
+	else if (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN))
+	{
 		return true;
 	}
-	else {
+	else if (steps > (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
 		myMotorController->stop();
+		myMotorController->resetStepCounter();
 		myStateMachine->sendEvent("myMotorController.finishedProfile");
 		return false;
 	}

@@ -55,21 +55,21 @@ int Motor::initMotor()
 	if (pwmSetPinmux_B(this->pwmMotor) < 0) return -1;
 	if (pwmOpen_B(this->pwmMotor) < 0) return -1;
 	if (pwmSetPeriod_B(this->pwmMotor, 50000) < 0) return -1;
-	//if (pwmSetDuty_B(this->pwmMotor, 35000)) return -1;
+	//if (pwmSetDuty_B(this->pwmMotor, 0)) return -1;
 	if (pwmSetPolarity_B(this->pwmMotor, 0)) return -1;
 	printf("SPI for Motor initialized!\n");
 	return 0;
 }
 
-int Motor::setSpeed(double speed)
+int Motor::setSpeedRPM(int speed)
 {
-	if (speed > 0 && speed <= 100) {
+	if (speed >= 100 && speed <= 2200) {
 		this->speed = speed;
 		return 0;
 	}
 	else {
 		this->speed = 0;
-		printf("speed should be between 0 - 100!\n");
+		//printf("speed should be between 100 - 2200!\n");
 		return -1;
 	}
 }
@@ -79,18 +79,32 @@ int Motor::getSpeed()
 	return this->speed;
 }
 
+int Motor::setDutyCycle(int duty)
+{
+	int err; 
+	if (duty < 0) {
+		err = pwmSetDuty_B(this->pwmMotor, (0.01 * PWM_PER));
+		//err = this->stopMotor();
+	}
+	else
+	{	
+		err = pwmSetDuty_B(this->pwmMotor, duty);
+	}
+	return err;
+}
+
 int Motor::startMotor(bool direction)
 {	
 	if (direction == 0) {
 		gpioSetValue(this->IN1, 1);
-		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED);
+		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED_RPM);
 		pwmSetEnable_B(this->pwmMotor, 1);
 		this->state = movingRight;
 		return 1;
 	}
 	else if (direction == 1) {
 		gpioSetValue(this->IN1, 0);
-		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED);
+		pwmSetDuty_B(this->pwmMotor, this->speed * PWM_PER / MAX_SPEED_RPM);
 		pwmSetEnable_B(this->pwmMotor, 1);
 		this->state = movingLeft;
 		return 1;
@@ -100,14 +114,14 @@ int Motor::startMotor(bool direction)
 
 int Motor::stopMotor()
 {
-	if (pwmSetEnable_B(pwmMotor, 0) < 0) return -1;
-	this->state = Stop;
+	if (pwmSetEnable_B(this->pwmMotor, 0) < 0) return -1;
+	//this->state = Stop;
 	return 0;
 }
 
 MotorState Motor::setStatus(MotorState motorstate)
 {
-	return this->state = motorstate;
+	return (this->state = motorstate);
 }
 
 MotorState Motor::getStatus()
@@ -118,6 +132,11 @@ MotorState Motor::getStatus()
 double Motor::getCurrentSpeed()
 {
 	return this->myEncoder->getSpeedRPM();
+}
+
+void Motor::oneStep()
+{	
+	myController->oneStep();
 }
 
 int Motor::setDirection(Direction direction)

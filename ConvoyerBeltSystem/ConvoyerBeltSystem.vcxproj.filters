@@ -96,6 +96,9 @@
     <ClCompile Include="spi.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
+    <ClCompile Include="Discrete.c">
+      <Filter>MotorController\Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">
@@ -194,6 +197,18 @@
     </ClInclude>
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete_private.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete_types.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="rtwtypes.h">
+      <Filter>MotorController\Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

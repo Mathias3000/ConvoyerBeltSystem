@@ -183,6 +183,24 @@ void testKeyBoard()
 
 }
 
+void testController()
+{	
+	myMotorController->enableMotorPWM();
+	while (true)
+	{
+		int speedConfigured = myMotorController->getConfiguredSpeedRPM();
+		int currrentSpeed = myMotorController->getCurrentSpeedRPM();
+		int error = speedConfigured - currrentSpeed;
+		//error = (error / 445);
+		Discrete_U.u = error;
+		myMotorController->oneStep();
+		double outputInvolts = (Discrete_Y.y);
+		double duty = (outputInvolts * 50000) / 7;
+		myMotorController->setMotorDutyCycle((int)duty);
+		usleep(20000);
+	}	
+}
+
 void testSM(void)
 {	
 	unsigned char readValue;
@@ -219,8 +237,42 @@ void testSM(void)
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
+		else if (readValue == 'A') {
+			myMotorController->setDirection(Right);
+			printf("direction set to: %d\n", myMotorController->getConfiguredDirection());
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == 'B') {
+			myMotorController->setDirection(Left);
+			printf("direction set to: %d\n", myMotorController->getConfiguredDirection());
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
 		else if (readValue == 'F') {
-			myMotorController->stop();
+			myMotorController->setSpeedInRPM(0);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+			//myMotorController->stop();
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == 'E') {
+			myMotorController->setSpeedInRPM(100);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == 'D') {
+			myMotorController->setSpeedInRPM(1000);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+			//myMotorController->move(Right);
+			this_thread::sleep_for(chrono::milliseconds(200));
+			readValue = 0x0;
+		}
+		else if (readValue == 'C') {
+			myMotorController->setSpeedInRPM(2200);
+			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+			//myMotorController->move(Right);
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
@@ -228,9 +280,17 @@ void testSM(void)
 }
 
 void testQEP() {
+	double speed;
+	int steps;
+	MotorState state;
 	while (true)
-	{
-		printf("%0.2f \n", myMotorController->getCurrentSpeed());
-		usleep(500000);
+	{	
+		state = myMotorController->getMotorState();
+		if ((state == movingLeft || state == movingRight) && myMotorController->getConfiguredSpeedRPM() != 0) {
+			speed = myMotorController->getCurrentSpeedRPM();
+			steps = myMotorController->getStepCounter();
+			printf("%0.2f, %d, \n", speed, steps);
+		}
+		usleep(20000);
 	}
 }

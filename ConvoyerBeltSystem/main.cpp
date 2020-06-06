@@ -16,17 +16,19 @@ int main()
 	myMotor = new Motor(myEncoder, myController);
 	mySpeedProfile = new SpeedProfile;
 	myMotorController = new MotorController(myMotor, mySpeedProfile);
-	myMotorController->setSpeed(100);
-	myMotor->stopMotor();
+	//myMotorController->stop();
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
+
+	//myMotorController->setSpeedInRPM(100);
+
 	thread threadKeyboard(testSM);
+	//thread threadTestController(testController);
+	thread threadQEP(testQEP);
 
 	systemManagerTest->startStateMachine();
-	
-	//thread threadQEP(testQEP);
-    //testTCPServer();
+	//testTCPServer();
 	//testMotor(0);
 	//testADC();
     //testKeyBoard();
