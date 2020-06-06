@@ -7,10 +7,17 @@ MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(
 {
 	printf("MotorController Konstruktor!\n");
 	this->myMotor->initMotor();
+	this->threadFollowProfile = thread(&MotorController::followProfile, this);
 }
 
-int MotorController::setSpeed(double speed)
+int MotorController::setSpeedInRPM(int speed)
 {
+
+	return this->myMotor->setSpeedRPM(speed);
+}
+
+int MotorController::getConfiguredSpeedRPM()
+
 
 	return this->myMotor->setSpeed(speed);
 }
@@ -21,92 +28,38 @@ int MotorController::setDirection(int direction)
 	return 0;
 }
 
-int MotorController::followProfile(int direction)
+Direction MotorController::getConfiguredDirection()
 {
-	this->myMotor->setDirection(direction);
-	pwmSetDuty_B(this->myMotor->pwmMotor, 1);
-	pwmSetEnable_B(this->myMotor->pwmMotor, 1);
-	this->myMotor->motorStopped = false;
-
-	if (direction == Right) {
-		gpioSetValue(this->myMotor->IN1, 1);
-	}
-	else if (direction == Left) {
-		gpioSetValue(this->myMotor->IN1, 0);
-	}
-
-	double speed = 0;
-	while (this->mySpeedProfile->getStepCounter() <= 400 && this->myMotor->motorStopped == false)
-	{	
-		//accelerate
-		if (this->mySpeedProfile->getStepCounter() <= RAMP_UP) {
-			pwmSetDuty_B(this->myMotor->pwmMotor, speed * PWM_PER / MAX_SPEED);
-			speed = (speed + (this->myMotor->getSpeed() / 50));
-		}
-
-		//steady
-		else if (this->mySpeedProfile->getStepCounter() <= RAMP_STEADY) {}
-
-		//decelarate
-		else if (this->mySpeedProfile->getStepCounter() <= RAMP_DOWN) {
-			speed = (speed - (this->myMotor->getSpeed() / 50));
-			pwmSetDuty_B(this->myMotor->pwmMotor, speed * PWM_PER / MAX_SPEED);
-		}
-	}
-	this->myMotor->motorStopped = true;
-	/*
-	int Motor::followProfile(bool direction)
-{
-	unsigned short countPrev = 0;
-	double speed = 0;
-	if (direction == 0) {
-		gpioSetValue(this->IN1, 1);
-		pwmSetDuty_B(this->pwmMotor, 1);
-		pwmSetEnable_B(this->pwmMotor, 1);
-		this->motorStopped = false;
-	}
-	else if (direction == 1) {
-		gpioSetValue(this->IN1, 0);
-		pwmSetDuty_B(this->pwmMotor, 1);
-		pwmSetEnable_B(this->pwmMotor, 1);
-		this->motorStopped = false;
-	}
-	do {
-		if (countPrev != stepCounterFollowProf) {
-			countPrev = stepCounterFollowProf;
-			//accelerate
-			if (stepCounterFollowProf <= RAMP_UP) {
-				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
-				speed = (speed + (this->speed / 50));
-			}
-			//steady speed
-			else if (stepCounterFollowProf <= RAMP_STEADY) {}
-			//decelerate
-			else if (stepCounterFollowProf < RAMP_DOWN) {
-				speed = (speed - (this->speed / 50));
-				pwmSetDuty_B(this->pwmMotor, speed * PWM_PER / MAX_SPEED);
-			}
-			//stop Motor
-			else if (stepCounterFollowProf >= RAMP_DOWN) {
-				this->stopMotor();
-				this->motorStopped = true;
-			}
-		}
-	} while (stepCounterFollowProf <= 400 && this->motorStopped == false); //Motor muss auf jeden Fall stoppen, da this.motorStopped = true sonst nur in this.stopMotor() passieren kann...
-	
-	return 0;
-}
-	
-	*/
+	return myMotor->getDirection();
 }
 
-int MotorController::move(bool Direction)
+int MotorController::setDirection(Direction direction)
 {
-	return this->myMotor->startMotor(Direction);
+	return myMotor->setDirection(direction);
+}
+
+int MotorController::setMotorDutyCycle(int duty)
+{
+	int err = myMotor->setDutyCycle(duty);
+	return err;
+}
+
+int MotorController::move(Direction direction)
+{
+	if (direction == Right) this->myMotor->setStatus(movingRight);
+	else this->myMotor->setStatus(movingLeft);
+	return this->myMotor->startMotor(direction);
+}
+
+int MotorController::enableMotorPWM()
+{	
+	int err = pwmSetEnable_B(this->myMotor->pwmMotor, 1);
+	return err;
 }
 
 int MotorController::stop()
-{
+{	
+	this->profileRunning = false;
 	return this->myMotor->stopMotor();
 }
 
@@ -124,4 +77,98 @@ int MotorController::incrementStepCounter()
 {
 	return this->mySpeedProfile->incrementStepCounter();
 }
+
+
+int MotorController::startProfile()
+{
+	this->enableMotorPWM();
+	if (this->profileRunning == true){
+		printf("Profile already running!\n");
+		return -1;
+	}
+	else if (this->profileRunning == false)
+	{
+		this->profileRunning = true;
+		//usleep(100000); //sync time - for MotorState to be set
+		return 0;
+	}
+}
+
+int MotorController::followProfile()
+{	
+	unsigned int steps = 0;
+	double output;
+	while (true)
+	{
+		if (this->profileRunning == true) {
+			steps = 0;
+			MotorState debugState = myMotor->getStatus();
+			int speed = this->getConfiguredSpeedRPM();
+			int desiredSpeed, currentSpeed, error;
+			Discrete_initialize();
+			this->myMotor->setDutyCycle(0);
+			pwmSetEnable_B(this->myMotor->pwmMotor, 1);
+			while (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN) && this->myMotor->getStatus() != Stop) {
+				steps = this->mySpeedProfile->getStepCounter();
+				//accelerate
+				if (steps <= RAMP_UP) {
+					desiredSpeed = (steps * speed / RAMP_UP);
+					currentSpeed = this->getCurrentSpeedRPM();
+					error = desiredSpeed - currentSpeed;
+					Discrete_U.u = error;
+					this->oneStep();
+					double outputInvolts = (Discrete_Y.y);
+					double duty = (outputInvolts * PWM_PER) / 7;
+					this->setMotorDutyCycle((int)duty);
+				}
+				//steady
+				else if (steps > RAMP_UP&& steps <= (RAMP_UP + RAMP_STEADY)) {}
+				//decelerate
+				else if (steps > (RAMP_UP + RAMP_STEADY) && steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
+					desiredSpeed = (((RAMP_UP + RAMP_STEADY + RAMP_DOWN) - steps) * speed) / RAMP_DOWN;
+					currentSpeed = this->getCurrentSpeedRPM();
+					error = desiredSpeed - currentSpeed;
+					Discrete_U.u = error;
+					this->oneStep();
+					double outputInvolts = (Discrete_Y.y);
+					double duty = (outputInvolts * PWM_PER) / 7;
+					this->setMotorDutyCycle((int)duty);
+				}
+				usleep(18000);
+			}
+			if (400 <= steps) {
+				this->myMotor->stopMotor();
+				this->myMotor->setStatus(Stop);
+				this->resetStepCounter();
+			}
+			this->profileRunning = false;
+		}
+		usleep(5000);
+	}
+	return 0;
+}
+
+MotorState MotorController::getMotorState()
+{
+	return this->myMotor->getStatus();
+}
+
+int MotorController::setMotorState(MotorState state)
+{
+	int err = this->myMotor->setStatus(state);
+	return err;
+}
+
+double MotorController::getCurrentSpeedRPM()
+{
+	return this->myMotor->getCurrentSpeed();
+}
+
+void MotorController::oneStep()
+{
+	myMotor->oneStep();
+}
+
+ 
+
 

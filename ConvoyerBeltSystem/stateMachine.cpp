@@ -65,6 +65,7 @@ std::string StateMachine :: getEvent() {
 }
 
 void StateMachine :: runToCompletion() {
+	printf("State Machine starting...!\n");
 	std::string actualEvent;
 	int d,i,j;
 
