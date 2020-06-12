@@ -1,28 +1,19 @@
 #include "Display.h"
 
-int Display::display(string string)
-{
-	cout << string;
-	cout.flush();
-	return 0;
-}
 
-int Display::displayLine(string string)
+Display::Display()
 {
-	cout << string << endl;
-	return 0;
-}
+	printf("Display Construktor!\n");
+	this->myConsole = new consDescriptor;
+	strncpy(myConsole->fileName, this->myConsoleName, MAX_FILENAME);
+	openConsole(myConsole);
+};
 
-int Display::display(int integerValue)
+int Display::displayLine(char* string)
 {
-	cout << integerValue;
-	cout.flush();
+	if(writeLineToConsole(this->myConsole, string) < 0) return -1;
 	return 0;
-}
+};
 
-int Display::display(double doubleValue)
-{
-	cout << doubleValue;
-	cout.flush();
-	return 0;
-}
+
+

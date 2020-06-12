@@ -7,6 +7,14 @@ using namespace std;
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
+	Display* myDisplay = new Display;
+	char a[MAX_CONS_LEN] = "this is a string to diplay!\n";
+	myDisplay->displayLine(a);
+	while (true)
+	{
+
+	}
+	/*
 	Encoder* myEncoder;
 	Motor* myMotor;
 	SpeedProfile* mySpeedProfile;
@@ -16,21 +24,18 @@ int main()
 	myMotor = new Motor(myEncoder, myController);
 	mySpeedProfile = new SpeedProfile;
 	myMotorController = new MotorController(myMotor, mySpeedProfile);
-	//myMotorController->stop();
 	SystemManager* systemManagerTest;
 	systemManagerTest = new SystemManager;
 	systemManagerTest->init();
-
-	//myMotorController->setSpeedInRPM(100);
-
 	thread threadKeyboard(testSM);
-	//thread threadTestController(testController);
 	thread threadQEP(testQEP);
-
 	systemManagerTest->startStateMachine();
+	*/
 	//testTCPServer();
 	//testMotor(0);
 	//testADC();
     //testKeyBoard();
+	
+	
     return 0;
 }

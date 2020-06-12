@@ -1,4 +1,4 @@
-/*
+	/*
 File: cons.h
 Author: HP
 As of: 2919-10-17
