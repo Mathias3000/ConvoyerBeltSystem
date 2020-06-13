@@ -6,7 +6,6 @@ class LocalMode: public Mode
 public: 
 	LocalMode();
 	~LocalMode();
-	void recv();
-	void send(Command command);
+	Command* recv();
 };
 

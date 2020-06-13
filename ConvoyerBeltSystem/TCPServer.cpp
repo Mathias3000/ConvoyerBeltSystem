@@ -10,6 +10,11 @@ TCPServer::TCPServer(in_addr_t IPAddress, int port) {
 
 TCPServer::TCPServer()
 {
+	init();
+}
+
+TCPServer::~TCPServer()
+{
 }
 
 void TCPServer::sendData(string data)
@@ -58,32 +63,32 @@ int TCPServer::init() {
 	}
 
 	// Start a worker thread for each new connection
-	while (true) {
+	//while (true) {
 
-		// Accept a call
-		clientSize = sizeof(client);
-		int clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
-		if (clientSocket == -1) {
-			cerr << "Problem with client connetion!";
-			return -4;
-		}
+	//	// Accept a call
+	//	clientSize = sizeof(client);
+	//	int clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
+	//	if (clientSocket == -1) {
+	//		cerr << "Problem with client connetion!";
+	//		return -4;
+	//	}
 
-		// worker thread
-		thread* clientThread;
-		clientThread = new thread(&TCPServer::thread_client_handler, this, 10);
+	//	// worker thread
+	//	thread* clientThread;
+	//	clientThread = new thread(&TCPServer::thread_client_handler, this, 10);
 
-		cout << "Connected with client" << endl;
+	//	cout << "Connected with client" << endl;
 
-		// Greet Client!
-		cout << "Initiate Greeting of client! Code Red!";
-		char greeting[] = "Hi Client! What's up!";
-		send(clientSocket, greeting, sizeof(greeting) + 1, 0);
+	//	// Greet Client!
+	//	cout << "Initiate Greeting of client! Code Red!";
+	//	char greeting[] = "Hi Client! What's up!";
+	//	send(clientSocket, greeting, sizeof(greeting) + 1, 0);
 
-		// cleaning up garbage
-		memset(host, 0, NI_MAXHOST);
-		memset(svc, 0, NI_MAXSERV);
+	//	// cleaning up garbage
+	//	memset(host, 0, NI_MAXHOST);
+	//	memset(svc, 0, NI_MAXSERV);
 
-	}
+	//}
 
 	return 0;
 

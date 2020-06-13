@@ -3,7 +3,7 @@
 
 class ICommunication
 {
-	virtual Command* parse();
+	virtual Command* parse() = 0;
 };
 
 // how to use: Interface

@@ -40,7 +40,6 @@ public:
 	TCPServer(in_addr_t IPAddress, int port);
 	TCPServer();
 	~TCPServer();
-	string recv();
 	void sendData(string data);
 	void thread_client_handler();
 

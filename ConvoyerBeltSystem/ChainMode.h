@@ -14,7 +14,7 @@ private:
 public: 
 	ChainMode();
 	void handleRequest(string ReadyWait);	// TODO: choose proper datatype for ready and wait status. maybe even a class for better usability
-	void recv();
-	void send(Command command);
+	Command* recv();
+	void send(Command* command);
 };
 

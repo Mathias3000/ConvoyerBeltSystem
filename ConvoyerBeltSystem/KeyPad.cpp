@@ -12,7 +12,7 @@ KeyPad::~KeyPad()
 	delete this;
 }
 
-void KeyPad::readKey()
+void KeyPad::handleKeyInput()
 {
 	// reads keyboard input and sends corresponding event
 	readValue = keyboard->getPressedKey();
@@ -52,4 +52,14 @@ void KeyPad::readKey()
 		break;
 	}
 
+}
+
+string KeyPad::readKey()
+{
+	return string(1, keyboard->getPressedKey());
+}
+
+char KeyPad::getLastKeyInput()
+{
+	return readValue;
 }

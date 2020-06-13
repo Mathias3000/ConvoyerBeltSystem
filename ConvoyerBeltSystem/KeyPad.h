@@ -13,7 +13,9 @@ private:
 public: 
 	KeyPad();
 	~KeyPad();
-	void readKey();
+	void handleKeyInput();
+	string readKey();
+	char getLastKeyInput();
 
 };
 

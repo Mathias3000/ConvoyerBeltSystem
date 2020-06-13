@@ -86,7 +86,7 @@
     <ClCompile Include="funcs.c" />
     <ClCompile Include="gpio.c" />
     <ClCompile Include="Helpers.cpp" />
-    <ClCompile Include="ICommand.cpp" />
+    <ClCompile Include="ICommunication.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="KeyPad.cpp" />
     <ClCompile Include="LocalMode.cpp" />
@@ -124,7 +124,7 @@
     <ClInclude Include="funcs.h" />
     <ClInclude Include="gpio.h" />
     <ClInclude Include="Helpers.h" />
-    <ClInclude Include="ICommand.h" />
+    <ClInclude Include="ICommunication.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="KeyPad.h" />
     <ClInclude Include="LocalMode.h" />
@@ -141,6 +141,7 @@
     <ClInclude Include="stateMachine.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="stateTable.h" />
+    <ClInclude Include="SystemLocation.h" />
     <ClInclude Include="systemManager.h" />
     <ClInclude Include="TCPClient.h" />
     <ClInclude Include="TCPServer.h" />

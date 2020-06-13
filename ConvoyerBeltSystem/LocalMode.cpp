@@ -1,6 +1,6 @@
 #include "LocalMode.h"
 
-LocalMode::LocalMode()
+LocalMode::LocalMode():Mode()
 {
 }
 
@@ -9,10 +9,7 @@ LocalMode::~LocalMode()
 	delete this;
 }
 
-void LocalMode::recv()
+Command* LocalMode::recv()
 {
 }
 
-void LocalMode::send(Command command)
-{
-}
