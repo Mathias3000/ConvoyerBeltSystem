@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #include <string>
 #include <iostream>
+#include <thread>
 
 #define HOST_IP "192.168.7.2"			// telnet
 #define CONVBELT_IP "91.0.0.7"			// tcp
@@ -41,6 +42,7 @@ public:
 	~TCPServer();
 	string recv();
 	void sendData(string data);
+	void thread_client_handler();
 
 };
 

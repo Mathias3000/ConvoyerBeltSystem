@@ -23,6 +23,10 @@ void TCPServer::sendData(string data)
 	delete[] toSend;
 }
 
+void TCPServer::thread_client_handler()
+{
+}
+
 int TCPServer::init() {
 
 	// create a socket
@@ -53,28 +57,33 @@ int TCPServer::init() {
 		return -3;
 	}
 
-	// Accept a call
-	clientSize = sizeof(client);
-	clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
+	// Start a worker thread for each new connection
+	while (true) {
 
-	if (clientSocket == -1) {
-		cerr << "Problem with client connetion!";
-		return -4;
+		// Accept a call
+		clientSize = sizeof(client);
+		int clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
+		if (clientSocket == -1) {
+			cerr << "Problem with client connetion!";
+			return -4;
+		}
+
+		// worker thread
+		thread* clientThread;
+		clientThread = new thread(&TCPServer::thread_client_handler, this, 10);
+
+		cout << "Connected with client" << endl;
+
+		// Greet Client!
+		cout << "Initiate Greeting of client! Code Red!";
+		char greeting[] = "Hi Client! What's up!";
+		send(clientSocket, greeting, sizeof(greeting) + 1, 0);
+
+		// cleaning up garbage
+		memset(host, 0, NI_MAXHOST);
+		memset(svc, 0, NI_MAXSERV);
+
 	}
-
-	cout << "Connected with client" << endl;
-
-	// Close socket
-	close(listening);
-
-	// Greet Client!
-	cout << "Initiate Greeting of client! Code Red!";
-	char greeting[] = "Hi Client! What's up!";
-	send(clientSocket, greeting, sizeof(greeting) + 1, 0);
-
-	// cleaning up garbage
-	memset(host, 0, NI_MAXHOST);
-	memset(svc, 0, NI_MAXSERV);
 
 	return 0;
 
