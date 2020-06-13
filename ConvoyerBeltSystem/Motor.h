@@ -22,6 +22,7 @@ extern "C" {
 class Motor
 {
 public:
+	Motor();
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); //init the spi connection and configure with default values
