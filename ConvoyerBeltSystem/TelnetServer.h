@@ -1,7 +1,8 @@
 #pragma once
 #include "TCPServer.h"
+#include "ICommand.h"
 
-class TelnetServer
+class TelnetServer: public ICommand
 {
 private: 
 	int telnetPort = 23;
@@ -14,6 +15,8 @@ public:
 	bool dirBuffer = true;	// buffer to save last direction value: true = right & false = left
 
 	TelnetServer();
+	Command* parse();
+	void sendData(string data);
 
 };
 

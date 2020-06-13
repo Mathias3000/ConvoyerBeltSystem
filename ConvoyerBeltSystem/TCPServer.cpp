@@ -12,6 +12,17 @@ TCPServer::TCPServer()
 {
 }
 
+void TCPServer::sendData(string data)
+{
+	// convert string to char*
+	char* toSend = new char[data.size() + 1];
+	std::copy(data.begin(), data.end(), toSend);
+	toSend[data.size()] = '\0'; // don't forget the terminating 0
+
+	send(clientSocket, toSend, strlen(toSend), 0);
+	delete[] toSend;
+}
+
 int TCPServer::init() {
 
 	// create a socket

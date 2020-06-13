@@ -9,6 +9,7 @@ TCPClient::TCPClient(in_addr_t serverAddress, int port)
 
 TCPClient::TCPClient()
 {
+    init();
 }
 
 int TCPClient::init()
@@ -36,3 +37,16 @@ int TCPClient::init()
     cout << "Sent message to Server" << endl;
 
 }
+
+void TCPClient::sendData(string data)
+{
+    // convert string to char*
+    char* toSend = new char[data.size() + 1];
+    std::copy(data.begin(), data.end(), toSend);
+    toSend[data.size()] = '\0'; // don't forget the terminating 0
+
+    send(sock, toSend, strlen(toSend), 0);
+    delete[] toSend;
+}
+
+
