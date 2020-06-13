@@ -7,25 +7,17 @@
 int n, m;		
 Keyboard* myKeyBoard;
 StateMachine* myStateMaschine;
+ConveyorBelt* conveyorBelt;
 
-extern MotorController* motorController;
 mutex mtxKeys;
 
-// temp global variable for communcation
-// maybe this can be avoid. Need to check 
-TelnetServer* telnetServer = new TelnetServer();
-TCPServer* tcpServer = new TCPServer();
-TCPClient* tcpClient = new TCPClient();
 
 StateManager::StateManager()
 {
 	myKeyBoard = new Keyboard();
 	myStateMaschine = new StateMachine();
-	encoder = new Encoder();
-	controller = new Controller();
-	motor = new Motor(encoder, controller);
-	speedProfile = new SpeedProfile();
-	motorController = new MotorController(motor, speedProfile);
+	conveyorBelt = new ConveyorBelt();
+
 	init();		// init seperat ausführen. Anscheinend kann es zu unbekannten Fehlern führen, wenn man es im ctor ausführt
 }
 
@@ -38,14 +30,15 @@ void StateManager::init()
 {
 	// Define state charts
 	// Local Mode Chart
-	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, noAction1, noCondition);
+	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, selectLocalMode, noCondition);
 	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed1, noCondition);
-	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirection", 0, actionSetDirection, noCondition);
+	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionRight", 0, actionSetDirection, noCondition);
+	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionLeft", 0, actionSetDirection, noCondition);
 	myStateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile1, noCondition);
 	myStateMaschine->tab[0][4] = new TableEntry("FollowProfile", "Local", "motorControllerFinishedProfile", 0, noAction2, noCondition);
 	myStateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction3, noCondition);
 
-	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils in Local und Chain einbauen
+	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils ins Local und Chain einbauen
 	myStateMaschine->tab[1][0] = new TableEntry("FollowProfile", "Local", "Timer0", 20, actionSetSpeedAndSteps, conditionTotalSteps);		// put timer.start() to different actionFunction
 
 	// Chain Chart
@@ -64,6 +57,7 @@ void StateManager::init()
 	myStateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop2, noCondition);
 
 	// Additional StateChart for KeyPad: Polling needs to be performed!
+	// Can be implemented with a thread as well
 
 	// Potentiometer/Keyboard Chart for Polling
 	// every 50ms check if poti value has changed "significantly"; If it has -> sendEvent for changing speed
@@ -118,7 +112,31 @@ void StateManager::startStateMaschine()
 }
 
 
-// Function for reading keyInputs
+// NICE TO KNOW: 
+/* alle Klassen, die ich for die action Funktionen brauche, müssen global definiert sein. Dazu gehören: 
+- MotorController: set speed
+- 
+*/
+// Defining global functions
+// ACTIONS
+void selectLocalMode() {
+	conveyorBelt->currentMode = new LocalMode();
+	// conveyorBelt->currentMode.
+	cout << "\nIdle --> Local" << endl;
+}
+
+// CONDITIONS
+bool noCondition() {
+	return true;
+}
+
+
+
+
+
+
+// TEST OF STATEMASCHINE
+// Test-Function for reading keyInputs
 void readKeyInputs()
 {
 	char readKey;
@@ -196,10 +214,11 @@ void readKeyInputs()
 
 }
 
+// ACTIONS FOR TESTING
+void noAction() {
+	cout << "no action\n" << endl;
+}
 
-
-// Defining global functions
-// ACTIONS
 void noAction1() {
 	cout << "\nIdle --> Local" << endl;
 	cout << "No action\n" << endl;
@@ -232,17 +251,17 @@ void noAction5() {
 
 void actionSetSpeed1() {
 	cout << "\nLocal --> Local" << endl;
-	motorController->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
+	// motorController->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
 }
 
 void actionSetSpeed2() {
 	cout << "\nChain --> Chain" << endl;
-	motorController->setSpeed(200);
+	// motorController->setSpeed(200);
 }
 
 void actionSetDirection() {
 	cout << "\nLocal --> Local" << endl;
-	motorController->setDirection(motorController->direction);
+	// motorController->setDirection(motorController->direction);
 }
 
 void actionFollowProfile1() {
@@ -308,9 +327,9 @@ void actionMotorMove() {
 
 
 // CONDITIONS
-bool noCondition() {
-	return true;
-}
+//bool noCondition() {
+//	return true;
+//}
 
 bool conditionTotalSteps() {
 

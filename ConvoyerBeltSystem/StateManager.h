@@ -14,6 +14,7 @@
 #include "TelnetServer.h"
 #include "TCPServer.h"
 #include "TCPClient.h"
+#include "ConveyorBelt.h"
 
 using namespace std;
 
@@ -36,6 +37,10 @@ public:
 	void startStateMaschine();
 
 };
+
+// action and condition functions
+void noAction();
+void selectLocalMode();
 
 // Function for reading keyInputs
 void readKeyInputs();
