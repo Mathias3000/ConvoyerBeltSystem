@@ -1,14 +1,16 @@
 #include "ChainMode.h"
 
-//ChainMode::ChainMode()
-//{
-//	network = new Network();
-//}
-
-void ChainMode::recv()
+ChainMode::ChainMode():Mode()
 {
+	network = new Network();
 }
 
-void ChainMode::send(Command command)
+Command* ChainMode::recv()
 {
+	Command* recvData = network->parse();
+}
+
+void ChainMode::send(Command* command)
+{
+	network->send(command->data, command->dest);
 }

@@ -1,9 +1,9 @@
 #pragma once
 #include "KeyPad.h"
 #include "Potentiometer.h"
-#include "ICommand.h"
+#include "ICommunication.h"
 
-class UserInterface: public ICommand
+class UserInterface: public ICommunication
 {
 private: 
 	KeyPad* keyPad;
@@ -11,7 +11,7 @@ private:
 
 public: 
 	UserInterface();
-	~UserInterface();
+	virtual ~UserInterface();
 	Command* parse();
 };
 
