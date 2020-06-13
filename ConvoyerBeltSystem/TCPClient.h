@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string>
 #include <string.h>
+#include <thread>
 
 #define RIGHT_CONVBELT_IP "192.168.7.1"
 #define TCP_PORT 5555
