@@ -79,6 +79,7 @@
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="cons.c" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="ConveyorBelt.cpp" />
     <ClCompile Include="diaTimer.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Encoder.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="cons.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="ConveyorBelt.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="diaTimer.h" />
     <ClInclude Include="Display.h" />
