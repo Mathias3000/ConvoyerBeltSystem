@@ -1,13 +1,13 @@
 #pragma once
 #include "TCPServer.h"
-#include "ICommand.h"
+#include "ICommunication.h"
 
-class TelnetServer: public ICommand
+class TelnetServer: public ICommunication
 {
 private: 
 	int telnetPort = 23;
 	TCPServer* telnetServer;
-
+	char* readData;
 
 public: 
 

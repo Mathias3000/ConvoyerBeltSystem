@@ -7,6 +7,8 @@ TelnetServer::TelnetServer()
 
 Command* TelnetServer::parse()
 {
+
+
 	return nullptr;
 }
 
