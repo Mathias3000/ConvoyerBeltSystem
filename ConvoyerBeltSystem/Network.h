@@ -1,9 +1,10 @@
 #pragma once
-#include "ICommand.h"
+#include "ICommunication.h"
 #include "TCPClient.h"
 #include "TCPServer.h"
+#include "SystemLocation.h"
 
-class Network: public ICommand
+class Network: public ICommunication
 {
 private: 
 	TCPServer* leftConveyorBelt;
@@ -13,11 +14,7 @@ private:
 public: 
 	Network();
 	Command* parse();
-	enum Destination {
-		LeftConveyorBelt, 
-		RightConveyorBelt, 
-		Master
-	};
-	void send(string data, Destination destination);
+	void send(string data, SystemLocation src, SystemLocation dest);
+	void send(string data, SystemLocation dest);
 };
 

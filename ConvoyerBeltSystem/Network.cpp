@@ -12,17 +12,37 @@ Command* Network::parse()
 	return nullptr;
 }
 
-void Network::send(string data, Destination destination)
+void Network::send(string data, SystemLocation src, SystemLocation dest)
 {
-	switch (destination)
+	switch (dest)
 	{
-	case Network::LeftConveyorBelt:
-		leftConveyorBelt->sendData(data);
-		break;
-	case Network::RightConveyorBelt:
+	case RightConveyorBelt:
+		// Concat src and dest to string: define protocol: IS THAT REALLY NEEDED? 
 		rightConveyorBelt->sendData(data);
 		break;
-	case Network::Master:
+	case LeftConveyorBelt:
+		leftConveyorBelt->sendData(data);
+		break;
+	case Master:
+		master->sendData(data);
+		break;
+	default:
+		break;
+	}
+}
+
+void Network::send(string data, SystemLocation dest)
+{
+	switch (dest)
+	{
+	case RightConveyorBelt:
+		// Concat src and dest to string: define protocol: IS THAT REALLY NEEDED? 
+		rightConveyorBelt->sendData(data);
+		break;
+	case LeftConveyorBelt:
+		leftConveyorBelt->sendData(data);
+		break;
+	case Master:
 		master->sendData(data);
 		break;
 	default:
