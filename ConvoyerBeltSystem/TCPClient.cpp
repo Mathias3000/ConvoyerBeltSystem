@@ -27,6 +27,21 @@ int TCPClient::init()
     serverAddr.sin_addr.s_addr = inet_addr(RIGHT_CONVBELT_IP);
     serverAddr.sin_port = htons(TCP_PORT);
 
+    // create worker thread
+    while (true) {
+
+        if (connect(sock, (struct sockaddr*) & serverAddr, sizeof(serverAddr)) < 0)
+        {
+            cerr << "Connection Failed " << endl;
+            return -3;
+        }
+
+        thread* serverThread;
+        serverThread = new thread(&TCPClient::threadServerHandler, this);
+        serverThread->join();
+
+    }
+
     if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0)
     {
         cerr << "Connection Failed " << endl;
@@ -47,6 +62,10 @@ void TCPClient::sendData(string data)
 
     send(sock, toSend, strlen(toSend), 0);
     delete[] toSend;
+}
+
+void TCPClient::threadServerHandler()
+{
 }
 
 
