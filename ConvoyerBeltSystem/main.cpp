@@ -3,17 +3,21 @@
 #include "systemManager.h"
 #include "MotorController.h"
 #include <pthread.h>
+#include "ConveyorBelt.h"
 
 Controller* myController;
 Encoder* myEncoder;
 Motor* myMotor;
 SpeedProfile* mySpeedProfile;
 MotorController* myMotorController;
-
+ConveyorBelt* myConveyorBelt;
+StateMachine* myStateMaschine;
 
 int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
+	myStateMaschine = new StateMachine();
+	testTCPServer();
 	
 	myController = new Controller;
 	myEncoder = new Encoder;
