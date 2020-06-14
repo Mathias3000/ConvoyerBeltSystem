@@ -10,6 +10,9 @@ private:
 	Potentiometer* potentiometer;
 
 public: 
+
+	bool updateCommunicationType = false;
+
 	UserInterface();
 	virtual ~UserInterface();
 	Command* parse();
