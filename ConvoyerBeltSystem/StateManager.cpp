@@ -6,17 +6,14 @@
 
 int n, m;		
 Keyboard* myKeyBoard;
-StateMachine* myStateMaschine;
-ConveyorBelt* conveyorBelt;
 
 mutex mtxKeys;
-
 
 StateManager::StateManager()
 {
 	myKeyBoard = new Keyboard();
 	myStateMaschine = new StateMachine();
-	conveyorBelt = new ConveyorBelt();
+	myConveyorBelt = new ConveyorBelt();
 
 	init();		// init seperat ausführen. Anscheinend kann es zu unbekannten Fehlern führen, wenn man es im ctor ausführt
 }
@@ -120,7 +117,7 @@ void StateManager::startStateMaschine()
 // Defining global functions
 // ACTIONS
 void selectLocalMode() {
-	conveyorBelt->currentMode = new LocalMode();
+	myConveyorBelt->currentMode = new LocalMode();
 	// conveyorBelt->currentMode.
 	cout << "\nIdle --> Local" << endl;
 }
@@ -246,6 +243,8 @@ void noAction4() {
 void noAction5() {
 	cout << "\nChain --> Requested" << endl;
 	cout << "No action\n" << endl;
+	myConveyorBelt->currentMode->communication = ((ChainMode*)(myConveyorBelt->currentMode))->network;
+
 	return;
 }
 

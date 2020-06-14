@@ -9,9 +9,11 @@ using namespace std;
 class ChainMode : public Mode
 {
 private: 
-	Network* network;
+
 
 public: 
+	Network* network;
+
 	ChainMode();
 	void handleRequest(string ReadyWait);	// TODO: choose proper datatype for ready and wait status. maybe even a class for better usability
 	Command* recv();

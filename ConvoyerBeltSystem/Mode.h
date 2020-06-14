@@ -3,7 +3,6 @@
 #include "MotorController.h"
 #include "Display.h"
 #include "UserInterface.h"
-#include "Network.h"
 #include "ICommunication.h"
 
 class Mode

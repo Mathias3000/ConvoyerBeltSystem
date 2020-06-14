@@ -7,11 +7,14 @@
 class Network: public ICommunication
 {
 private: 
+
+
+public: 
+
 	TCPServer* leftConveyorBelt;
 	TCPClient* rightConveyorBelt;
 	TCPServer* master;
 
-public: 
 	Network();
 	Command* parse();
 	void send(string data, SystemLocation src, SystemLocation dest);

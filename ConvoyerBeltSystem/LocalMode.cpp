@@ -2,6 +2,8 @@
 
 LocalMode::LocalMode():Mode()
 {
+	userInterface = new UserInterface();
+	telnetServer = new TelnetServer();
 }
 
 LocalMode::~LocalMode()
@@ -11,5 +13,6 @@ LocalMode::~LocalMode()
 
 Command* LocalMode::recv()
 {
+	return nullptr;
 }
 
