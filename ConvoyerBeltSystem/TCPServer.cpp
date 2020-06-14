@@ -1,5 +1,4 @@
 #include "TCPServer.h"
-#include <string.h>
 
 TCPServer::TCPServer(in_addr_t IPAddress, int port) {
 
@@ -28,12 +27,8 @@ void TCPServer::sendData(string data)
 	delete[] toSend;
 }
 
-void TCPServer::thread_client_handler()
+int TCPServer::init()
 {
-}
-
-int TCPServer::init() {
-
 	// create a socket
 	listening = socket(AF_INET, SOCK_STREAM, 0);
 	if (listening == -1) {
@@ -63,33 +58,89 @@ int TCPServer::init() {
 	}
 
 	// Start a worker thread for each new connection
-	//while (true) {
+	while (true) {
 
-	//	// Accept a call
-	//	clientSize = sizeof(client);
-	//	int clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
-	//	if (clientSocket == -1) {
-	//		cerr << "Problem with client connetion!";
-	//		return -4;
-	//	}
+		// Accept a call
+		clientSize = sizeof(client);
+		clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
+		if (clientSocket == -1) {
+			cerr << "Problem with client connetion!";
+			return -4;
+		}
 
-	//	// worker thread
-	//	thread* clientThread;
-	//	clientThread = new thread(&TCPServer::thread_client_handler, this, 10);
-
-	//	cout << "Connected with client" << endl;
-
-	//	// Greet Client!
-	//	cout << "Initiate Greeting of client! Code Red!";
-	//	char greeting[] = "Hi Client! What's up!";
-	//	send(clientSocket, greeting, sizeof(greeting) + 1, 0);
-
-	//	// cleaning up garbage
-	//	memset(host, 0, NI_MAXHOST);
-	//	memset(svc, 0, NI_MAXSERV);
-
-	//}
+		// worker thread
+		thread* clientThread;
+		clientThread = new thread(&TCPServer::threadClientHandler, this);
+		clientThread->join();
+	}
 
 	return 0;
+}
+
+
+void TCPServer::threadClientHandler()
+{
+	cout << "Connected with client" << endl;
+
+	// Greet Client!
+	cout << "Initiate Greeting of client! Code Red!" << endl;
+	char greeting[] = "Hi Client! What's up!";
+	send(clientSocket, greeting, sizeof(greeting) + 1, 0);
+	// int val = write(*(int*)(clientSocket), greeting, sizeof(greeting) + 1);
+	// int val = send(*((int*)(clientSocket)), greeting, sizeof(greeting) + 1, 0);
+	
+
+	while (true)
+	{
+		// empty buffer
+		memset(buffer, 0, BUF_SIZE);
+
+		// read value and save in buffer
+		// read(*((int*)(clientSocket)), buffer, BUF_SIZE);
+		recv(clientSocket, buffer, BUF_SIZE, 0);
+		
+		// handle input from client = LEFT or MASTER
+		handleClientInput();
+
+	}
+
+	// cleaning up garbage
+	memset(host, 0, NI_MAXHOST);
+	memset(svc, 0, NI_MAXSERV);
+}
+
+void TCPServer::handleClientInput()
+{
+	string input(buffer);
+
+	// debug
+	cout << "Received from Client (LEFT OR MASTER): " << input << endl;
+
+	// TODO: Check if currentMode == ChainMode
+	// Maybe set communication to network when changing to ChainMode: NO, only makes sense if in chainmode only TCP is used
+	// myConveyorBelt->currentMode->communication = ((ChainMode*)myConveyorBelt->currentMode)->network;
+	
+	updateCommunicationType = true;
+	if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
+		myStateMaschine->sendEvent("RecvCmdRequest");
+	}
+	else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")
+	{
+		myStateMaschine->sendEvent("RecvCmdReleased");
+	}
+	else if (input == "READY\r\n" || input == "Ready\r\n" || input == "ready\r\n")
+	{
+		myStateMaschine->sendEvent("RecvCmdReady");
+	}
+	else if (input == "WAIT\r\n" || input == "Wait\r\n" || input == "wait\r\n")
+	{
+		myStateMaschine->sendEvent("RecvCmdWait");
+	}
+	else
+	{
+		updateCommunicationType = false;
+	}
 
 }
+
+
