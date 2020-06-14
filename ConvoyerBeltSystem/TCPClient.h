@@ -25,11 +25,14 @@ private:
 	int port;
 
 public: 
+
+	bool updateCommunicationType = false;
+
 	TCPClient(in_addr_t serverAddress, int port);
 	TCPClient();
 	int init();
 	void sendData(string data);
-
+	void threadServerHandler();
 
 };
 
