@@ -61,6 +61,7 @@ int TCPServer::init()
 	while (true) {
 
 		// Accept a call
+		cout << "Accepting clients ... " << endl;
 		clientSize = sizeof(client);
 		clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
 		if (clientSocket == -1) {
@@ -71,7 +72,7 @@ int TCPServer::init()
 		// worker thread
 		thread* clientThread;
 		clientThread = new thread(&TCPServer::threadClientHandler, this);
-		clientThread->join();
+		// clientThread->join();
 	}
 
 	return 0;
