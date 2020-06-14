@@ -7,6 +7,8 @@
 #include <string>
 #include <iostream>
 #include <thread>
+#include <string.h>
+#include "stateMachine.h"
 
 #define HOST_IP "192.168.7.2"			// telnet
 #define CONVBELT_IP "91.0.0.7"			// tcp
@@ -37,11 +39,15 @@ private:
 	int init();
 
 public: 
+
+	bool updateCommunicationType = false;
+
 	TCPServer(in_addr_t IPAddress, int port);
 	TCPServer();
 	~TCPServer();
 	void sendData(string data);
-	void thread_client_handler();
+	void threadClientHandler();
+	void handleClientInput();
 
 };
 
