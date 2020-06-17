@@ -6,6 +6,14 @@ LocalMode::LocalMode():Mode()
 	telnetServer = new TelnetServer();
 }
 
+LocalMode* LocalMode::getInstance()
+{
+	if (instance == NULL) {
+		instance = new LocalMode();
+	}
+	return instance;
+}
+
 LocalMode::~LocalMode()
 {
 	delete this;
@@ -14,5 +22,11 @@ LocalMode::~LocalMode()
 Command* LocalMode::recv()
 {
 	return nullptr;
+}
+
+void LocalMode::send(Command* command)
+{
+	// send some data to telnet server
+	telnetServer->sendData(command->data);
 }
 

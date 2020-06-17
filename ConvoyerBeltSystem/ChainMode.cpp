@@ -5,6 +5,14 @@ ChainMode::ChainMode():Mode()
 	network = new Network();
 }
 
+ChainMode* ChainMode::getInstance()
+{
+	if (instance == NULL) {
+		instance = new ChainMode();
+	}
+	return instance;
+}
+
 Command* ChainMode::recv()
 {
 	Command* recvData = network->parse();
