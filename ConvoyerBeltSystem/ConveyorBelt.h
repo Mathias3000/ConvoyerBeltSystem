@@ -25,6 +25,14 @@ private:
 		- UserInterface
 	*/
 	void updateCurrentCommunicationType();
+
+	/*
+	Instantiate all needed classes
+	Both local and chain mode have to be instiate at the very be, so that the threads(tcp connections, user input from keypad)
+	can start at the very beginning
+	Singleton for communication classes maybe not needed. No new instantiation during runtime, only reassignments.
+	*/
+	void init();	
 };
 
 extern ConveyorBelt* myConveyorBelt;
