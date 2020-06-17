@@ -4,7 +4,6 @@
 #include "TCPServer.h"
 #include "ICommunication.h"
 
-#define SPEED_CMD "tel speed"
 
 class TelnetServer: public ICommunication
 {
@@ -23,7 +22,7 @@ public:
 	TelnetServer();
 	Command* parse();
 	void sendData(string data);
-	void handleUserInput();
+	// void handleUserInput();
 
 };
 
