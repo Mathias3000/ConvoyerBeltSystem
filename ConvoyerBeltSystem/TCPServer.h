@@ -18,6 +18,8 @@
 
 #define BUF_SIZE 128
 
+
+
 using namespace std;
 
 class TCPServer
@@ -34,12 +36,11 @@ private:
 	char host[NI_MAXHOST];
 	char svc[NI_MAXSERV];	// services
 	int clientSocket;
-	char buffer[BUF_SIZE];
 
 	int init();
 
 public: 
-
+	char buffer[BUF_SIZE];
 	bool updateCommunicationType = false;
 
 	TCPServer(in_addr_t IPAddress, int port);
