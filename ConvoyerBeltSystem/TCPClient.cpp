@@ -38,7 +38,7 @@ int TCPClient::init()
 
         thread* serverThread;
         serverThread = new thread(&TCPClient::threadServerHandler, this);
-        serverThread->join();
+        // serverThread->join();
 
     }
 
@@ -66,6 +66,58 @@ void TCPClient::sendData(string data)
 
 void TCPClient::threadServerHandler()
 {
+    cout << "Connected with server" << endl;
+
+    // Greet Server!
+    cout << "Sending greeting to server" << endl;
+    char greeting[] = "Hi Server! This is a client ... ";
+    send(sock, greeting, sizeof(greeting) + 1, 0);
+
+    while (true)
+    {
+        // empty buffer
+        memset(buffer, 0, BUF_SIZE);
+
+        // read balues and save in buffer
+        recv(sock, buffer, BUF_SIZE, 0);
+
+        // handle input from server = RIGHT
+        handleServerInput();
+
+    }
+}
+
+void TCPClient::handleServerInput()
+{
+    string input(buffer);
+
+    // debug
+    cout << "Received from Server (RIGHT): " << input << endl;
+
+    // TODO: Check if currentMode == ChainMode
+    // Maybe set communication to network when changing to ChainMode: NO, only makes sense if in chainmode only TCP is used
+    // myConveyorBelt->currentMode->communication = ((ChainMode*)myConveyorBelt->currentMode)->network;
+
+    updateCommunicationType = true;
+    if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
+        myStateMaschine->sendEvent("RecvCmdRequest");
+    }
+    else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")
+    {
+        myStateMaschine->sendEvent("RecvCmdReleased");
+    }
+    else if (input == "READY\r\n" || input == "Ready\r\n" || input == "ready\r\n")
+    {
+        myStateMaschine->sendEvent("RecvCmdReady");
+    }
+    else if (input == "WAIT\r\n" || input == "Wait\r\n" || input == "wait\r\n")
+    {
+        myStateMaschine->sendEvent("RecvCmdWait");
+    }
+    else
+    {
+        updateCommunicationType = false;
+    }
 }
 
 

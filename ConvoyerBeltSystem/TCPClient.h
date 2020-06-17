@@ -7,6 +7,7 @@
 #include <string>
 #include <string.h>
 #include <thread>
+#include "stateMachine.h"
 
 #define RIGHT_CONVBELT_IP "192.168.7.1"
 #define TCP_PORT 5555
@@ -33,6 +34,7 @@ public:
 	int init();
 	void sendData(string data);
 	void threadServerHandler();
+	void handleServerInput();
 
 };
 
