@@ -1,4 +1,6 @@
 #pragma once
+#include <thread>
+
 #include "keyboard.h"
 #include "stateMachine.h"
 #include "MotorController.h"

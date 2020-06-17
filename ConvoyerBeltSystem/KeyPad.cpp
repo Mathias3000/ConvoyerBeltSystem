@@ -5,6 +5,8 @@
 KeyPad::KeyPad()
 {
 	keyboard = new Keyboard();
+	thread* keyPadThread = new thread(&KeyPad::handleKeyInput, this);
+	
 }
 
 KeyPad::~KeyPad()
@@ -14,44 +16,49 @@ KeyPad::~KeyPad()
 
 void KeyPad::handleKeyInput()
 {
-	// reads keyboard input and sends corresponding event
-	readValue = keyboard->getPressedKey();
-
-	switch (readValue)
+	while (true)
 	{
-	case '1': 
-		// motorController->direction = 1;		// way to avoid this: add seperate event-string & action 
-		myStateMaschine->sendEvent("RecvCmdDirectionRight");
-		break;
+		// reads keyboard input and sends corresponding event
+		readValue = keyboard->getPressedKey();
 
-	case '2': 
-		myStateMaschine->sendEvent("RecvCmdDirectionLeft");
-		break;
+		switch (readValue)
+		{
+		case '1':
+			// motorController->direction = 1;		// way to avoid this: add seperate event-string & action 
+			myStateMaschine->sendEvent("RecvCmdDirectionRight");
+			break;
 
-	case'3': 
-		myStateMaschine->sendEvent("RecvCmdFollowProfile");		// Start motor/start movement
-		break;
+		case '2':
+			myStateMaschine->sendEvent("RecvCmdDirectionLeft");
+			break;
 
-	case '4': 
-		myStateMaschine->sendEvent("RecvCmdStopMotor");
-		break;
+		case'3':
+			myStateMaschine->sendEvent("RecvCmdFollowProfile");		// Start motor/start movement
+			break;
 
-	case 'F': 
-		myStateMaschine->sendEvent("RecvCmdChain");
-		break;
+		case '4':
+			myStateMaschine->sendEvent("RecvCmdStopMotor");
+			break;
 
-	case 'E': 
-		myStateMaschine->sendEvent("RecvCmdLocal");
-		break;
+		case 'F':
+			myStateMaschine->sendEvent("RecvCmdChain");
+			break;
 
-	case 'D': 
-		myStateMaschine->sendEvent("RecvCmdReadPoti");
-		break;
+		case 'E':
+			myStateMaschine->sendEvent("RecvCmdLocal");
+			break;
 
-	default:
-		break;
+		case 'D':
+			myStateMaschine->sendEvent("RecvCmdReadPoti");
+			break;
+
+		default:
+			break;
+		}
+
+		usleep(50000);	// 50ms sleep
+
 	}
-
 }
 
 string KeyPad::readKey()
