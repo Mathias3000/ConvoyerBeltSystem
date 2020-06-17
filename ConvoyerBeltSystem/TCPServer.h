@@ -18,6 +18,7 @@
 
 #define BUF_SIZE 128
 
+#define SPEED_CMD "tel speed"
 
 
 using namespace std;
@@ -42,6 +43,7 @@ private:
 public: 
 	char buffer[BUF_SIZE];
 	bool updateCommunicationType = false;
+	int speedBuffer = 0;
 
 	TCPServer(in_addr_t IPAddress, int port);
 	TCPServer();

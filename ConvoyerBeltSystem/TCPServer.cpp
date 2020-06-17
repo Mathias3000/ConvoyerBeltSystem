@@ -138,6 +138,36 @@ void TCPServer::handleClientInput()
 	{
 		myStateMaschine->sendEvent("RecvCmdWait");
 	}
+	else if (input == "tel start\r\n") {
+		myStateMaschine->sendEvent("RecvCmdRequest");
+	}
+	else if (input == "tel stop\r\n")
+	{
+		myStateMaschine->sendEvent("RecvCmdReleased");
+	}
+	else if (input == "tel dir right\r\n")
+	{
+		myStateMaschine->sendEvent("RecvCmdReady");
+	}
+	else if (input == "tel dir left\r\n")
+	{
+		myStateMaschine->sendEvent("RecvCmdWait");
+	}
+	else if (input.find(SPEED_CMD) != string::npos)		// check if speed command string
+	{
+		string s = input;
+		std::string delimiter = ":";
+
+		size_t pos = 0;
+		std::string token;
+		while ((pos = s.find(delimiter)) != std::string::npos) {
+			token = s.substr(0, pos);
+			std::cout << token << std::endl;
+			s.erase(0, pos + delimiter.length());
+		}
+		std::cout << s << std::endl;
+		speedBuffer = stoi(s);
+	}
 	else
 	{
 		updateCommunicationType = false;
