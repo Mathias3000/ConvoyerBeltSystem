@@ -255,3 +255,8 @@ void* testSM(void*)
 	return NULL;
 }
 
+void testStateManager()
+{
+	
+}
+

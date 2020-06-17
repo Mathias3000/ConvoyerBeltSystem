@@ -2,6 +2,7 @@
 #include "KeyPad.h"
 #include "Potentiometer.h"
 #include "ICommunication.h"
+#include "Helpers.h"
 
 class UserInterface: public ICommunication
 {
@@ -14,7 +15,8 @@ public:
 	bool updateCommunicationType = false;
 
 	UserInterface();
-	virtual ~UserInterface();
+	~UserInterface();
 	Command* parse();
+	Command* pollingData();
 };
 

@@ -83,6 +83,7 @@ void TCPServer::threadClientHandler()
 {
 	cout << "Connected with client" << endl;
 
+	// TODO: Delete Greeting. Only used for debugging
 	// Greet Client!
 	cout << "Initiate Greeting of client! Code Red!" << endl;
 	char greeting[] = "Hi Client! What's up!";

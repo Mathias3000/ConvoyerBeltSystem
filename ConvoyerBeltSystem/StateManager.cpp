@@ -117,7 +117,7 @@ void StateManager::startStateMaschine()
 // Defining global functions
 // ACTIONS
 void selectLocalMode() {
-	myConveyorBelt->currentMode = new LocalMode();
+	myConveyorBelt->currentMode = LocalMode::getInstance();
 	// conveyorBelt->currentMode.
 	cout << "\nIdle --> Local" << endl;
 }

@@ -19,6 +19,7 @@ public:
 	Mode();
 
 	// Mode();
-	virtual Command* recv() = 0;	// ICommand is used only for recv(): probably neccessary to change return type of recv()
+	virtual Command* recv() = 0;				// ICommand is used only for recv(): probably neccessary to change return type of recv()
+	virtual void send(Command* command) = 0;	
 };
 

@@ -29,3 +29,14 @@ Command* UserInterface::parse()
 
 	return recvData;
 }
+
+Command* UserInterface::pollingData()
+{
+	while (true)
+	{
+		string readValue = keyPad->readKey();
+
+	}
+
+	return nullptr;
+}

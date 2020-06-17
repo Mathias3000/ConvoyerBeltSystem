@@ -15,8 +15,14 @@ StateMachine* myStateMaschine;
 
 int main()
 {
-    printf("hello from ConvoyerBeltSystem!\n");
 	myStateMaschine = new StateMachine();
+	myStateMaschine->init();
+
+	testStateManager();
+
+    printf("hello from ConvoyerBeltSystem!\n");
+
+	testTCPClient();
 	testTCPServer();
 	
 	myController = new Controller;
