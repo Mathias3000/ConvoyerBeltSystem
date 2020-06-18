@@ -43,7 +43,7 @@ void testDisplay()
 
 void testTelnet()
 {
-	TelnetServer* telnetServer = new TelnetServer();
+	TelnetServer* telnetServer = TelnetServer::getInstance();
 
 	while (1) {}
 }

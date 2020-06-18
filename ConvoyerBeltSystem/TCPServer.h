@@ -40,6 +40,8 @@ private:
 
 	int init();
 
+
+
 public: 
 	char buffer[BUF_SIZE];
 	bool updateCommunicationType = false;
