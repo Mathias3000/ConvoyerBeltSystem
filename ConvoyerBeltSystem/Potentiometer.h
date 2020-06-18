@@ -30,11 +30,6 @@ public :
 
 };
 
-// salam
-// i am fine
-// Cvid was bas
-// has to stay at home for 1 month no work no school
-// now better. had 15k cases now 1k new active cases
-// do you have school or work or are you still staying at home
+
 
 
