@@ -1,12 +1,10 @@
 #pragma once
+
 class SpeedProfile
 {
-
 public:
 	int step;
-
 	SpeedProfile();
-
 	int getStatus();
 	int startProfile(bool direction);
 	int incrementStepCounter();
@@ -14,6 +12,5 @@ public:
 	int resetStepCounter();
 private:
 	int stepCounterFollowProf = 0;
-
 };
 

@@ -81,6 +81,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="ConveyorBelt.cpp" />
     <ClCompile Include="diaTimer.cpp" />
+    <ClCompile Include="Discrete.c" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="funcs.c" />
@@ -119,6 +120,9 @@
     <ClInclude Include="ConveyorBelt.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="diaTimer.h" />
+    <ClInclude Include="Discrete.h" />
+    <ClInclude Include="Discrete_private.h" />
+    <ClInclude Include="Discrete_types.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="funcs.h" />
@@ -136,6 +140,7 @@
     <ClInclude Include="Potentiometer.h" />
     <ClInclude Include="pwm.h" />
     <ClInclude Include="qep.h" />
+    <ClInclude Include="rtwtypes.h" />
     <ClInclude Include="SpeedProfile.h" />
     <ClInclude Include="spi.h" />
     <ClInclude Include="stateMachine.h" />

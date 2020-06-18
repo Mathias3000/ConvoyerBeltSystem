@@ -93,8 +93,13 @@
     <ClCompile Include="spi.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
+
+    <ClCompile Include="Discrete.c">
+      <Filter>MotorController\Controller</Filter>
+
     <ClCompile Include="StateManager.cpp">
       <Filter>FSM framework</Filter>
+
     </ClCompile>
     <ClCompile Include="UserInterface.cpp">
       <Filter>Communication\UserInterface</Filter>
@@ -196,9 +201,7 @@
     <ClInclude Include="systemManager.h">
       <Filter>FSM framework</Filter>
     </ClInclude>
-    <ClInclude Include="StateManager.h">
-      <Filter>FSM framework</Filter>
-    </ClInclude>
+
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
@@ -211,6 +214,22 @@
     </ClInclude>
     <ClInclude Include="ICommunication.h">
       <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete_private.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete_types.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="rtwtypes.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+
+    <ClInclude Include="StateManager.h">
+      <Filter>FSM framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

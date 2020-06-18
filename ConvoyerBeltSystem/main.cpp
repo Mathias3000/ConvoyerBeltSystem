@@ -13,6 +13,8 @@ MotorController* myMotorController;
 ConveyorBelt* myConveyorBelt;
 StateMachine* myStateMaschine;
 
+using namespace std;
+
 // predefine local and chain mode static
 LocalMode* LocalMode::instance = NULL;
 ChainMode* ChainMode::instance = NULL;
@@ -26,28 +28,8 @@ int main()
 
 	testStateManager();
 
-    printf("hello from ConvoyerBeltSystem!\n");
+  printf("hello from ConvoyerBeltSystem!\n");
 
-	testTCPClient();
-	testTCPServer();
-	
-	myController = new Controller;
-	myEncoder = new Encoder;
-	myMotor = new Motor(myEncoder, myController);
-	mySpeedProfile = new SpeedProfile;
-	myMotorController = new MotorController(myMotor, mySpeedProfile);
-	myMotorController->setSpeed(100);
-	SystemManager* systemManagerTest;
-	systemManagerTest = new SystemManager;
-	systemManagerTest->init();
-	pthread_t threadKeyboard;
-	pthread_create(&threadKeyboard, NULL, testSM, NULL);
-	systemManagerTest->startStateMachine();
-	
-    //testTCPServer();
-	//testMotor(0);
-	//testADC();
-    //testKeyBoard();
 
     return 0;
 }
