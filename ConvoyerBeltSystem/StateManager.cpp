@@ -3,11 +3,10 @@
 // I need these global variables so that I can access them in my global action functions
 // Tip: use prefix "my" for testing with global variables
 
-
-int n, m;		
-// Keyboard* myKeyBoard;
-
 mutex mtxKeys;
+int n, m;		
+StateMachine* myStateMaschine;
+ConveyorBelt* myConveyorBelt;
 
 StateManager::StateManager()
 {
@@ -25,10 +24,13 @@ StateManager::~StateManager()
 
 void StateManager::init()
 {
+
+
 	// Define state charts
 	// Local Mode Chart
 	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, selectLocalMode, noCondition);
-	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed1, noCondition);
+	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSetSpeedPoti", 0, setSpeedPotentiometer, noCondition);
+	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSetSpeedTelnet", 0, actionSetSpeed1, noCondition);		// set communication = new TelnetServer()
 	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionRight", 0, actionSetDirection, noCondition);
 	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionLeft", 0, actionSetDirection, noCondition);
 	myStateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile1, noCondition);
@@ -117,9 +119,36 @@ void StateManager::startStateMaschine()
 // Defining global functions
 // ACTIONS
 void selectLocalMode() {
+	cout << "\nIdle -> Local" << endl;
+	
+	// update the communication flags
+	myConveyorBelt->updateCurrentCommunicationType();
+
 	myConveyorBelt->currentMode = LocalMode::getInstance();
-	// conveyorBelt->currentMode.
-	cout << "\nIdle --> Local" << endl;
+
+	// reset all flags
+	myConveyorBelt->resetCommunicationFlags();
+
+}
+
+void setSpeedPotentiometer()
+{
+	cout << "\nLocal -> Local" << endl;
+	Command* cmd = myConveyorBelt->currentMode->communication->parse();
+	int speed = stoi(cmd->data);
+	myConveyorBelt->currentMode->motorController->setSpeedInRPM(speed);
+	cout << "\nSet speed to " + cmd->data + " rpm" << endl;
+	
+}
+
+void setSpeedTelnet()
+{
+	cout << "\nLocal -> Local" << endl;
+
+	// read value from telnet cmd
+	// Beforehand: set communication = TelnetServer();
+	// myConveyorBelt->currentMode->communication = 
+
 }
 
 // CONDITIONS
@@ -211,7 +240,7 @@ bool noCondition() {
 //
 //}
 
-// ACTIONS FOR TESTING
+//  ACTIONS FOR TESTING
 void noAction() {
 	cout << "no action\n" << endl;
 }

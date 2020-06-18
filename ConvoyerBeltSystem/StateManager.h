@@ -41,10 +41,20 @@ public:
 // action and condition functions
 void noAction();
 void selectLocalMode();
+void setSpeedPotentiometer();
+void setSpeedTelnet();
+
+bool noCondition();
 
 // Function for reading keyInputs
 void readKeyInputs();
 
+
+
+
+
+
+// Functions for testing
 // implement noAction() only once for actual implementation
 void noAction1();
 void noAction2();
