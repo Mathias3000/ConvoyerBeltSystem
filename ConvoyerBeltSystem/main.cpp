@@ -8,13 +8,12 @@ int main()
 {
     printf("hello from ConvoyerBeltSystem!\n");
 	Display* myDisplay = new Display;
+	/*
 	char a[MAX_CONS_LEN] = "this is a string to diplay!\n";
 	myDisplay->displayLine(a);
-	while (true)
-	{
+	*/
 
-	}
-	/*
+	
 	Encoder* myEncoder;
 	Motor* myMotor;
 	SpeedProfile* mySpeedProfile;
@@ -30,7 +29,7 @@ int main()
 	thread threadKeyboard(testSM);
 	thread threadQEP(testQEP);
 	systemManagerTest->startStateMachine();
-	*/
+	
 	//testTCPServer();
 	//testMotor(0);
 	//testADC();

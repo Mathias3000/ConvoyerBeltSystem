@@ -260,6 +260,7 @@ void testQEP() {
 	while (true)
 	{	
 		state = myMotorController->getMotorState();
+		//printf("Motor Status: %d\n", state);
 		if ((state == movingLeft || state == movingRight) && myMotorController->getConfiguredSpeedRPM() != 0) {
 			speed = myMotorController->getCurrentSpeedRPM();
 			steps = myMotorController->getStepCounter();
