@@ -60,6 +60,10 @@ void ConveyorBelt::updateCurrentCommunicationType()
 	updateMutex.unlock();
 }
 
+void ConveyorBelt::resetCommunicationFlags()
+{
+}
+
 void ConveyorBelt::init()
 {
 	// Instiate local and chain mode + set local default

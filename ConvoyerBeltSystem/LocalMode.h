@@ -3,11 +3,11 @@
 #include "TelnetServer.h"
 #include "UserInterface.h"
 
+
 class LocalMode: public Mode
 {
-	static LocalMode* instance;
 private: 
-
+	static LocalMode* instance;
 	LocalMode();
 
 public: 

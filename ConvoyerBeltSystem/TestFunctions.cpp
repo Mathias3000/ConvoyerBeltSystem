@@ -236,6 +236,8 @@ void testController()
 
 void testSM(void)
 {	
+	myMotorController = new MotorController();
+
 	unsigned char readValue;
 	while (true)
 	{	
@@ -325,6 +327,9 @@ void testStateManager()
 
 
 void testQEP() {
+
+	myMotorController = new MotorController();
+
 	double speed;
 	int steps;
 	MotorState state;

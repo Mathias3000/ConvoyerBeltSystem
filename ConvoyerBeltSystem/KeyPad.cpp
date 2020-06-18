@@ -49,7 +49,7 @@ void KeyPad::handleKeyInput()
 			break;
 
 		case 'D':
-			myStateMaschine->sendEvent("RecvCmdReadPoti");
+			myStateMaschine->sendEvent("RecvCmdSetSpeedPoti");
 			break;
 
 		default:

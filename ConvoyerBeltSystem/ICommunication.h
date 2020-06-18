@@ -3,6 +3,7 @@
 
 class ICommunication
 {
+public: 
 	virtual Command* parse() = 0;
 };
 
