@@ -9,7 +9,21 @@ Network::Network()
 
 Command* Network::parse()
 {
-	return nullptr;
+	Command* receivedCommand;
+
+	if (rightConveyorBelt->updateCommunicationType) {
+		receivedCommand = new Command(rightConveyorBelt->buffer, RightConveyorBelt, Self);
+	}
+	else if (leftConveyorBelt->updateCommunicationType) {
+		receivedCommand = new Command(leftConveyorBelt->buffer, LeftConveyorBelt, Self);
+	}
+	else if (master->updateCommunicationType) {
+		receivedCommand = new Command(master->buffer, Master, Self);
+	}
+	else {
+		receivedCommand = new Command("", NoLocation, NoLocation);
+	}
+	return receivedCommand;
 }
 
 void Network::send(string data, SystemLocation src, SystemLocation dest)

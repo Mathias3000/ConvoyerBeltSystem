@@ -13,21 +13,21 @@ UserInterface::~UserInterface()
 
 Command* UserInterface::parse()
 {
-	Command* recvData = new Command();
+	Command* receivedCommand;
 	// KeyPad
-	recvData->data = keyPad->readKey();
-	recvData->src = KeyPadLocal;
-
+	receivedCommand->data = keyPad->readKey();
+	receivedCommand->src = KeyPadLocal;
+	receivedCommand->dest = Self;
 	// Check if poti value if wanted: key = 'D'
 	// Maybe SM is not fast enough to read "D" again after sending Event upon reading it the first time (when using readKey())
 	// Fix: save read value in buffer
 	if (keyPad->getLastKeyInput() == 'D') {
 		// Potentiometer
-		recvData->data = to_string(potentiometer->getValue());
-		recvData->src = PotentiometerLocal;
+		receivedCommand->data = to_string(potentiometer->getSpeed());
+		receivedCommand->src = PotentiometerLocal;
 	}
 
-	return recvData;
+	return receivedCommand;
 }
 
 Command* UserInterface::pollingData()
