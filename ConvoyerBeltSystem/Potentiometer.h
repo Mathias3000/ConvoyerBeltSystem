@@ -1,11 +1,16 @@
 #pragma once
 #include <string>
 #include <fcntl.h>
+#include <math.h>
 
 extern "C" {
 	#include "spi.h"
 	#include "gpio.h"
 }
+
+#define ADC_MAX_VAL 65535.0
+#define SPEED_MAX 2200.0
+#define SPEED_MIN 110.0
 
 class Potentiometer
 {
@@ -21,6 +26,7 @@ public :
 
 	Potentiometer();
 	int getValue();
+	int getSpeed();
 
 };
 

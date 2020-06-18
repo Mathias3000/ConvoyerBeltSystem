@@ -35,3 +35,12 @@ int Potentiometer::getValue()
 
 	return readValue;
 }
+
+int Potentiometer::getSpeed()
+{
+	double a = SPEED_MAX;
+	double b = (double)a;
+	double scale = (SPEED_MAX - SPEED_MIN) / (double)ADC_MAX_VAL;
+	return ceil((getValue() * scale) + 100.0);
+
+}
