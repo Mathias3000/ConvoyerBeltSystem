@@ -9,9 +9,16 @@ TelnetServer::TelnetServer()
 
 Command* TelnetServer::parse()
 {
+	Command* receivedCommand;
 
+	if (telnetServer->updateCommunicationType) {
+		receivedCommand = new Command(telnetServer->buffer, TelnetUser, Self);
+	}
+	else {
+		receivedCommand = new Command("", NoLocation, NoLocation);
+	}
+	return receivedCommand;
 
-	return nullptr;
 }
 
 void TelnetServer::sendData(string data)

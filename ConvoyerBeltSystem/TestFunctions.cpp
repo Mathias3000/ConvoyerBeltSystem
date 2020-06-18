@@ -65,7 +65,10 @@ void testPotentiometer()
 	while (true) {
 
 		readValue = poti->getValue();
-		cout << "value of poti : " << readValue << endl;
+		cout << "\nvalue of poti : " << readValue << endl;
+
+		readValue = poti->getSpeed();
+		cout << "equivalent speed: " << readValue << endl;
 
 		sleep(350);
 	}
@@ -199,21 +202,21 @@ void testKeyBoard()
 }
 
 
-void testStateManagerWithThreads()
-{
-	StateManager* sm = new StateManager();
-	cout << "\n\nStarting State Maschine ... " << endl;
-	cout << "Initialization completed. \n" << endl;
-	thread smThread(&StateManager::startStateMaschine, sm);
-	thread keyInputThread(readKeyInputs);
-
-	if (smThread.joinable()) {
-		smThread.join();
-	}
-	if (keyInputThread.joinable()) {
-		keyInputThread.join();
-	}
-}
+//void testStateManagerWithThreads()
+//{
+//	StateManager* sm = new StateManager();
+//	cout << "\n\nStarting State Maschine ... " << endl;
+//	cout << "Initialization completed. \n" << endl;
+//	thread smThread(&StateManager::startStateMaschine, sm);
+//	thread keyInputThread(readKeyInputs);
+//
+//	if (smThread.joinable()) {
+//		smThread.join();
+//	}
+//	if (keyInputThread.joinable()) {
+//		keyInputThread.join();
+//	}
+//}
 
 void* testSM(void*)
 {	
@@ -257,6 +260,12 @@ void* testSM(void*)
 
 void testStateManager()
 {
-	
+	StateManager* sm = new StateManager();
+	sm->startStateMaschine();
+
+	while (1)
+	{
+
+	}
 }
 
