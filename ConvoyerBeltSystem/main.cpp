@@ -15,7 +15,7 @@ StateMachine* myStateMaschine;
 
 using namespace std;
 
-// predefine local and chain mode static
+// predefine static variables for local and chain mode
 LocalMode* LocalMode::instance = NULL;
 ChainMode* ChainMode::instance = NULL;
 

@@ -28,16 +28,14 @@ public:
 	MotorState getMotorState();
 	int setMotorState(MotorState state);
 
-	enum MotorState
-	{
-		movingLeft, movingRight, Stop
-	};
+	//enum MotorState
+	//{
+	//	movingLeft, movingRight, Stop
+	//};
 	MotorController();
-	MotorController(Motor* motor, SpeedProfile* profile);
 	
 	int setDirection(int direction);
 	int move(bool Direction); //time neccessary?
-	int stop();
 
 
 	int getStepCounter();

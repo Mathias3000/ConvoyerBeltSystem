@@ -1,7 +1,7 @@
 #include "TestFunctions.h"
 
-extern Keyboard* myKeyboard;
-extern SystemManager* systemManagerTest;
+Keyboard* myKeyboard;
+//extern SystemManager* systemManagerTest;
 
 
 void testTCPServer()

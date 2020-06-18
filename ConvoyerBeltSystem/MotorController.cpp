@@ -22,9 +22,9 @@ int MotorController::setSpeedInRPM(int speed)
 }
 
 int MotorController::getConfiguredSpeedRPM()
+{
 
-
-	return this->myMotor->setSpeed(speed);
+	return this->myMotor->setSpeedRPM(currentSpeed);
 }
 
 int MotorController::setDirection(int direction)

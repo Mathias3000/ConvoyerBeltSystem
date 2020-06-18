@@ -105,7 +105,6 @@
     <ClCompile Include="stateMachine.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="stateTable.cpp" />
-    <ClCompile Include="systemManager.cpp" />
     <ClCompile Include="TCPClient.cpp" />
     <ClCompile Include="TCPServer.cpp" />
     <ClCompile Include="TelnetServer.cpp" />
@@ -147,7 +146,6 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="stateTable.h" />
     <ClInclude Include="SystemLocation.h" />
-    <ClInclude Include="systemManager.h" />
     <ClInclude Include="TCPClient.h" />
     <ClInclude Include="TCPServer.h" />
     <ClInclude Include="TelnetServer.h" />

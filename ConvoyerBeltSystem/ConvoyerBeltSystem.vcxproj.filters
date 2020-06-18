@@ -86,16 +86,13 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
     <ClCompile Include="MotorController.cpp" />
-    <ClCompile Include="systemManager.cpp">
-      <Filter>FSM framework</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="spi.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
     <ClCompile Include="Discrete.c">
       <Filter>MotorController\Controller</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="StateManager.cpp">
       <Filter>FSM framework</Filter>
     </ClCompile>
@@ -107,7 +104,6 @@
       <Filter>Communication</Filter>
     </ClCompile>
   </ItemGroup>
-  
   <ItemGroup>
     <ClInclude Include="defines.h">
       <Filter>FSM framework</Filter>
@@ -197,9 +193,6 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
     <ClInclude Include="MotorController.h" />
-    <ClInclude Include="systemManager.h">
-      <Filter>FSM framework</Filter>
-    </ClInclude>
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
@@ -229,7 +222,6 @@
       <Filter>FSM framework</Filter>
     </ClInclude>
   </ItemGroup>
-  
   <ItemGroup>
     <Filter Include="FSM framework">
       <UniqueIdentifier>{8dd46300-9098-4165-b3c1-414570359de0}</UniqueIdentifier>
