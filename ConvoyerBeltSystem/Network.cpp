@@ -7,6 +7,14 @@ Network::Network()
 	master = new TCPServer();
 }
 
+Network* Network::getInstance()
+{
+	if (instance == NULL) {
+		instance = new Network();
+	}
+	return instance;
+}
+
 Command* Network::parse()
 {
 	Command* receivedCommand;

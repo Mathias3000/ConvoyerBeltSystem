@@ -7,6 +7,14 @@ TelnetServer::TelnetServer()
 	// thread* telnetThread = new thread(&TelnetServer::handleUserInput, this);
 }
 
+TelnetServer* TelnetServer::getInstance()
+{
+	if (instance == NULL) {
+		instance = new TelnetServer();
+	}
+	return instance;
+}
+
 Command* TelnetServer::parse()
 {
 	Command* receivedCommand;

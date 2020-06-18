@@ -7,15 +7,16 @@
 class Network: public ICommunication
 {
 private: 
-
+	Network();
+	static Network* instance;
 
 public: 
 
 	TCPServer* leftConveyorBelt;
 	TCPClient* rightConveyorBelt;
 	TCPServer* master;
-
-	Network();
+	static Network* getInstance();
+	
 	Command* parse();
 	void send(string data, SystemLocation src, SystemLocation dest);
 	void send(string data, SystemLocation dest);

@@ -6,6 +6,14 @@ UserInterface::UserInterface()
 	potentiometer = new Potentiometer();
 }
 
+UserInterface* UserInterface::getInstance()
+{
+	if (instance == NULL) {
+		instance = new UserInterface();
+	}
+	return instance;
+}
+
 UserInterface::~UserInterface()
 {
 	delete this;
