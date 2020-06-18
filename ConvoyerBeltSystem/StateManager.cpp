@@ -5,13 +5,13 @@
 
 
 int n, m;		
-Keyboard* myKeyBoard;
+// Keyboard* myKeyBoard;
 
 mutex mtxKeys;
 
 StateManager::StateManager()
 {
-	myKeyBoard = new Keyboard();
+	// myKeyBoard = new Keyboard();
 	myStateMaschine = new StateMachine();
 	myConveyorBelt = new ConveyorBelt();
 
@@ -134,82 +134,82 @@ bool noCondition() {
 
 // TEST OF STATEMASCHINE
 // Test-Function for reading keyInputs
-void readKeyInputs()
-{
-	char readKey;
-
-	while (true) {
-
-		readKey = myKeyBoard->getPressedKey();
-		sleep(100);
-
-		// Evaluate
-		// -- Events		
-		// [1] RecvCmdLocal
-		// [2] RecvCmdSpeed
-		// [3] RecvCmdDirection
-		// [4] RecvCmdFollowProfile
-		// [5] motorControllerFinishedProfile
-		// [6] RecvCmdChain
-		// [7] RecvCmdRequest
-		// [8] motorControllerReadToRecvPayload
-		// [9] SendRelease
-		// [0] motorControllerFinishedProfile
-		// [A] RecvCmdWait
-		// [B] RecvCmdReady
-		// [C] RecvCmdRelease
-
-
-		// mtxKeys.lock();
-		switch (readKey)
-		{
-		case '0':
-			myStateMaschine->sendEvent("motorControllerFinishedProfile");
-			break;
-		case '1':
-			myStateMaschine->sendEvent("RecvCmdLocal");
-			break;
-		case '2':
-			myStateMaschine->sendEvent("RecvCmdSpeed");
-			break;
-		case '3':
-			myStateMaschine->sendEvent("RecvCmdDirection");
-			break;
-		case '4':
-			myStateMaschine->sendEvent("RecvCmdFollowProfile");
-			break;
-		case '5':
-			myStateMaschine->sendEvent("motorControllerFinishedProfile");
-			break;
-		case '6':
-			myStateMaschine->sendEvent("RecvCmdChain");
-			break;
-		case '7':
-			myStateMaschine->sendEvent("RecvCmdRequest");
-			break;
-		case '8':
-			myStateMaschine->sendEvent("motorControllerReadyToRecvPayload");
-			break;
-		case '9':
-			myStateMaschine->sendEvent("SendRelease");
-			break;
-		case 'A':
-			myStateMaschine->sendEvent("RecvCmdWait");
-			break;
-		case 'B':
-			myStateMaschine->sendEvent("RecvCmdReady");
-			break;
-		case 'C':
-			myStateMaschine->sendEvent("RecvCmdReleased");
-			break;
-
-		default:
-			break;
-		}
-		// mtxKeys.unlock();
-	}
-
-}
+//void readKeyInputs()
+//{
+//	char readKey;
+//
+//	while (true) {
+//
+//		readKey = myKeyBoard->getPressedKey();
+//		sleep(100);
+//
+//		// Evaluate
+//		// -- Events		
+//		// [1] RecvCmdLocal
+//		// [2] RecvCmdSpeed
+//		// [3] RecvCmdDirection
+//		// [4] RecvCmdFollowProfile
+//		// [5] motorControllerFinishedProfile
+//		// [6] RecvCmdChain
+//		// [7] RecvCmdRequest
+//		// [8] motorControllerReadToRecvPayload
+//		// [9] SendRelease
+//		// [0] motorControllerFinishedProfile
+//		// [A] RecvCmdWait
+//		// [B] RecvCmdReady
+//		// [C] RecvCmdRelease
+//
+//
+//		// mtxKeys.lock();
+//		switch (readKey)
+//		{
+//		case '0':
+//			myStateMaschine->sendEvent("motorControllerFinishedProfile");
+//			break;
+//		case '1':
+//			myStateMaschine->sendEvent("RecvCmdLocal");
+//			break;
+//		case '2':
+//			myStateMaschine->sendEvent("RecvCmdSpeed");
+//			break;
+//		case '3':
+//			myStateMaschine->sendEvent("RecvCmdDirection");
+//			break;
+//		case '4':
+//			myStateMaschine->sendEvent("RecvCmdFollowProfile");
+//			break;
+//		case '5':
+//			myStateMaschine->sendEvent("motorControllerFinishedProfile");
+//			break;
+//		case '6':
+//			myStateMaschine->sendEvent("RecvCmdChain");
+//			break;
+//		case '7':
+//			myStateMaschine->sendEvent("RecvCmdRequest");
+//			break;
+//		case '8':
+//			myStateMaschine->sendEvent("motorControllerReadyToRecvPayload");
+//			break;
+//		case '9':
+//			myStateMaschine->sendEvent("SendRelease");
+//			break;
+//		case 'A':
+//			myStateMaschine->sendEvent("RecvCmdWait");
+//			break;
+//		case 'B':
+//			myStateMaschine->sendEvent("RecvCmdReady");
+//			break;
+//		case 'C':
+//			myStateMaschine->sendEvent("RecvCmdReleased");
+//			break;
+//
+//		default:
+//			break;
+//		}
+//		// mtxKeys.unlock();
+//	}
+//
+//}
 
 // ACTIONS FOR TESTING
 void noAction() {

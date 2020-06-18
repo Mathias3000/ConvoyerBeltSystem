@@ -26,6 +26,7 @@ private:
 	SpeedProfile* speedProfile;
 	Encoder* encoder;
 	Controller* controller;
+	void init();
 
 public: 
 
@@ -33,7 +34,6 @@ public:
 
 	StateManager();
 	~StateManager();
-	void init();
 	void startStateMaschine();
 
 };

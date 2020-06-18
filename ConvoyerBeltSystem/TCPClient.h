@@ -19,7 +19,6 @@ class TCPClient
 {
 private: 
 	int sock;
-	char buffer[BUF_SIZE];
 	sockaddr_in serverAddr;
 	char* test = "Hello from Client";
 	in_addr_t IPAddress;
@@ -28,6 +27,7 @@ private:
 public: 
 
 	bool updateCommunicationType = false;
+	char buffer[BUF_SIZE];
 
 	TCPClient(in_addr_t serverAddress, int port);
 	TCPClient();

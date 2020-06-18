@@ -8,9 +8,9 @@ extern "C" {
 	#include "gpio.h"
 }
 
-#define ADC_MAX_VAL 65535.0
-#define SPEED_MAX 2200.0
-#define SPEED_MIN 110.0
+#define ADC_MAX_VAL 65535.0f
+#define SPEED_MAX 2200.0f
+#define SPEED_MIN 110.0f
 
 class Potentiometer
 {

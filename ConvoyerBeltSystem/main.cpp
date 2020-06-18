@@ -13,10 +13,16 @@ MotorController* myMotorController;
 ConveyorBelt* myConveyorBelt;
 StateMachine* myStateMaschine;
 
+// predefine local and chain mode static
+LocalMode* LocalMode::instance = NULL;
+ChainMode* ChainMode::instance = NULL;
+
 int main()
 {
 	myStateMaschine = new StateMachine();
 	myStateMaschine->init();
+
+	testPotentiometer();
 
 	testStateManager();
 

@@ -5,9 +5,9 @@
 
 class LocalMode: public Mode
 {
-
-private: 
 	static LocalMode* instance;
+private: 
+
 	LocalMode();
 
 public: 

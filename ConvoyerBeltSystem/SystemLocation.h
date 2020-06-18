@@ -5,5 +5,7 @@ typedef enum {
 	Master, 
 	KeyPadLocal, 
 	PotentiometerLocal,
-	NoLocation
+	TelnetUser,
+	NoLocation, 
+	Self
 }SystemLocation;
