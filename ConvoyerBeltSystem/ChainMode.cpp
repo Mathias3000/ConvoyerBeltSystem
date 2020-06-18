@@ -15,7 +15,8 @@ ChainMode* ChainMode::getInstance()
 
 Command* ChainMode::recv()
 {
-	Command* recvData = network->parse();
+	return communication->parse();
+
 }
 
 void ChainMode::send(Command* command)

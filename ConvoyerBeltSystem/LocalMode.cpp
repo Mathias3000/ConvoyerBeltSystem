@@ -21,7 +21,18 @@ LocalMode::~LocalMode()
 
 Command* LocalMode::recv()
 {
-	return nullptr;
+	communication->parse();
+
+
+	// Delete later
+	//if (userInterface->updateCommunicationType) {
+	//	userInterface->parse();
+	//}
+	//else if (telnetServer->updateCommunicationType)
+	//{
+	//	telnetServer->parse();
+	//}
+
 }
 
 void LocalMode::send(Command* command)
