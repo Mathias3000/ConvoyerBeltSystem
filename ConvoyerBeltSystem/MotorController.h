@@ -59,3 +59,4 @@ private:
 	SpeedProfile* mySpeedProfile;
 };
 
+extern MotorController* myMotorController;
