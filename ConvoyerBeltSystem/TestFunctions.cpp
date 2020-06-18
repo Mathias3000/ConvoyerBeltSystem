@@ -64,7 +64,10 @@ void testPotentiometer()
 	while (true) {
 
 		readValue = poti->getValue();
-		cout << "value of poti : " << readValue << endl;
+		cout << "\nvalue of poti : " << readValue << endl;
+
+		readValue = poti->getSpeed();
+		cout << "equivalent speed: " << readValue << endl;
 
 		sleep(350);
 	}
@@ -215,21 +218,21 @@ void testController()
 	}	
 }
 
-void testStateManagerWithThreads()
-{
-	StateManager* sm = new StateManager();
-	cout << "\n\nStarting State Maschine ... " << endl;
-	cout << "Initialization completed. \n" << endl;
-	thread smThread(&StateManager::startStateMaschine, sm);
-	thread keyInputThread(readKeyInputs);
-
-	if (smThread.joinable()) {
-		smThread.join();
-	}
-	if (keyInputThread.joinable()) {
-		keyInputThread.join();
-	}
-}
+//void testStateManagerWithThreads()
+//{
+//	StateManager* sm = new StateManager();
+//	cout << "\n\nStarting State Maschine ... " << endl;
+//	cout << "Initialization completed. \n" << endl;
+//	thread smThread(&StateManager::startStateMaschine, sm);
+//	thread keyInputThread(readKeyInputs);
+//
+//	if (smThread.joinable()) {
+//		smThread.join();
+//	}
+//	if (keyInputThread.joinable()) {
+//		keyInputThread.join();
+//	}
+//}
 
 void testSM(void)
 {	
@@ -238,32 +241,32 @@ void testSM(void)
 	{	
 		readValue = myKeyboard->getPressedKey();
 		if (readValue == '1') {
-			myStateMachine->sendEvent("mode==local");
+			myStateMaschine->sendEvent("mode==local");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == '2') {
-			myStateMachine->sendEvent("command==speed");
+			myStateMaschine->sendEvent("command==speed");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == '3') {
-			myStateMachine->sendEvent("command==direction");
+			myStateMaschine->sendEvent("command==direction");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == '4') {
-			myStateMachine->sendEvent("command==followProfile");
+			myStateMaschine->sendEvent("command==followProfile");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == '5') {
-			myStateMachine->sendEvent("myMotorController.finishedProfile");
+			myStateMaschine->sendEvent("myMotorController.finishedProfile");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
 		else if (readValue == '6') {
-			myStateMachine->sendEvent("command==chain");
+			myStateMaschine->sendEvent("command==chain");
 			this_thread::sleep_for(chrono::milliseconds(200));
 			readValue = 0x0;
 		}
@@ -309,6 +312,18 @@ void testSM(void)
 	}
 }
 
+void testStateManager()
+{
+	StateManager* sm = new StateManager();
+	sm->startStateMaschine();
+
+	while (1)
+	{
+
+	}
+}
+
+
 void testQEP() {
 	double speed;
 	int steps;
@@ -324,3 +339,4 @@ void testQEP() {
 		usleep(20000);
 	}
 }
+

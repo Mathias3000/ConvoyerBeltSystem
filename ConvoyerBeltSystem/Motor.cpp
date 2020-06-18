@@ -1,5 +1,12 @@
 #include "Motor.h"
 
+// use this kind of ctor
+Motor::Motor()
+{
+	myEncoder = new Encoder();
+	myController = new Controller();
+}
+
 Motor::Motor(Encoder* encoder, Controller* controller) : myEncoder(encoder), myController(controller)
 {
 	printf("Motor Konstruktor!\n");
@@ -9,6 +16,11 @@ Motor::Motor(Encoder* encoder, Controller* controller) : myEncoder(encoder), myC
 	this->spiDescMotor = new spiDescriptor;
 	this->bridgeEN = new gpioDescriptor;
 	this->bridgeDIS = new gpioDescriptor;
+}
+
+Motor::~Motor()
+{
+	delete this;
 }
 
 int Motor::initMotor()

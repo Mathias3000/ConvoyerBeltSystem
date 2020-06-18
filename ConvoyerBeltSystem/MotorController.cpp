@@ -1,8 +1,13 @@
 #include "MotorController.h"
 
+// extern MotorController* motorController;
+
 MotorController::MotorController()
 {
+	myMotor = new Motor();
+	mySpeedProfile = new SpeedProfile();
 }
+
 MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(motor), mySpeedProfile(profile)
 {
 	printf("MotorController Konstruktor!\n");

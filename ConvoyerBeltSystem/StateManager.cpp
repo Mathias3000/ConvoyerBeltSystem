@@ -4,17 +4,18 @@
 // Tip: use prefix "my" for testing with global variables
 
 
-int n, m;
-Keyboard* myKeyBoard = new Keyboard();
-StateMachine* myStateMaschine = new StateMachine();
+int n, m;		
+// Keyboard* myKeyBoard;
 
-SpeedProfile* myProfile = new SpeedProfile();
-MotorController* motorCtrl = new MotorController();
 mutex mtxKeys;
 
 StateManager::StateManager()
 {
-	init();
+	// myKeyBoard = new Keyboard();
+	myStateMaschine = new StateMachine();
+	myConveyorBelt = new ConveyorBelt();
+
+	init();		// init seperat ausführen. Anscheinend kann es zu unbekannten Fehlern führen, wenn man es im ctor ausführt
 }
 
 StateManager::~StateManager()
@@ -26,14 +27,15 @@ void StateManager::init()
 {
 	// Define state charts
 	// Local Mode Chart
-	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, noAction1, noCondition);
+	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, selectLocalMode, noCondition);
 	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSpeed", 0, actionSetSpeed1, noCondition);
-	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirection", 0, actionSetDirection, noCondition);
+	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionRight", 0, actionSetDirection, noCondition);
+	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionLeft", 0, actionSetDirection, noCondition);
 	myStateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile1, noCondition);
 	myStateMaschine->tab[0][4] = new TableEntry("FollowProfile", "Local", "motorControllerFinishedProfile", 0, noAction2, noCondition);
 	myStateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction3, noCondition);
 
-	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils in Local und Chain einbauen
+	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils ins Local und Chain einbauen
 	myStateMaschine->tab[1][0] = new TableEntry("FollowProfile", "Local", "Timer0", 20, actionSetSpeedAndSteps, conditionTotalSteps);		// put timer.start() to different actionFunction
 
 	// Chain Chart
@@ -41,7 +43,7 @@ void StateManager::init()
 	myStateMaschine->tab[2][1] = new TableEntry("Chain", "Chain", "RecvCmdSpeed", 0, actionSetSpeed2, noCondition);
 	myStateMaschine->tab[2][2] = new TableEntry("Chain", "Requested", "RecvCmdRequest", 0, noAction5, noCondition);
 	myStateMaschine->tab[2][3] = new TableEntry("Requested", "Requested", "RecvCmdRequest", 0, actionHandleRequest_Wait1, noCondition);
-	myStateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
+	myStateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadyToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
 	myStateMaschine->tab[2][5] = new TableEntry("ReceivingPayload", "ReceivingPayload", "RecvCmdRequest", 0, actionHandleRequest_Wait2, noCondition);
 	myStateMaschine->tab[2][6] = new TableEntry("ReceivingPayload", "FollowProfile", "SendRelease", 0, actionFollowProfile2, noCondition);
 	myStateMaschine->tab[2][7] = new TableEntry("FollowProfile", "FollowProfile", "RecvCmdRequest", 0, actionHandleRequest_Wait3, noCondition);
@@ -50,6 +52,9 @@ void StateManager::init()
 	myStateMaschine->tab[2][10] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, actionMotorStop1, noCondition);
 	myStateMaschine->tab[2][11] = new TableEntry("Requesting", "PassLoad", "RecvCmdReady", 0, actionMotorMove, noCondition);
 	myStateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop2, noCondition);
+
+	// Additional StateChart for KeyPad: Polling needs to be performed!
+	// Can be implemented with a thread as well
 
 	// Potentiometer/Keyboard Chart for Polling
 	// every 50ms check if poti value has changed "significantly"; If it has -> sendEvent for changing speed
@@ -104,88 +109,113 @@ void StateManager::startStateMaschine()
 }
 
 
-// Function for reading keyInputs
-void readKeyInputs()
-{
-	char readKey;
+// NICE TO KNOW: 
+/* alle Klassen, die ich for die action Funktionen brauche, müssen global definiert sein. Dazu gehören: 
+- MotorController: set speed
+- 
+*/
+// Defining global functions
+// ACTIONS
+void selectLocalMode() {
+	myConveyorBelt->currentMode = LocalMode::getInstance();
+	// conveyorBelt->currentMode.
+	cout << "\nIdle --> Local" << endl;
+}
 
-	while (true) {
-
-		readKey = myKeyBoard->getPressedKey();
-		sleep(100);
-
-		// Evaluate
-		// -- Events		
-		// [1] RecvCmdLocal
-		// [2] RecvCmdSpeed
-		// [3] RecvCmdDirection
-		// [4] RecvCmdFollowProfile
-		// [5] motorControllerFinishedProfile
-		// [6] RecvCmdChain
-		// [7] RecvCmdRequest
-		// [8] motorControllerReadToRecvPayload
-		// [9] SendRelease
-		// [0] motorControllerFinishedProfile
-		// [A] RecvCmdWait
-		// [B] RecvCmdReady
-		// [C] RecvCmdRelease
-
-
-		// mtxKeys.lock();
-		switch (readKey)
-		{
-		case '0':
-			myStateMaschine->sendEvent("motorControllerFinishedProfile");
-			break;
-		case '1':
-			myStateMaschine->sendEvent("RecvCmdLocal");
-			break;
-		case '2':
-			myStateMaschine->sendEvent("RecvCmdSpeed");
-			break;
-		case '3':
-			myStateMaschine->sendEvent("RecvCmdDirection");
-			break;
-		case '4':
-			myStateMaschine->sendEvent("RecvCmdFollowProfile");
-			break;
-		case '5':
-			myStateMaschine->sendEvent("motorControllerFinishedProfile");
-			break;
-		case '6':
-			myStateMaschine->sendEvent("RecvCmdChain");
-			break;
-		case '7':
-			myStateMaschine->sendEvent("RecvCmdRequest");
-			break;
-		case '8':
-			myStateMaschine->sendEvent("motorControllerReadToRecvPayload");
-			break;
-		case '9':
-			myStateMaschine->sendEvent("SendRelease");
-			break;
-		case 'A':
-			myStateMaschine->sendEvent("RecvCmdWait");
-			break;
-		case 'B':
-			myStateMaschine->sendEvent("RecvCmdReady");
-			break;
-		case 'C':
-			myStateMaschine->sendEvent("RecvCmdReleased");
-			break;
-
-		default:
-			break;
-		}
-		// mtxKeys.unlock();
-	}
-
+// CONDITIONS
+bool noCondition() {
+	return true;
 }
 
 
 
-// Defining global functions
-// ACTIONS
+
+
+
+// TEST OF STATEMASCHINE
+// Test-Function for reading keyInputs
+//void readKeyInputs()
+//{
+//	char readKey;
+//
+//	while (true) {
+//
+//		readKey = myKeyBoard->getPressedKey();
+//		sleep(100);
+//
+//		// Evaluate
+//		// -- Events		
+//		// [1] RecvCmdLocal
+//		// [2] RecvCmdSpeed
+//		// [3] RecvCmdDirection
+//		// [4] RecvCmdFollowProfile
+//		// [5] motorControllerFinishedProfile
+//		// [6] RecvCmdChain
+//		// [7] RecvCmdRequest
+//		// [8] motorControllerReadToRecvPayload
+//		// [9] SendRelease
+//		// [0] motorControllerFinishedProfile
+//		// [A] RecvCmdWait
+//		// [B] RecvCmdReady
+//		// [C] RecvCmdRelease
+//
+//
+//		// mtxKeys.lock();
+//		switch (readKey)
+//		{
+//		case '0':
+//			myStateMaschine->sendEvent("motorControllerFinishedProfile");
+//			break;
+//		case '1':
+//			myStateMaschine->sendEvent("RecvCmdLocal");
+//			break;
+//		case '2':
+//			myStateMaschine->sendEvent("RecvCmdSpeed");
+//			break;
+//		case '3':
+//			myStateMaschine->sendEvent("RecvCmdDirection");
+//			break;
+//		case '4':
+//			myStateMaschine->sendEvent("RecvCmdFollowProfile");
+//			break;
+//		case '5':
+//			myStateMaschine->sendEvent("motorControllerFinishedProfile");
+//			break;
+//		case '6':
+//			myStateMaschine->sendEvent("RecvCmdChain");
+//			break;
+//		case '7':
+//			myStateMaschine->sendEvent("RecvCmdRequest");
+//			break;
+//		case '8':
+//			myStateMaschine->sendEvent("motorControllerReadyToRecvPayload");
+//			break;
+//		case '9':
+//			myStateMaschine->sendEvent("SendRelease");
+//			break;
+//		case 'A':
+//			myStateMaschine->sendEvent("RecvCmdWait");
+//			break;
+//		case 'B':
+//			myStateMaschine->sendEvent("RecvCmdReady");
+//			break;
+//		case 'C':
+//			myStateMaschine->sendEvent("RecvCmdReleased");
+//			break;
+//
+//		default:
+//			break;
+//		}
+//		// mtxKeys.unlock();
+//	}
+//
+//}
+
+// ACTIONS FOR TESTING
+void noAction() {
+	cout << "no action\n" << endl;
+}
+
 void noAction1() {
 	cout << "\nIdle --> Local" << endl;
 	cout << "No action\n" << endl;
@@ -213,22 +243,24 @@ void noAction4() {
 void noAction5() {
 	cout << "\nChain --> Requested" << endl;
 	cout << "No action\n" << endl;
+	myConveyorBelt->currentMode->communication = ((ChainMode*)(myConveyorBelt->currentMode))->network;
+
 	return;
 }
 
 void actionSetSpeed1() {
 	cout << "\nLocal --> Local" << endl;
-	motorCtrl->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
+	// motorController->setSpeed(100);		// Woher bekomme ich die Inputs? globale Variablen?
 }
 
 void actionSetSpeed2() {
 	cout << "\nChain --> Chain" << endl;
-	motorCtrl->setSpeed(200);
+	// motorController->setSpeed(200);
 }
 
 void actionSetDirection() {
 	cout << "\nLocal --> Local" << endl;
-	motorCtrl->setDirection(1);
+	// motorController->setDirection(motorController->direction);
 }
 
 void actionFollowProfile1() {
@@ -243,7 +275,7 @@ void actionFollowProfile2() {
 
 void actionSetSpeedAndSteps() {
 	cout << "\nFollowProfile --> Local" << endl;
-	myProfile->step++;
+	// myProfile->step++;
 	cout << "Set speed and increment steps\n" << endl;;
 }
 
@@ -294,14 +326,14 @@ void actionMotorMove() {
 
 
 // CONDITIONS
-bool noCondition() {
-	return true;
-}
+//bool noCondition() {
+//	return true;
+//}
 
 bool conditionTotalSteps() {
 
 	// cout << "Total steps > 400 " << endl;
-	if (myProfile->step >= 400)
-		return true;
+	//if (myProfile->step >= 400)
+	//	return true;
 	return false;
 }

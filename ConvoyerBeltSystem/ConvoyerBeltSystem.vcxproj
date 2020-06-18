@@ -79,6 +79,7 @@
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="cons.c" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="ConveyorBelt.cpp" />
     <ClCompile Include="diaTimer.cpp" />
     <ClCompile Include="Discrete.c" />
     <ClCompile Include="Display.cpp" />
@@ -86,7 +87,7 @@
     <ClCompile Include="funcs.c" />
     <ClCompile Include="gpio.c" />
     <ClCompile Include="Helpers.cpp" />
-    <ClCompile Include="ICommand.cpp" />
+    <ClCompile Include="ICommunication.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="KeyPad.cpp" />
     <ClCompile Include="LocalMode.cpp" />
@@ -109,12 +110,14 @@
     <ClCompile Include="TCPServer.cpp" />
     <ClCompile Include="TelnetServer.cpp" />
     <ClCompile Include="TestFunctions.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChainMode.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="cons.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="ConveyorBelt.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="diaTimer.h" />
     <ClInclude Include="Discrete.h" />
@@ -125,7 +128,7 @@
     <ClInclude Include="funcs.h" />
     <ClInclude Include="gpio.h" />
     <ClInclude Include="Helpers.h" />
-    <ClInclude Include="ICommand.h" />
+    <ClInclude Include="ICommunication.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="KeyPad.h" />
     <ClInclude Include="LocalMode.h" />
@@ -143,11 +146,13 @@
     <ClInclude Include="stateMachine.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="stateTable.h" />
+    <ClInclude Include="SystemLocation.h" />
     <ClInclude Include="systemManager.h" />
     <ClInclude Include="TCPClient.h" />
     <ClInclude Include="TCPServer.h" />
     <ClInclude Include="TelnetServer.h" />
     <ClInclude Include="TestFunctions.h" />
+    <ClInclude Include="UserInterface.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Link>

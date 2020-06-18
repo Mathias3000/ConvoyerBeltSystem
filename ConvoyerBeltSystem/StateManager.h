@@ -6,23 +6,41 @@
 #include <thread>
 #include <mutex>
 #include "MotorController.h"
+#include "Motor.h"
+#include "SpeedProfile.h"
+#include "Encoder.h"
+#include "Controller.h"
 #include "Helpers.h"
+#include "TelnetServer.h"
+#include "TCPServer.h"
+#include "TCPClient.h"
+#include "ConveyorBelt.h"
 
 using namespace std;
 
 
 class StateManager
 {
+private: 
+	Motor* motor;
+	SpeedProfile* speedProfile;
+	Encoder* encoder;
+	Controller* controller;
+	void init();
+
 public: 
 
 	mutex mtx;
 
 	StateManager();
 	~StateManager();
-	void init();
 	void startStateMaschine();
 
 };
+
+// action and condition functions
+void noAction();
+void selectLocalMode();
 
 // Function for reading keyInputs
 void readKeyInputs();

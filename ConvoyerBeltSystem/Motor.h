@@ -21,6 +21,7 @@ extern "C" {
 class Motor
 {
 public:
+	Motor();
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); 

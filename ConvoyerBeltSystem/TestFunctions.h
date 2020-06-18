@@ -40,7 +40,8 @@ void testTelnet();			// test with CMD line: telnet 192.168.7.2 4444
 void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 address with port 5555
 void testPotentiometer();
 void testMotor(int dir);
-
+void* followProfile(void*); //Thread handler for test purposes of followProfile()
+void testStateManager();
 void testSM();
 void testQEP();
 void testADC();

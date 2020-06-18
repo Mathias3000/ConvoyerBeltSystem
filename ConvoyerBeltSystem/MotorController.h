@@ -12,6 +12,8 @@ class MotorController
 {
 public:
 
+
+  int direction = 1;		// 1 = right & 0 = left
 	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
 	//move for time 1s !!! implementieren!
 	int move(Direction Direction);
@@ -47,6 +49,7 @@ public:
 
 	bool readyToRecvPayload();
 	bool finishedProfile();
+
 private:
 	int followProfile();
 	bool profileRunning = false;

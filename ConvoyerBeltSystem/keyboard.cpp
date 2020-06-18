@@ -2,6 +2,7 @@
 #include "keyboard.h"
 
 int keyCount;
+extern Keyboard* myKeyBoard;
 
 Keyboard :: Keyboard() {
 	printf("Keyboard Konstruktor!\n");	

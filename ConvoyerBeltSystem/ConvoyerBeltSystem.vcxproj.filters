@@ -34,9 +34,6 @@
     <ClCompile Include="TelnetServer.cpp">
       <Filter>Communication\Telnet</Filter>
     </ClCompile>
-    <ClCompile Include="ICommand.cpp">
-      <Filter>Communication\Command</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Communication\Command</Filter>
     </ClCompile>
@@ -104,6 +101,13 @@
       <Filter>FSM framework</Filter>
 
     </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Communication\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="ConveyorBelt.cpp" />
+    <ClCompile Include="ICommunication.cpp">
+      <Filter>Communication</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h">
@@ -141,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="TelnetServer.h">
       <Filter>Communication\Telnet</Filter>
-    </ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>Communication\Command</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Communication\Command</Filter>
@@ -204,6 +205,16 @@
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Communication\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ConveyorBelt.h" />
+    <ClInclude Include="SystemLocation.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommunication.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
     <ClInclude Include="Discrete.h">
       <Filter>MotorController\Controller</Filter>
     </ClInclude>
@@ -220,8 +231,6 @@
     <ClInclude Include="StateManager.h">
       <Filter>FSM framework</Filter>
     </ClInclude>
-  
-
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FSM framework">

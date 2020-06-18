@@ -1,38 +1,35 @@
 #include <cstdio>
 #include "TestFunctions.h"
 #include "systemManager.h"
+#include "MotorController.h"
+#include <pthread.h>
+#include "ConveyorBelt.h"
+
+Controller* myController;
+Encoder* myEncoder;
+Motor* myMotor;
+SpeedProfile* mySpeedProfile;
+MotorController* myMotorController;
+ConveyorBelt* myConveyorBelt;
+StateMachine* myStateMaschine;
 
 using namespace std;
 
+// predefine local and chain mode static
+LocalMode* LocalMode::instance = NULL;
+ChainMode* ChainMode::instance = NULL;
 
 int main()
 {
-    printf("hello from ConvoyerBeltSystem!\n");
-	Encoder* myEncoder;
-	Motor* myMotor;
-	SpeedProfile* mySpeedProfile;
-	Controller* myController;
-	myController = new Controller;
-	myEncoder = new Encoder;
-	myMotor = new Motor(myEncoder, myController);
-	mySpeedProfile = new SpeedProfile;
-	myMotorController = new MotorController(myMotor, mySpeedProfile);
-	//myMotorController->stop();
-	SystemManager* systemManagerTest;
-	systemManagerTest = new SystemManager;
-	systemManagerTest->init();
+	myStateMaschine = new StateMachine();
+	myStateMaschine->init();
 
-	//myMotorController->setSpeedInRPM(100);
+	testPotentiometer();
 
-	thread threadKeyboard(testSM);
-	//thread threadTestController(testController);
-	thread threadQEP(testQEP);
+	testStateManager();
 
-	systemManagerTest->startStateMachine();
-	//testTCPServer();
-	//testMotor(0);
-	//testADC();
-    //testKeyBoard();
+  printf("hello from ConvoyerBeltSystem!\n");
+
 
     return 0;
 }
