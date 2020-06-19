@@ -19,6 +19,7 @@
 #define BUF_SIZE 128
 
 #define SPEED_CMD "tel speed"
+#define DIR_CMD "tel dir"
 
 
 using namespace std;
@@ -39,6 +40,9 @@ private:
 	int clientSocket;
 
 	int init();
+	void threadClientHandler();
+	void handleClientInput();
+	void acceptClients();
 
 
 
@@ -46,13 +50,12 @@ public:
 	char buffer[BUF_SIZE];
 	bool updateCommunicationType = false;
 	int speedBuffer = 0;
+	char dirBuffer;
+	string dataBuffer;
 
 	TCPServer(in_addr_t IPAddress, int port);
 	TCPServer();
 	~TCPServer();
 	void sendData(string data);
-	void threadClientHandler();
-	void handleClientInput();
-
 };
 
