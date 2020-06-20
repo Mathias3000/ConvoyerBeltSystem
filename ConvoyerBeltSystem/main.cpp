@@ -14,10 +14,10 @@ ChainMode* ChainMode::instance = NULL;
 
 int main()
 {
-
+	
 	testStateManager();
 
-    printf("hello from ConvoyerBeltSystem!\n");
+  
 
     return 0;
 }

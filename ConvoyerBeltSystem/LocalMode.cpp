@@ -3,7 +3,7 @@
 LocalMode::LocalMode():Mode()
 {
 	userInterface = new UserInterface();
-	telnetServer = new TelnetServer();
+	//telnetServer = new TelnetServer();
 }
 
 LocalMode* LocalMode::getInstance()

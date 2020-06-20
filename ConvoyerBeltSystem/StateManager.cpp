@@ -138,7 +138,6 @@ void setSpeedPotentiometer()
 	int speed = stoi(cmd->data);
 	myConveyorBelt->currentMode->motorController->setSpeedInRPM(speed);
 	cout << "\nSet speed to " + cmd->data + " rpm" << endl;
-	
 }
 
 void setSpeedTelnet()

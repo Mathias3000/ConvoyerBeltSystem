@@ -64,10 +64,105 @@ void ConveyorBelt::resetCommunicationFlags()
 {
 }
 
+void ConveyorBelt::stopDisplayUI()
+{
+	this->stop == true;
+}
+
 void ConveyorBelt::init()
 {
 	// Instiate local and chain mode + set local default
 	// use singleton design pattern to avoid multiple instances of local and chain mode
-	currentMode = ChainMode::getInstance();
+	//currentMode = ChainMode::getInstance();
 	currentMode = LocalMode::getInstance();
+	this->workerDisplayUI = thread(&ConveyorBelt::displayUI, this); //start thread Display UI
 }
+
+int ConveyorBelt::displayUI()
+{
+	char displayLine[MAX_CONS_LEN];
+	const char* tempData;
+	string tempString;
+	int configuredSpeed, actualSpeed;
+	Direction configuredDirection;
+	MotorState actualMotorState;
+
+	//mögliche Telnet Befehle, Keypad Befehle ganz oben anzeigen
+	char* topLines[MAXTOPLINES] = { "Possible Keypad commands:", 
+		"1: right, 2: left, 3: follow Profile, 4: stop,",
+		"F: go to chain mode, D: Set speed via potentiometer",
+		"Possible Telnet commands:", 
+		"tel:start, tel:stop, tel dir:right, tel dir:left, tel speed:xxxx" 
+	};
+
+	this->currentMode->display->displayClear();
+
+	while (!stop)
+	{
+		//display the very top lines
+		for (int i = 0; i < MAXTOPLINES; i++) {
+			this->currentMode->display->displayLine(topLines[i]);
+		}
+		//display configured speed:
+		configuredSpeed = currentMode->motorController->getConfiguredSpeedRPM();
+		tempString = to_string(configuredSpeed);
+		tempData = tempString.c_str();
+		strcpy(displayLine, "Configured speed is: ");
+		strcat(displayLine, tempData);
+		this->currentMode->display->displayLine(displayLine);
+		//display configured direction:
+		configuredDirection = currentMode->motorController->getConfiguredDirection();
+		if (configuredDirection == Right) {
+			strcpy(displayLine, "Configured direction is: Right");
+			this->currentMode->display->displayLine(displayLine);
+		}
+		else if (configuredDirection == Left) {
+			strcpy(displayLine, "Configured direction is: Left");
+			this->currentMode->display->displayLine(displayLine);
+		};
+		//display actual motor state:
+		actualMotorState = currentMode->motorController->getMotorState();
+		if (actualMotorState == movingLeft) {
+			strcpy(displayLine, "Motor state: left");
+			this->currentMode->display->displayLine(displayLine);
+		}
+		else if (actualMotorState == movingRight) {
+			strcpy(displayLine, "Motor state: right");
+			this->currentMode->display->displayLine(displayLine);
+		}
+		else if (actualMotorState == Stop) {
+			strcpy(displayLine, "Motor state: stopped");
+			this->currentMode->display->displayLine(displayLine);
+		};
+		//display currents speed:
+		actualSpeed = currentMode->motorController->getCurrentSpeedRPM();
+		tempString = to_string(actualSpeed);
+		tempData = tempString.c_str();
+		strcpy(displayLine, "Actual speed is: ");
+		strcat(displayLine, tempData);
+		this->currentMode->display->displayLine(displayLine);
+
+		//if in chain mode:
+		if(currentMode == ChainMode::getInstance()) {
+			strcpy(displayLine, "System in currently chain mode");
+			this->currentMode->display->displayLine(displayLine);
+			strcpy(displayLine, "current commands from Conveyorbelt right, left and from the master: ");
+			this->currentMode->display->displayLine(displayLine);
+
+			//letzte Befehle von Links, Rechts, Master anzeigen
+
+		}
+		
+		// local mode: in beide Richtungen fahren, gestartet und gestoppt, vor dem starten speed von 100-2200 einstellbar
+		if (currentMode == LocalMode::getInstance()) {
+			strcpy(displayLine, "System currently in local mode");
+			this->currentMode->display->displayLine(displayLine);
+		}
+
+		sleep(1);
+		this->currentMode->display->displayClear();
+	}
+	return 0;
+}
+
+

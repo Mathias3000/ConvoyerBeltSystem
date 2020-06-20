@@ -4,7 +4,7 @@ TCPServer::TCPServer(in_addr_t IPAddress, int port) {
 
 	this->port = port;
 	socketAddress = IPAddress;
-	init();
+	//init();
 }
 
 TCPServer::TCPServer()
