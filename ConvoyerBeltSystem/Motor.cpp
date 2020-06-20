@@ -89,7 +89,7 @@ int Motor::setSpeedRPM(int speed)
 	else {
 		this->speed = 0;
 		//printf("speed should be between 100 - 2200!\n");
-		return -1;
+		return 0;
 	}
 }
 

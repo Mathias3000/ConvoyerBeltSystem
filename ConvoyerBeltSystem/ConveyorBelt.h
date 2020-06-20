@@ -4,6 +4,9 @@
 #include "ChainMode.h"
 #include "stateMachine.h"
 #include <mutex>
+#include <type_traits>
+
+using namespace std;
 
 class ConveyorBelt
 {
@@ -28,7 +31,7 @@ public:
 
 	// reset all communication flags
 	void resetCommunicationFlags();
-
+	void stopDisplayUI();
 private:
 
 
@@ -38,7 +41,10 @@ private:
 	can start at the very beginning
 	Singleton for communication classes maybe not needed. No new instantiation during runtime, only reassignments.
 	*/
-	void init();	
+	void init();
+	bool stop = false;
+	thread workerDisplayUI;
+	int displayUI();
 };
 
 extern ConveyorBelt* myConveyorBelt;

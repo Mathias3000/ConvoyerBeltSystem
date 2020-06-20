@@ -5,6 +5,7 @@ TCPServer::TCPServer(char* IPAddress, int port) {
 	this->port = port;
 	socketAddress = inet_addr(IPAddress);
 	init();
+
 }
 
 TCPServer::TCPServer()
