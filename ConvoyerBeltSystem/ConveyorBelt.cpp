@@ -73,7 +73,7 @@ void ConveyorBelt::init()
 {
 	// Instiate local and chain mode + set local default
 	// use singleton design pattern to avoid multiple instances of local and chain mode
-	//currentMode = ChainMode::getInstance();
+	currentMode = ChainMode::getInstance();
 	currentMode = LocalMode::getInstance();
 	this->workerDisplayUI = thread(&ConveyorBelt::displayUI, this); //start thread Display UI
 }
