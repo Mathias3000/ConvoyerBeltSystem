@@ -1,8 +1,5 @@
 #pragma once
 
-using namespace std;
-
-
 extern "C" {
 #include "Discrete_types.h"
 #include "Discrete_private.h"
@@ -13,6 +10,8 @@ extern "C" {
 class Controller
 {
 public:
+	Controller();
+	~Controller();
 	int setValue(double value);
 	void oneStep();
 };

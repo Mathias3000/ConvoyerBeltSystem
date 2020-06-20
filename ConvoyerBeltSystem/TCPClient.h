@@ -23,6 +23,9 @@ private:
 	char* test = "Hello from Client";
 	in_addr_t IPAddress;
 	int port;
+	void connectToServer();
+	void threadServerHandler();
+	void handleServerInput();
 
 public: 
 
@@ -33,8 +36,7 @@ public:
 	TCPClient();
 	int init();
 	void sendData(string data);
-	void threadServerHandler();
-	void handleServerInput();
+
 
 };
 

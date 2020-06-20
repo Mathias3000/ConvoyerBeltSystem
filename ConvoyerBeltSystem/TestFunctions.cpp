@@ -6,7 +6,7 @@ Keyboard* myKeyboard;
 
 void testTCPServer()
 {
-	TCPServer* server = new TCPServer(inet_addr(HOST_IP), TCP_PORT);
+	TCPServer* server = new TCPServer(HOST_IP, TCP_PORT);
 
 	while (1) {}
 }
@@ -43,7 +43,7 @@ void testDisplay()
 
 void testTelnet()
 {
-	TelnetServer* telnetServer = new TelnetServer();
+	TelnetServer* telnetServer = TelnetServer::getInstance();
 
 	while (1) {}
 }
@@ -111,7 +111,7 @@ void testADC() {
 	}
 }
 
-void testMotor(int dir)
+void testMotor()
 {
 	int retVal = 0;
 	unsigned short readBackValSPI = 0;
@@ -183,8 +183,9 @@ void testMotor(int dir)
 	retVal = pwmSetDuty_B(pwmMotor, 35000);
 	retVal = pwmSetPolarity_B(pwmMotor, 0);
 	retVal = pwmSetEnable_B(pwmMotor, 1);
-	sleep(3);
+	sleep(3000);		// set time to run motor
 	retVal = pwmSetEnable_B(pwmMotor, 0);
+	int a = 0;
 }
 
 void testKeyBoard()
@@ -200,23 +201,24 @@ void testKeyBoard()
 
 }
 
-void testController()
-{	
-	myMotorController->enableMotorPWM();
-	while (true)
-	{
-		int speedConfigured = myMotorController->getConfiguredSpeedRPM();
-		int currrentSpeed = myMotorController->getCurrentSpeedRPM();
-		int error = speedConfigured - currrentSpeed;
-		//error = (error / 445);
-		Discrete_U.u = error;
-		myMotorController->oneStep();
-		double outputInvolts = (Discrete_Y.y);
-		double duty = (outputInvolts * 50000) / 7;
-		myMotorController->setMotorDutyCycle((int)duty);
-		usleep(20000);
-	}	
-}
+//void testController()
+//{	
+//	// Deleted myMotorController global variable, therefore this test will not work
+//	myMotorController->enableMotorPWM();
+//	while (true)
+//	{
+//		int speedConfigured = myMotorController->getConfiguredSpeedRPM();
+//		int currrentSpeed = myMotorController->getCurrentSpeedRPM();
+//		int error = speedConfigured - currrentSpeed;
+//		//error = (error / 445);
+//		Discrete_U.u = error;
+//		myMotorController->oneStep();
+//		double outputInvolts = (Discrete_Y.y);
+//		double duty = (outputInvolts * 50000) / 7;
+//		myMotorController->setMotorDutyCycle((int)duty);
+//		usleep(20000);
+//	}	
+//}
 
 //void testStateManagerWithThreads()
 //{
@@ -234,85 +236,86 @@ void testController()
 //	}
 //}
 
-void testSM(void)
-{	
-	myMotorController = new MotorController();
-
-	unsigned char readValue;
-	while (true)
-	{	
-		readValue = myKeyboard->getPressedKey();
-		if (readValue == '1') {
-			myStateMaschine->sendEvent("mode==local");
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == '2') {
-			myStateMaschine->sendEvent("command==speed");
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == '3') {
-			myStateMaschine->sendEvent("command==direction");
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == '4') {
-			myStateMaschine->sendEvent("command==followProfile");
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == '5') {
-			myStateMaschine->sendEvent("myMotorController.finishedProfile");
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == '6') {
-			myStateMaschine->sendEvent("command==chain");
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == 'A') {
-			myMotorController->setDirection(Right);
-			printf("direction set to: %d\n", myMotorController->getConfiguredDirection());
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == 'B') {
-			myMotorController->setDirection(Left);
-			printf("direction set to: %d\n", myMotorController->getConfiguredDirection());
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == 'F') {
-			myMotorController->setSpeedInRPM(0);
-			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
-			//myMotorController->stop();
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == 'E') {
-			myMotorController->setSpeedInRPM(100);
-			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == 'D') {
-			myMotorController->setSpeedInRPM(1000);
-			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
-			//myMotorController->move(Right);
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-		else if (readValue == 'C') {
-			myMotorController->setSpeedInRPM(2200);
-			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
-			//myMotorController->move(Right);
-			this_thread::sleep_for(chrono::milliseconds(200));
-			readValue = 0x0;
-		}
-	}
-}
+//void testSM(void)
+//{	
+// // Deleted myMotorController global variable, therefore this test will not work
+//	myMotorController = new MotorController();
+//
+//	unsigned char readValue;
+//	while (true)
+//	{	
+//		readValue = myKeyboard->getPressedKey();
+//		if (readValue == '1') {
+//			myStateMaschine->sendEvent("mode==local");
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == '2') {
+//			myStateMaschine->sendEvent("command==speed");
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == '3') {
+//			myStateMaschine->sendEvent("command==direction");
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == '4') {
+//			myStateMaschine->sendEvent("command==followProfile");
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == '5') {
+//			myStateMaschine->sendEvent("myMotorController.finishedProfile");
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == '6') {
+//			myStateMaschine->sendEvent("command==chain");
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == 'A') {
+//			myMotorController->setDirection(Right);
+//			printf("direction set to: %d\n", myMotorController->getConfiguredDirection());
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == 'B') {
+//			myMotorController->setDirection(Left);
+//			printf("direction set to: %d\n", myMotorController->getConfiguredDirection());
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == 'F') {
+//			myMotorController->setSpeedInRPM(0);
+//			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+//			//myMotorController->stop();
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == 'E') {
+//			myMotorController->setSpeedInRPM(100);
+//			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == 'D') {
+//			myMotorController->setSpeedInRPM(1000);
+//			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+//			//myMotorController->move(Right);
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//		else if (readValue == 'C') {
+//			myMotorController->setSpeedInRPM(2200);
+//			printf("speed set to: %d\n", myMotorController->getConfiguredSpeedRPM());
+//			//myMotorController->move(Right);
+//			this_thread::sleep_for(chrono::milliseconds(200));
+//			readValue = 0x0;
+//		}
+//	}
+//}
 
 void testStateManager()
 {
@@ -326,22 +329,22 @@ void testStateManager()
 }
 
 
-void testQEP() {
-
-	myMotorController = new MotorController();
-
-	double speed;
-	int steps;
-	MotorState state;
-	while (true)
-	{	
-		state = myMotorController->getMotorState();
-		if ((state == movingLeft || state == movingRight) && myMotorController->getConfiguredSpeedRPM() != 0) {
-			speed = myMotorController->getCurrentSpeedRPM();
-			steps = myMotorController->getStepCounter();
-			printf("%0.2f, %d, \n", speed, steps);
-		}
-		usleep(20000);
-	}
-}
+//void testQEP() {
+//
+//	myMotorController = new MotorController();
+//
+//	double speed;
+//	int steps;
+//	MotorState state;
+//	while (true)
+//	{	
+//		state = myMotorController->getMotorState();
+//		if ((state == movingLeft || state == movingRight) && myMotorController->getConfiguredSpeedRPM() != 0) {
+//			speed = myMotorController->getCurrentSpeedRPM();
+//			steps = myMotorController->getStepCounter();
+//			printf("%0.2f, %d, \n", speed, steps);
+//		}
+//		usleep(20000);
+//	}
+//}
 

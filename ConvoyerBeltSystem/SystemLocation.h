@@ -1,4 +1,6 @@
 #pragma once
+// TODO: move to defines.h
+
 typedef enum {
 	RightConveyorBelt,
 	LeftConveyorBelt,
