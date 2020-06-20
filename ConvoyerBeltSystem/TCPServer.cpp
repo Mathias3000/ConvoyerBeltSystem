@@ -1,9 +1,9 @@
 #include "TCPServer.h"
 
-TCPServer::TCPServer(in_addr_t IPAddress, int port) {
+TCPServer::TCPServer(char* IPAddress, int port) {
 
 	this->port = port;
-	socketAddress = IPAddress;
+	socketAddress = inet_addr(IPAddress);
 	init();
 }
 
@@ -36,14 +36,17 @@ int TCPServer::init()
 		return -1;
 	}
 
+	// Forcefully attach to port
+	setsockopt(listening, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+		&opt, sizeof(opt));
+
 	// Bind socket to IP address and port
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = socketAddress;	// or INADDR_ANY to use the address of the BB
 	server.sin_port = htons(port);			// default set to 5555
 
-	//inet_pton(AF_INET, "0.0.0.0", &server.sin_addr);
-
-	if (bind(listening, (sockaddr*)&server, sizeof(server)) == -1) {
+	int binding = bind(listening, (struct sockaddr*)&server, sizeof(server));	// (struct sockaddr*) & serverAddr
+	if (binding == -1) {
 		cerr << "Can't bind to IP/port. Please restart program. " << endl;
 		return -2;
 	}
@@ -105,6 +108,7 @@ void TCPServer::handleClientInput()
 	
 	updateCommunicationType = true;
 	if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
+		requestBuffer++;
 		myStateMaschine->sendEvent("RecvCmdRequest");
 	}
 	else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")

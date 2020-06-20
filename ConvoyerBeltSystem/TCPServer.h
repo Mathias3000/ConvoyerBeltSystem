@@ -30,6 +30,8 @@ private:
 
 	int port = TCP_PORT;	// default
 	in_addr_t socketAddress = inet_addr(HOST_IP);	// default
+	int opt = 1;
+
 
 	int listening;
 	sockaddr_in server;
@@ -52,8 +54,9 @@ public:
 	int speedBuffer = 0;
 	char dirBuffer;
 	string dataBuffer;
+	int requestBuffer = 0;
 
-	TCPServer(in_addr_t IPAddress, int port);
+	TCPServer(char* IPAddress, int port);
 	TCPServer();
 	~TCPServer();
 	void sendData(string data);
