@@ -3,8 +3,9 @@
 Network::Network()
 {
 	rightConveyorBelt = new TCPClient();
-	leftConveyorBelt = new TCPServer();
-	master = new TCPServer();
+	leftConveyorBelt = new TCPServer(HOST_IP, TCP_PORT);
+	master = new TCPServer(CONVBELT_IP, TCP_PORT);
+
 }
 
 Network* Network::getInstance()
@@ -19,11 +20,12 @@ Command* Network::parse()
 {
 	Command* receivedCommand;
 
-	if (rightConveyorBelt->updateCommunicationType) {
-		receivedCommand = new Command(rightConveyorBelt->buffer, RightConveyorBelt, Self);
+	if (leftConveyorBelt->updateCommunicationType) {
+		receivedCommand = new Command(to_string(leftConveyorBelt->requestBuffer), LeftConveyorBelt, Self);	// not necessary
+		leftConveyorBelt->requestBuffer--;
 	}
-	else if (leftConveyorBelt->updateCommunicationType) {
-		receivedCommand = new Command(leftConveyorBelt->buffer, LeftConveyorBelt, Self);
+	else if (rightConveyorBelt->updateCommunicationType) {
+		receivedCommand = new Command(rightConveyorBelt->buffer, RightConveyorBelt, Self);
 	}
 	else if (master->updateCommunicationType) {
 		receivedCommand = new Command(master->buffer, Master, Self);

@@ -21,6 +21,9 @@
 #define ENC_DELAY_READ_QEP 20000	//Read the qep every x us
 #define ENC_DELAY_CALC_SPEED 10000	//Calculate the speed every x us
 
+// states, TODO: finish
+#define CMD_LOCAL "RecvCmdLocal"
+
 typedef enum
 {
 	Right, Left

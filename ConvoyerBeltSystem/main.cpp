@@ -18,9 +18,9 @@ Network* Network::instance = NULL;
 int main()
 {
 
-	testStateManager();
-
-    printf("hello from ConvoyerBeltSystem!\n");
+    StateManager* sm = new StateManager();
+    sm->init();
+    sm->startStateMaschine();
 
     return 0;
 }

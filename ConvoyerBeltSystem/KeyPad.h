@@ -11,6 +11,7 @@ class KeyPad
 private: 
 	Keyboard* keyboard;
 	char readValue;
+	char lastValue;
 
 public: 
 	KeyPad();

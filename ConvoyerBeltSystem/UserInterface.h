@@ -20,6 +20,5 @@ public:
 
 	~UserInterface();
 	Command* parse();
-	Command* pollingData();
 };
 
