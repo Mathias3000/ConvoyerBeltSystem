@@ -2,7 +2,7 @@
 
 ChainMode::ChainMode():Mode()
 {
-	network = new Network();
+	network = Network::getInstance();
 }
 
 ChainMode* ChainMode::getInstance()

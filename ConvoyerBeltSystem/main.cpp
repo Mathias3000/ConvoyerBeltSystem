@@ -11,13 +11,16 @@ using namespace std;
 // predefine static variables for local and chain mode
 LocalMode* LocalMode::instance = NULL;
 ChainMode* ChainMode::instance = NULL;
+TelnetServer* TelnetServer::instance = NULL;
+UserInterface* UserInterface::instance = NULL;
+Network* Network::instance = NULL;
 
 int main()
 {
-	
-	testStateManager();
 
-  
+    StateManager* sm = new StateManager();
+    sm->init();
+    sm->startStateMaschine();
 
     return 0;
 }

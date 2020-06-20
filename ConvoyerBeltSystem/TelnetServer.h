@@ -12,14 +12,17 @@ private:
 	TCPServer* telnetServer;
 	int speedBuffer = 0;
 
+	TelnetServer();
+	static TelnetServer* instance;
+
 public: 
 
 	// check if acually needed
 	double buffer2 = 0;		// buffer to save last speed value
 	bool dirBuffer = true;	// buffer to save last direction value: true = right & false = left
 	bool updateCommunicationType = false;
-
-	TelnetServer();
+	static TelnetServer* getInstance();
+	
 	Command* parse();
 	void sendData(string data);
 	// void handleUserInput();

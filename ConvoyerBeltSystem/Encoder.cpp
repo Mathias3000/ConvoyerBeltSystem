@@ -2,7 +2,6 @@
 
 Encoder::Encoder()
 { 
-	printf("Encoder Konstruktor!\n");
 	this->qepMotor = new qepDescriptor;
 	this->init();
 	threadPollEncoder = thread(&Encoder::pollEncoder, this);
@@ -18,7 +17,6 @@ int Encoder::init()
 	int err = qepSetPinmux(this->qepMotor);
 	err = qepSetMode(this->qepMotor, 1);
 	err = qepSetPeriod(this->qepMotor, ENC_DELAY_NSEC); 
-	printf("Encoder initialized!\n");
 	return err;
 }
 

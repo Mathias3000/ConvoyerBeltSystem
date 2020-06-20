@@ -5,11 +5,19 @@ Motor::Motor()
 {
 	myEncoder = new Encoder();
 	myController = new Controller();
+
+	//Create instances for hardware usage
+	this->IN1 = new gpioDescriptor;
+	this->pwmMotor = new pwmDescriptor;
+	this->spiDescMotor = new spiDescriptor;
+	this->bridgeEN = new gpioDescriptor;
+	this->bridgeDIS = new gpioDescriptor;
+
+	initMotor();
 }
 
 Motor::Motor(Encoder* encoder, Controller* controller) : myEncoder(encoder), myController(controller)
 {
-	printf("Motor Konstruktor!\n");
 	//Create instances for hardware usage
 	this->IN1 = new gpioDescriptor;
 	this->pwmMotor = new pwmDescriptor;
@@ -69,7 +77,6 @@ int Motor::initMotor()
 	if (pwmSetPeriod_B(this->pwmMotor, 50000) < 0) return -1;
 	//if (pwmSetDuty_B(this->pwmMotor, 0)) return -1;
 	if (pwmSetPolarity_B(this->pwmMotor, 0)) return -1;
-	printf("SPI for Motor initialized!\n");
 	return 0;
 }
 

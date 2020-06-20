@@ -3,26 +3,26 @@
 Network::Network()
 {
 	rightConveyorBelt = new TCPClient();
-	leftConveyorBelt = new TCPServer();
-	master = new TCPServer();
+	leftConveyorBelt = new TCPServer(HOST_IP, TCP_PORT);
+	master = new TCPServer(CONVBELT_IP, TCP_PORT);
+
+}
+
+Network* Network::getInstance()
+{
+	if (instance == NULL) {
+		instance = new Network();
+	}
+	return instance;
 }
 
 Command* Network::parse()
 {
 	Command* receivedCommand;
+	// only reading values from left system: in order to track number of current request in the queue
+	receivedCommand = new Command(to_string(leftConveyorBelt->requestBuffer), SystemLocation::LeftConveyorBelt, Self);	
+	leftConveyorBelt->requestBuffer--;
 
-	if (rightConveyorBelt->updateCommunicationType) {
-		receivedCommand = new Command(rightConveyorBelt->buffer, RightConveyorBelt, Self);
-	}
-	else if (leftConveyorBelt->updateCommunicationType) {
-		receivedCommand = new Command(leftConveyorBelt->buffer, LeftConveyorBelt, Self);
-	}
-	else if (master->updateCommunicationType) {
-		receivedCommand = new Command(master->buffer, Master, Self);
-	}
-	else {
-		receivedCommand = new Command("", NoLocation, NoLocation);
-	}
 	return receivedCommand;
 }
 

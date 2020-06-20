@@ -28,28 +28,24 @@ int TCPClient::init()
     serverAddr.sin_port = htons(TCP_PORT);
 
     // create worker thread
-    while (true) {
+    thread* t = new thread(&TCPClient::connectToServer, this);
 
-        if (connect(sock, (struct sockaddr*) & serverAddr, sizeof(serverAddr)) < 0)
-        {
-            cerr << "Connection Failed " << endl;
-            return -3;
-        }
+}
 
-        thread* serverThread;
-        serverThread = new thread(&TCPClient::threadServerHandler, this);
-        // serverThread->join();
+void TCPClient::connectToServer()
+{
 
-    }
+    cout << "Searching for server ... " << endl;
 
-    if (connect(sock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0)
+    if (connect(sock, (struct sockaddr*) & serverAddr, sizeof(serverAddr)) < 0)
     {
         cerr << "Connection Failed " << endl;
-        return -3;
+        return;
     }
 
-    send(sock, test, strlen(test), 0);
-    cout << "Sent message to Server" << endl;
+    thread* serverThread;
+    serverThread = new thread(&TCPClient::threadServerHandler, this);
+    // serverThread->join();
 
 }
 
@@ -99,12 +95,14 @@ void TCPClient::handleServerInput()
     // myConveyorBelt->currentMode->communication = ((ChainMode*)myConveyorBelt->currentMode)->network;
 
     updateCommunicationType = true;
+    // !!! Replave updateCom with a check, where the package is coming from: src
+
     if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
         myStateMaschine->sendEvent("RecvCmdRequest");
     }
     else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")
     {
-        myStateMaschine->sendEvent("RecvCmdReleased");
+        myStateMaschine->sendEvent("RecvCmdRelease");
     }
     else if (input == "READY\r\n" || input == "Ready\r\n" || input == "ready\r\n")
     {

@@ -10,11 +10,7 @@ ConveyorBelt* myConveyorBelt;
 
 StateManager::StateManager()
 {
-	// myKeyBoard = new Keyboard();
-	myStateMaschine = new StateMachine();
 	myConveyorBelt = new ConveyorBelt();
-
-	init();		// init seperat ausführen. Anscheinend kann es zu unbekannten Fehlern führen, wenn man es im ctor ausführt
 }
 
 StateManager::~StateManager()
@@ -24,78 +20,65 @@ StateManager::~StateManager()
 
 void StateManager::init()
 {
+	// TODO: use defines for state names
 
+	myStateMaschine = new StateMachine();
 
-	// Define state charts
+	// DEFINE STATE CHARTS
 	// Local Mode Chart
-	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, selectLocalMode, noCondition);
-	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSetSpeedPoti", 0, setSpeedPotentiometer, noCondition);
-	myStateMaschine->tab[0][1] = new TableEntry("Local", "Local", "RecvCmdSetSpeedTelnet", 0, actionSetSpeed1, noCondition);		// set communication = new TelnetServer()
-	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionRight", 0, actionSetDirection, noCondition);
-	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdDirectionLeft", 0, actionSetDirection, noCondition);
-	myStateMaschine->tab[0][3] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, actionFollowProfile1, noCondition);
-	myStateMaschine->tab[0][4] = new TableEntry("FollowProfile", "Local", "motorControllerFinishedProfile", 0, noAction2, noCondition);
-	myStateMaschine->tab[0][5] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, noAction3, noCondition);
-
-	// FollowProfile Chart: funktioniert so nicht ... lieber als zusätzliche Line jeweils ins Local und Chain einbauen
-	myStateMaschine->tab[1][0] = new TableEntry("FollowProfile", "Local", "Timer0", 20, actionSetSpeedAndSteps, conditionTotalSteps);		// put timer.start() to different actionFunction
+	myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, startLocalMode, noCondition);
+	myStateMaschine->tab[0][1] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, selectChainMode, noCondition);	// reset to local mit cmd
+	myStateMaschine->tab[0][2] = new TableEntry("Chain", "Local", "Reset", 0, noAction, noCondition);	// reset to local 
+	myStateMaschine->tab[0][3] = new TableEntry("Local", "Local", "RecvCmdSetSpeedPoti", 0, setSpeedPotentiometer, noCondition);
+	myStateMaschine->tab[0][4] = new TableEntry("Local", "Local", "RecvCmdSetSpeedTelnet", 0, setSpeedTelnet, noCondition);	
+	myStateMaschine->tab[0][5] = new TableEntry("Local", "Local", "RecvCmdDirectionKeyPad", 0, setDirectionKeyPad, noCondition);
+	myStateMaschine->tab[0][6] = new TableEntry("Local", "Local", "RecvCmdDirectionTelnet", 0, setDirectionTelnet, noCondition);
+	myStateMaschine->tab[0][7] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, followProfile, noCondition);
+	myStateMaschine->tab[0][8] = new TableEntry("FollowProfile", "FollowProfile", "Timer0", 20, updateSteps, isProfileFinished);
+	myStateMaschine->tab[0][9] = new TableEntry("FollowProfile", "Local", "finishedProfile", 0, finishedProfile, noCondition);
 
 	// Chain Chart
-	myStateMaschine->tab[2][0] = new TableEntry("Idle", "Chain", "RecvCmdChain", 0, noAction4, noCondition);
-	myStateMaschine->tab[2][1] = new TableEntry("Chain", "Chain", "RecvCmdSpeed", 0, actionSetSpeed2, noCondition);
-	myStateMaschine->tab[2][2] = new TableEntry("Chain", "Requested", "RecvCmdRequest", 0, noAction5, noCondition);
-	myStateMaschine->tab[2][3] = new TableEntry("Requested", "Requested", "RecvCmdRequest", 0, actionHandleRequest_Wait1, noCondition);
-	myStateMaschine->tab[2][4] = new TableEntry("Requested", "ReceivingPayload", "motorControllerReadyToRecvPayload", 0, actionHandleRequest_Ready, noCondition);
-	myStateMaschine->tab[2][5] = new TableEntry("ReceivingPayload", "ReceivingPayload", "RecvCmdRequest", 0, actionHandleRequest_Wait2, noCondition);
-	myStateMaschine->tab[2][6] = new TableEntry("ReceivingPayload", "FollowProfile", "SendRelease", 0, actionFollowProfile2, noCondition);
-	myStateMaschine->tab[2][7] = new TableEntry("FollowProfile", "FollowProfile", "RecvCmdRequest", 0, actionHandleRequest_Wait3, noCondition);
-	myStateMaschine->tab[2][8] = new TableEntry("FollowProfile", "Requesting", "motorControllerFinishedProfile", 0, actionSendRequest, noCondition);
-	myStateMaschine->tab[2][9] = new TableEntry("Requesting", "Requesting", "RecvCmdRequest", 0, actionHandleRequest_Wait4, noCondition);
-	myStateMaschine->tab[2][10] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, actionMotorStop1, noCondition);
-	myStateMaschine->tab[2][11] = new TableEntry("Requesting", "PassLoad", "RecvCmdReady", 0, actionMotorMove, noCondition);
-	myStateMaschine->tab[2][12] = new TableEntry("PassLoad", "Chain", "RecvCmdRelease", 0, actionMotorStop2, noCondition);
-
-	// Additional StateChart for KeyPad: Polling needs to be performed!
-	// Can be implemented with a thread as well
-
-	// Potentiometer/Keyboard Chart for Polling
-	// every 50ms check if poti value has changed "significantly"; If it has -> sendEvent for changing speed
-	// OR: define Key to accept/validate the chosen value of poti -> But this action can be called in each state of 
-
-	// Display Chart for visualization
-	// Get currect state 
-	// OR: just print it out continuousyl
-
-	// TCP Server/Client: They send Event when they reveive something. No need for polling. 
-	// Example: Telnet Server
-	// - receives data
-	// - unpack
-	// - set global variables?
-	// - sendEvent to the queue
+	myStateMaschine->tab[1][0] = new TableEntry("Idle", "Chain", "RecvCmdChain", 0, startChainMode, noCondition);
+	myStateMaschine->tab[1][1] = new TableEntry("Chain", "Local", "RecvCmdLocal", 0, selectLocalMode, noCondition);	
+	myStateMaschine->tab[1][2] = new TableEntry("Local", "Chain", "Reset", 0, noAction, noCondition);	
+	myStateMaschine->tab[1][3] = new TableEntry("Chain", "Chain", "RecvCmdSetSpeedPoti", 0, setSpeedPotentiometer, noCondition);
+	myStateMaschine->tab[1][4] = new TableEntry("Chain", "Chain", "RecvCmdSetSpeedTelnet", 0, setSpeedTelnet, noCondition);
+	myStateMaschine->tab[1][5] = new TableEntry("Chain", "Requested", "RecvCmdRequest", 0, handleRequest, noCondition);		
+	myStateMaschine->tab[1][6] = new TableEntry("Requested", "Requested", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
+	myStateMaschine->tab[1][7] = new TableEntry("Requested", "ReceivingPayload", "ReadyToRecvPayload", 0, startSlowMovement, readyToReceive);
+	myStateMaschine->tab[1][8] = new TableEntry("ReceivingPayload", "ReceivingPayload", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
+	myStateMaschine->tab[1][9] = new TableEntry("ReceivingPayload", "ReceivingPayloadFinished", "Timer1", 1000, releasePayload, noCondition);
+	myStateMaschine->tab[1][10] = new TableEntry("ReceivingPayloadFinished", "ReceivingPayloadFinished", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
+	myStateMaschine->tab[1][11] = new TableEntry("ReceivingPayloadFinished", "FollowProfile", "ReleasedPayload", 0, followProfile, noCondition);
+	myStateMaschine->tab[1][12] = new TableEntry("FollowProfile", "FollowProfile", "Timer1", 20, updateSteps, isProfileFinished);
+	myStateMaschine->tab[1][13] = new TableEntry("FollowProfile", "Requesting", "finishedProfile", 0, requesting, isProfileFinished);
+	myStateMaschine->tab[1][14] = new TableEntry("Requesting", "Requesting", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
+	myStateMaschine->tab[1][15] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, handleWait, noCondition);
+	myStateMaschine->tab[1][16] = new TableEntry("Requesting", "Passload", "RecvCmdReady", 0, handleReady, noCondition);
+	myStateMaschine->tab[1][17] = new TableEntry("Passload", "PassloadCompleted", "Timer1", 1000, completingPassload, noCondition);
+	myStateMaschine->tab[1][18] = new TableEntry("Passload", "Passload", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
+	myStateMaschine->tab[1][19] = new TableEntry("PassloadCompleted", "PassloadCompleted", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
+	myStateMaschine->tab[1][20] = new TableEntry("PassloadCompleted", "Chain", "RecvCmdRelease", 0, checkRequestBuffer, noCondition);	
 
 
 	// Initialize timer names for all diagrams
+	// e.g. Diagram 0 uses Timer0, ... 
 	myStateMaschine->timerNames[0] = "Timer0";
+	myStateMaschine->timerNames[1] = "Timer1";
 
 	// Initialize line numbers for all diagrams
-	myStateMaschine->lines[0] = 6;	// Anzahl der Teilen bei den Tabellen oben
-	myStateMaschine->lines[1] = 1;
-	myStateMaschine->lines[2] = 13;
+	myStateMaschine->lines[0] = 10;	
+	myStateMaschine->lines[1] = 21;
 
 	// Initialize first state for all diagrams
 	myStateMaschine->actualState[0] = "Idle";
-	myStateMaschine->actualState[1] = "FollowProfile";
-	myStateMaschine->actualState[2] = "Idle";
+	myStateMaschine->actualState[1] = "Idle";
 
 	// Set the actual number of diagrams
-	myStateMaschine->diagrams = 3;
+	myStateMaschine->diagrams = 2;
 
 	// Initialize state machine
 	myStateMaschine->init();
-
-	// Start timer for each diagram which needs one in the first state!
-	// In my case these are diagram 0 and 2
-	myStateMaschine->diaTimerTable[0]->startTimer(myStateMaschine->tab[1][0]->eventTime);
 
 	// Initial actions can be done here, if needed!
 	n = 0;
@@ -111,48 +94,278 @@ void StateManager::startStateMaschine()
 }
 
 
-// NICE TO KNOW: 
-/* alle Klassen, die ich for die action Funktionen brauche, müssen global definiert sein. Dazu gehören: 
-- MotorController: set speed
-- 
-*/
+
 // Defining global functions
 // ACTIONS
-void selectLocalMode() {
+void startLocalMode()
+{
 	cout << "\nIdle -> Local" << endl;
-	
-	// update the communication flags
-	myConveyorBelt->updateCurrentCommunicationType();
-
 	myConveyorBelt->currentMode = LocalMode::getInstance();
-
-	// reset all flags
-	myConveyorBelt->resetCommunicationFlags();
-
 }
 
+void selectLocalMode() {
+	// cout << "\nChain -> Local" << endl;
+	myConveyorBelt->currentMode = LocalMode::getInstance();
+	Mode* currentMode = myConveyorBelt->currentMode;
+	if (LocalMode* lm = dynamic_cast<LocalMode*>(currentMode)) {
+		cout << "Current Mode: " << typeid(LocalMode).name() << endl;
+	}
+	else
+	{
+		cout << "Current Mode: " << typeid(ChainMode).name() << endl;
+	}
+
+	myStateMaschine->sendEvent("Reset");
+}
+
+void startChainMode() {
+	cout << "\nIdle -> Chain" << endl;
+	myConveyorBelt->currentMode = ChainMode::getInstance();
+}
+
+void selectChainMode() {
+	// cout << "\Local -> Chain" << endl;
+	myConveyorBelt->currentMode = ChainMode::getInstance();
+	Mode* currentMode = myConveyorBelt->currentMode;
+	if (LocalMode* lm = dynamic_cast<LocalMode*>(currentMode)) {
+		string s;
+		cout << "Current Mode: " << typeid(LocalMode).name() << endl;
+	}
+	else
+	{
+		cout << "Current Mode: " << typeid(ChainMode).name() << endl;
+	}
+
+	myStateMaschine->sendEvent("Reset");
+}
+
+
+// TODO: use proper function to set speed in motor
 void setSpeedPotentiometer()
 {
-	cout << "\nLocal -> Local" << endl;
+	// cout << "\nLocal -> Local" << endl;
+
+	myConveyorBelt->currentMode->communication = UserInterface::getInstance();
 	Command* cmd = myConveyorBelt->currentMode->communication->parse();
+	usleep(50000);		
 	int speed = stoi(cmd->data);
 	myConveyorBelt->currentMode->motorController->setSpeedInRPM(speed);
-	cout << "\nSet speed to " + cmd->data + " rpm" << endl;
+	cout << "\nSet speed with potentiometer to " << speed << " rpm" << endl;
+	
 }
 
 void setSpeedTelnet()
 {
+	// cout << "\nLocal -> Local" << endl;
+
+	// read value from telnet cmd
+	myConveyorBelt->currentMode->communication = TelnetServer::getInstance();
+	Command* cmd = myConveyorBelt->currentMode->communication->parse();
+	int speed = stoi(cmd->data);
+	myConveyorBelt->currentMode->motorController->setSpeedInRPM(speed);
+	cout << "\nSet speed with telnet to " << speed << " rpm" << endl;
+
+}
+
+void setDirectionKeyPad() {
 	cout << "\nLocal -> Local" << endl;
 
 	// read value from telnet cmd
-	// Beforehand: set communication = TelnetServer();
-	// myConveyorBelt->currentMode->communication = 
+	myConveyorBelt->currentMode->communication = UserInterface::getInstance();
+	Command* cmd = myConveyorBelt->currentMode->recv();
+	char dir = cmd->data[0];
+
+	if (dir == 'l') {	// left
+		myConveyorBelt->currentMode->motorController->setDirection(Direction::Left);
+		cout << "Set direction to left" << endl;
+	}
+	else if (dir == 'r') {
+		myConveyorBelt->currentMode->motorController->setDirection(Direction::Right);
+		cout << "Set direction to right" << endl;
+	}
+	else
+	{
+		cout << "Failed to set direction. Cmd: " << dir << endl;
+	}
+
+}
+
+void setDirectionTelnet() {
+	cout << "\nLocal -> Local" << endl;
+
+	// read value from telnet cmd
+	myConveyorBelt->currentMode->communication = TelnetServer::getInstance();
+	Command* cmd = myConveyorBelt->currentMode->communication->parse();
+	char dir = myConveyorBelt->currentMode->communication->parse()->data[0];
+
+	if (dir == 'l') {	// left
+		myConveyorBelt->currentMode->motorController->setDirection(Direction::Left);
+		cout << "Set direction to left" << endl;
+	}
+	else if (dir == 'r') {
+		myConveyorBelt->currentMode->motorController->setDirection(Direction::Right);
+		cout << "Set direction to right" << endl;
+	}
+}
+
+void followProfile() {
+
+	// cout << "\nLocal -> FollowProfile" << endl;
+
+	if (myConveyorBelt->currentMode->motorController->getConfiguredDirection() == Right) {
+		myConveyorBelt->currentMode->motorController->setMotorState(movingRight);
+
+	}
+	else if (myConveyorBelt->currentMode->motorController->getConfiguredDirection() == Left) {
+		myConveyorBelt->currentMode->motorController->setMotorState(movingLeft);
+	}
+	if (myConveyorBelt->currentMode->motorController->getConfiguredSpeedRPM() == 0) {	// orig: != 0, why?
+		myConveyorBelt->currentMode->motorController->startProfile();
+	}
+	else
+	{
+		cout << "speed not set!\n" << endl;
+		myConveyorBelt->currentMode->motorController->setMotorState(Stop);
+	}
+	cout << "\nStarted Profile" << endl;
+}
+
+void finishedProfile() {
+
+	cout << "\nFollowProfile  -> Steps completed -> Local" << endl;
+	//myMotorController->stop();
+	//myMotorController->resetStepCounter();
+
+
+}
+
+void updateSteps() 
+{
+	myConveyorBelt->currentMode->motorController->incrementStepCounter();
+}
+
+void handleRequest() 
+{
+	cout << "\nChain -> Requested" << endl;
+	myConveyorBelt->currentMode->communication = Network::getInstance();
+
+	Command* cmd = new Command("\nREADY\n", Self, LeftConveyorBelt);
+	myConveyorBelt->currentMode->send(cmd);
+	myStateMaschine->sendEvent("ReadyToRecvPayload");
+}
+
+void releasePayload() {
+	cout << "\nReceivingPayload -> ReceivingPayloadFinished" << endl;
+
+	// send Event, check happens in condition
+	myConveyorBelt->currentMode->communication = Network::getInstance();
+	Command* cmd = new Command("\nRELEASE\n", Self, LeftConveyorBelt);
+	myConveyorBelt->currentMode->send(cmd);
+
+	myStateMaschine->sendEvent("ReleasedPayload");
+}
+
+void handleRequestRepeat() 
+{
+	cout << "\nRequested -> Requested" << endl;
+
+	// send back wait
+	myConveyorBelt->currentMode->communication = Network::getInstance();
+	Command* cmd = new Command("\nWAIT\n", Self, LeftConveyorBelt);
+	myConveyorBelt->currentMode->send(cmd);
+	
+}
+
+void checkRequestBuffer()
+{
+	cout << "\nPassload -> Chain" << endl;
+
+	myConveyorBelt->currentMode->communication = Network::getInstance();
+	Command* cmd = myConveyorBelt->currentMode->communication->parse();
+
+	int reqBufferCount = stoi(cmd->data) - 1;	// first request is always processed
+	if (reqBufferCount > 0) {
+		myStateMaschine->sendEvent("RecvCmdRequest");
+	}
+}
+
+void startSlowMovement()
+{
+	cout << "\nRequested -> ReceivingPayload" << endl;
+	myConveyorBelt->currentMode->motorController->move(myConveyorBelt->currentMode->motorController->getConfiguredDirection());	// correct function?
+}
+
+void requesting()
+{
+	cout << "\nFollowProfile -> Requesting" << endl;
+
+	// send request to right
+	myConveyorBelt->currentMode->communication = Network::getInstance();
+	Command* cmd = new Command("\nREQUEST\n", Self, RightConveyorBelt);
+	myConveyorBelt->currentMode->send(cmd);
+
+}
+
+void handleWait()
+{
+	cout << "\nRequesting -> Requesting" << endl;
+	// stay in state
+	// stop motor
+	myConveyorBelt->currentMode->motorController->stop();
+}
+
+void handleReady()
+{
+	cout << "\nRequesting -> Passload" << endl;
+
+	myConveyorBelt->currentMode->motorController->move(myConveyorBelt->currentMode->motorController->getConfiguredDirection());
+}
+
+void completingPassload()
+{
+	cout << "\nPassload -> PassloadCompleted" << endl;
+	myConveyorBelt->currentMode->motorController->stop();
+	// reset status to stop
+	myConveyorBelt->currentMode->motorController->myMotor->setStatus(MotorState::Stop);
 
 }
 
 // CONDITIONS
 bool noCondition() {
 	return true;
+}
+
+bool falseCondition()
+{
+	return false;
+}
+
+
+bool isProfileFinished() {
+	int steps = myConveyorBelt->currentMode->motorController->getStepCounter();
+	MotorState state = myConveyorBelt->currentMode->motorController->getMotorState();
+	Direction direction = myConveyorBelt->currentMode->motorController->getConfiguredDirection();
+	if (state == Stop)
+	{
+		myStateMaschine->sendEvent("finishedProfile");
+		return false;
+	}
+	else if (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN))
+	{
+		return true;
+	}
+	else if (steps > (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
+		myConveyorBelt->currentMode->motorController->stop();
+		myConveyorBelt->currentMode->motorController->resetStepCounter();
+		myStateMaschine->sendEvent("finishedProfile");
+		return false;
+	}
+}
+
+bool readyToReceive()
+{
+	return myConveyorBelt->currentMode->motorController->readyToRecvPayload();
+
 }
 
 
@@ -241,8 +454,10 @@ bool noCondition() {
 
 //  ACTIONS FOR TESTING
 void noAction() {
-	cout << "no action\n" << endl;
+	// cout << "no action\n" << endl;
 }
+
+
 
 void noAction1() {
 	cout << "\nIdle --> Local" << endl;

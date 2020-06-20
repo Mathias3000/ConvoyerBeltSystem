@@ -18,6 +18,10 @@ void KeyPad::handleKeyInput()
 {
 	while (true)
 	{
+		// TODO: improve
+		// use timer. Check in each case, whether a reapeated sendEvent is allowed
+		// https://en.cppreference.com/w/cpp/chrono/c/clock
+
 		// reads keyboard input and sends corresponding event
 		readValue = keyboard->getPressedKey();
 
@@ -25,39 +29,44 @@ void KeyPad::handleKeyInput()
 		{
 		case '1':
 			// motorController->direction = 1;		// way to avoid this: add seperate event-string & action 
-			myStateMaschine->sendEvent("RecvCmdDirectionRight");
+			lastValue = readValue;
+			myStateMaschine->sendEvent("RecvCmdDirectionKeyPad");
 			break;
 
 		case '2':
-			myStateMaschine->sendEvent("RecvCmdDirectionLeft");
+			lastValue = readValue;
+			myStateMaschine->sendEvent("RecvCmdDirectionKeyPad");
 			break;
 
 		case'3':
+			lastValue = readValue;
 			myStateMaschine->sendEvent("RecvCmdFollowProfile");		// Start motor/start movement
 			break;
 
 		case '4':
+			lastValue = readValue;
 			myStateMaschine->sendEvent("RecvCmdStopMotor");
 			break;
 
 		case 'F':
+			lastValue = readValue;
 			myStateMaschine->sendEvent("RecvCmdChain");
 			break;
 
 		case 'E':
+			lastValue = readValue;
 			myStateMaschine->sendEvent("RecvCmdLocal");
 			break;
 
 		case 'D':
+			lastValue = readValue;
 			myStateMaschine->sendEvent("RecvCmdSetSpeedPoti");
 			break;
 
 		default:
 			break;
 		}
-
-		usleep(50000);	// 50ms sleep
-
+		usleep(150000);
 	}
 }
 
@@ -68,5 +77,5 @@ string KeyPad::readKey()
 
 char KeyPad::getLastKeyInput()
 {
-	return readValue;
+	return lastValue;
 }

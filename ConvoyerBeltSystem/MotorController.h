@@ -12,8 +12,10 @@ class MotorController
 {
 public:
 
+	Motor* myMotor;
+	SpeedProfile* mySpeedProfile;
 
-  int direction = 1;		// 1 = right & 0 = left
+	int direction = 1;		// 1 = right & 0 = left
 	MotorController(Motor* motor, SpeedProfile* profile); //call init() and starts thread, which polls variable 'profileRunning' --> startProfile() sets the variable to true
 	//move for time 1s !!! implementieren!
 	int move(Direction Direction);
@@ -52,11 +54,9 @@ private:
 	int followProfile();
 	bool profileRunning = false;
 	int currentSteps;
-	double currentSpeed;
+	double currentSpeed = 1000;		// default: 1000 rpm
 	char currentState[MAX_STATE_NAME];
 	thread threadFollowProfile;
-	Motor* myMotor;
-	SpeedProfile* mySpeedProfile;
+
 };
 
-extern MotorController* myMotorController;
