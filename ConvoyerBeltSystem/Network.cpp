@@ -19,20 +19,10 @@ Network* Network::getInstance()
 Command* Network::parse()
 {
 	Command* receivedCommand;
+	// only reading values from left system: in order to track number of current request in the queue
+	receivedCommand = new Command(to_string(leftConveyorBelt->requestBuffer), SystemLocation::LeftConveyorBelt, Self);	
+	leftConveyorBelt->requestBuffer--;
 
-	if (leftConveyorBelt->updateCommunicationType) {
-		receivedCommand = new Command(to_string(leftConveyorBelt->requestBuffer), LeftConveyorBelt, Self);	// not necessary
-		leftConveyorBelt->requestBuffer--;
-	}
-	else if (rightConveyorBelt->updateCommunicationType) {
-		receivedCommand = new Command(rightConveyorBelt->buffer, RightConveyorBelt, Self);
-	}
-	else if (master->updateCommunicationType) {
-		receivedCommand = new Command(master->buffer, Master, Self);
-	}
-	else {
-		receivedCommand = new Command("", NoLocation, NoLocation);
-	}
 	return receivedCommand;
 }
 
