@@ -128,6 +128,7 @@ void selectChainMode() {
 	myConveyorBelt->currentMode = ChainMode::getInstance();
 	Mode* currentMode = myConveyorBelt->currentMode;
 	if (LocalMode* lm = dynamic_cast<LocalMode*>(currentMode)) {
+		string s;
 		cout << "Current Mode: " << typeid(LocalMode).name() << endl;
 	}
 	else
@@ -246,9 +247,8 @@ void updateSteps()
 void handleRequest() 
 {
 	cout << "\nChain -> Requested" << endl;
-	
-	// send Event, check happens in condition
 	myConveyorBelt->currentMode->communication = Network::getInstance();
+
 	Command* cmd = new Command("\nREADY\n", Self, LeftConveyorBelt);
 	myConveyorBelt->currentMode->send(cmd);
 	myStateMaschine->sendEvent("ReadyToRecvPayload");
@@ -279,15 +279,14 @@ void handleRequestRepeat()
 void checkRequestBuffer()
 {
 	cout << "\nPassload -> Chain" << endl;
+
 	myConveyorBelt->currentMode->communication = Network::getInstance();
 	Command* cmd = myConveyorBelt->currentMode->communication->parse();
 
-	// TODO
-	//int currentReqBuffer = stoi(myConveyorBelt->currentMode->communication->parse()->data);
-
-	//if (currentReqBuffer > 0) {
-	//	myStateMaschine->sendEvent("RecvCmdRequest");
-	//}
+	int reqBufferCount = stoi(cmd->data) - 1;	// first request is always processed
+	if (reqBufferCount > 0) {
+		myStateMaschine->sendEvent("RecvCmdRequest");
+	}
 }
 
 void startSlowMovement()
@@ -326,6 +325,8 @@ void completingPassload()
 {
 	cout << "\nPassload -> PassloadCompleted" << endl;
 	myConveyorBelt->currentMode->motorController->stop();
+	// reset status to stop
+	myConveyorBelt->currentMode->motorController->myMotor->setStatus(MotorState::Stop);
 
 }
 
