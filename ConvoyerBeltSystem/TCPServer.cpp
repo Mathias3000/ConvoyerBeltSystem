@@ -1,10 +1,11 @@
 #include "TCPServer.h"
 
-TCPServer::TCPServer(in_addr_t IPAddress, int port) {
+TCPServer::TCPServer(char* IPAddress, int port) {
 
 	this->port = port;
-	socketAddress = IPAddress;
-	//init();
+	socketAddress = inet_addr(IPAddress);
+	init();
+
 }
 
 TCPServer::TCPServer()
@@ -35,21 +36,21 @@ int TCPServer::init()
 		cerr << "Can't create a socket";
 		return -1;
 	}
-	cout << "Socket created. " << endl;
+
+	// Forcefully attach to port
+	setsockopt(listening, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+		&opt, sizeof(opt));
 
 	// Bind socket to IP address and port
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = socketAddress;	// or INADDR_ANY to use the address of the BB
 	server.sin_port = htons(port);			// default set to 5555
 
-	//inet_pton(AF_INET, "0.0.0.0", &server.sin_addr);
-
-	if (bind(listening, (sockaddr*)&server, sizeof(server)) == -1) {
-		cerr << "Can't bind to IP/port";
+	int binding = bind(listening, (struct sockaddr*)&server, sizeof(server));	// (struct sockaddr*) & serverAddr
+	if (binding == -1) {
+		cerr << "Can't bind to IP/port. Please restart program. " << endl;
 		return -2;
 	}
-
-	cout << "Listening to clients" << endl;
 
 	// Mark the socket for listening
 	if (listen(listening, SOMAXCONN) == -1) {
@@ -58,22 +59,7 @@ int TCPServer::init()
 	}
 
 	// Start a worker thread for each new connection
-	while (true) {
-
-		// Accept a call
-		cout << "Accepting clients ... " << endl;
-		clientSize = sizeof(client);
-		clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
-		if (clientSocket == -1) {
-			cerr << "Problem with client connetion!";
-			return -4;
-		}
-
-		// worker thread
-		thread* clientThread;
-		clientThread = new thread(&TCPServer::threadClientHandler, this);
-		// clientThread->join();
-	}
+	thread* t = new thread(&TCPServer::acceptClients, this);
 
 	return 0;
 }
@@ -81,11 +67,10 @@ int TCPServer::init()
 
 void TCPServer::threadClientHandler()
 {
-	cout << "Connected with client" << endl;
+	cout << "Connected with client. " << endl;		// use as status in Display
 
 	// TODO: Delete Greeting. Only used for debugging
 	// Greet Client!
-	cout << "Initiate Greeting of client! Code Red!" << endl;
 	char greeting[] = "Hi Client! What's up!";
 	send(clientSocket, greeting, sizeof(greeting) + 1, 0);
 	// int val = write(*(int*)(clientSocket), greeting, sizeof(greeting) + 1);
@@ -116,7 +101,7 @@ void TCPServer::handleClientInput()
 	string input(buffer);
 
 	// debug
-	cout << "Received from Client (LEFT OR MASTER): " << input << endl;
+	// cout << "Received from Client (LEFT OR MASTER): " << input << endl;
 
 	// TODO: Check if currentMode == ChainMode
 	// Maybe set communication to network when changing to ChainMode: NO, only makes sense if in chainmode only TCP is used
@@ -124,6 +109,7 @@ void TCPServer::handleClientInput()
 	
 	updateCommunicationType = true;
 	if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
+		requestBuffer++;
 		myStateMaschine->sendEvent("RecvCmdRequest");
 	}
 	else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")
@@ -139,19 +125,11 @@ void TCPServer::handleClientInput()
 		myStateMaschine->sendEvent("RecvCmdWait");
 	}
 	else if (input == "tel start\r\n") {
-		myStateMaschine->sendEvent("RecvCmdRequest");
+		myStateMaschine->sendEvent("RecvCmdFollowProfile");
 	}
 	else if (input == "tel stop\r\n")
 	{
 		myStateMaschine->sendEvent("RecvCmdReleased");
-	}
-	else if (input == "tel dir right\r\n")
-	{
-		myStateMaschine->sendEvent("RecvCmdReady");
-	}
-	else if (input == "tel dir left\r\n")
-	{
-		myStateMaschine->sendEvent("RecvCmdWait");
 	}
 	else if (input.find(SPEED_CMD) != string::npos)		// check if speed command string
 	{
@@ -162,17 +140,50 @@ void TCPServer::handleClientInput()
 		std::string token;
 		while ((pos = s.find(delimiter)) != std::string::npos) {
 			token = s.substr(0, pos);
-			std::cout << token << std::endl;
 			s.erase(0, pos + delimiter.length());
 		}
-		std::cout << s << std::endl;
-		speedBuffer = stoi(s);
+		dataBuffer = s;
+		myStateMaschine->sendEvent("RecvCmdSetSpeedTelnet");
+	}
+	else if (input.find(DIR_CMD) != string::npos)		// check if speed command string
+	{
+		string s = input;
+		std::string delimiter = ":";
+
+		size_t pos = 0;
+		std::string token;
+		while ((pos = s.find(delimiter)) != std::string::npos) {
+			token = s.substr(0, pos);
+			s.erase(0, pos + delimiter.length());
+		}
+		dataBuffer = s;		
+		myStateMaschine->sendEvent("RecvCmdDirectionTelnet");
+
 	}
 	else
 	{
 		updateCommunicationType = false;
 	}
 
+}
+
+void TCPServer::acceptClients()
+{
+	while (true) {
+
+		// Accept a call
+		cout << "\nSearching for clients ... " << endl;
+		clientSize = sizeof(client);
+		clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
+		if (clientSocket == -1) {
+			cerr << "Problem with client connetion!";
+		}
+
+		// worker thread
+		thread* clientThread;
+		clientThread = new thread(&TCPServer::threadClientHandler, this);
+		// clientThread->join();
+	}
 }
 
 

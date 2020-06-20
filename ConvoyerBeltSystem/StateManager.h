@@ -1,19 +1,12 @@
 #pragma once
-#include "keyboard.h"
-#include "stateMachine.h"
 #include <iostream>
-#include "SpeedProfile.h"
 #include <thread>
 #include <mutex>
-#include "MotorController.h"
-#include "Motor.h"
-#include "SpeedProfile.h"
-#include "Encoder.h"
-#include "Controller.h"
+
+#include "stateMachine.h"
+#include "keyboard.h"
+
 #include "Helpers.h"
-#include "TelnetServer.h"
-#include "TCPServer.h"
-#include "TCPClient.h"
 #include "ConveyorBelt.h"
 
 using namespace std;
@@ -22,16 +15,11 @@ using namespace std;
 class StateManager
 {
 private: 
-	Motor* motor;
-	SpeedProfile* speedProfile;
-	Encoder* encoder;
-	Controller* controller;
-	void init();
 
 public: 
 
 	mutex mtx;
-
+	void init();
 	StateManager();
 	~StateManager();
 	void startStateMaschine();
@@ -40,11 +28,32 @@ public:
 
 // action and condition functions
 void noAction();
+void startLocalMode();
+void startChainMode();
 void selectLocalMode();
+void selectChainMode();
 void setSpeedPotentiometer();
 void setSpeedTelnet();
+void setDirectionKeyPad();
+void setDirectionTelnet();
+void followProfile();
+void finishedProfile();
+void updateSteps();
+void handleRequest();
+void handleRequestRepeat();
+void checkRequestBuffer();
+void startSlowMovement();
+void requesting();
+void handleWait();
+void handleReady();
+void completingPassload();
+void releasePayload();
+
 
 bool noCondition();
+bool falseCondition();
+bool isProfileFinished();
+bool readyToReceive();
 
 // Function for reading keyInputs
 void readKeyInputs();

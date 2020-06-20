@@ -9,14 +9,16 @@ class UserInterface: public ICommunication
 private: 
 	KeyPad* keyPad;
 	Potentiometer* potentiometer;
+	static UserInterface* instance;
+	UserInterface();
 
 public: 
 
 	bool updateCommunicationType = false;
+	static UserInterface* getInstance();
 
-	UserInterface();
+
 	~UserInterface();
 	Command* parse();
-	Command* pollingData();
 };
 

@@ -6,11 +6,11 @@ MotorController::MotorController()
 {
 	myMotor = new Motor();
 	mySpeedProfile = new SpeedProfile();
+	this->threadFollowProfile = thread(&MotorController::followProfile, this);
 }
 
 MotorController::MotorController(Motor* motor, SpeedProfile* profile) : myMotor(motor), mySpeedProfile(profile)
 {
-	printf("MotorController Konstruktor!\n");
 	this->myMotor->initMotor();
 	this->threadFollowProfile = thread(&MotorController::followProfile, this);
 }
@@ -23,8 +23,8 @@ int MotorController::setSpeedInRPM(int speed)
 
 int MotorController::getConfiguredSpeedRPM()
 {
-
-	return this->myMotor->setSpeedRPM(currentSpeed);
+	int a = this->myMotor->setSpeedRPM(currentSpeed);
+	return a;
 }
 
 int MotorController::setDirection(int direction)
@@ -108,7 +108,7 @@ int MotorController::followProfile()
 		if (this->profileRunning == true) {
 			steps = 0;
 			MotorState debugState = myMotor->getStatus();
-			int speed = this->getConfiguredSpeedRPM();
+			int speed = this->getConfiguredSpeedRPM();		// Was sollte das erreichen? wieso speed 0 oder 1?
 			int desiredSpeed, currentSpeed, error;
 			Discrete_initialize();
 			this->myMotor->setDutyCycle(0);
@@ -172,6 +172,15 @@ double MotorController::getCurrentSpeedRPM()
 void MotorController::oneStep()
 {
 	myMotor->oneStep();
+}
+
+bool MotorController::readyToRecvPayload()
+{
+	// Check, if other thigs have to be tested
+	if (myMotor->getStatus() == Stop) {
+		return true;
+	}
+	return false;
 }
 
  

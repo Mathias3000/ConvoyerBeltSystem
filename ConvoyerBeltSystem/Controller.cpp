@@ -1,5 +1,14 @@
 #include "Controller.h"
 
+Controller::Controller()
+{
+}
+
+Controller::~Controller()
+{
+	delete this;
+}
+
 void Controller::oneStep()
 {
 	static boolean_T OverrunFlag = false;

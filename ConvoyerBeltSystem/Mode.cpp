@@ -5,7 +5,7 @@ Mode::Mode()
 	motorController = new MotorController();
 	display = new Display();
 	receivedCommand = new Command();
-	communication = new UserInterface();	// default commandType
+	communication = UserInterface::getInstance();
 
 }
 
