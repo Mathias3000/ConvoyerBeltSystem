@@ -18,16 +18,14 @@ public:
 	mutex displayMutex;
 	string* currentAction = new string("No Actions at the moment. ");
 	void showDisplayOutput();
-
+	int displayUI();
 	// void updateCurrentCommunicationType();
 	// void resetCommunicationFlags();
 	void stopDisplayUI();
 private:
-
 	void init();
 	bool stop = false;
 	thread workerDisplayUI;
-	int displayUI();
 
 	char* commands[7] = {
 		"KEYBOARD commands: ",

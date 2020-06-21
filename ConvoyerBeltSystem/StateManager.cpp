@@ -35,7 +35,7 @@ void StateManager::init()
 	myStateMaschine->tab[0][4] = new TableEntry("Local", "Local", "RecvCmdDirectionKeyPad", 0, setDirectionKeyPad, noCondition);
 	myStateMaschine->tab[0][5] = new TableEntry("Local", "Local", "RecvCmdDirectionTelnet", 0, setDirectionTelnet, noCondition);
 	myStateMaschine->tab[0][6] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, followProfile, noCondition);
-	myStateMaschine->tab[0][7] = new TableEntry("FollowProfile", "FollowProfile", "Timer0", 20, updateSteps, isProfileFinished);
+	myStateMaschine->tab[0][7] = new TableEntry("FollowProfile", "FollowProfile", "Timer0", 20, updateMotorController, isProfileFinished);
 	myStateMaschine->tab[0][8] = new TableEntry("FollowProfile", "Local", "finishedProfile", 0, finishedProfile, noCondition);
 
 	// Chain Chart
@@ -51,7 +51,7 @@ void StateManager::init()
 	myStateMaschine->tab[1][8] = new TableEntry("ReceivingPayload", "ReceivingPayloadFinished", "Timer1", 1000, releasePayload, noCondition);
 	myStateMaschine->tab[1][9] = new TableEntry("ReceivingPayloadFinished", "ReceivingPayloadFinished", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
 	myStateMaschine->tab[1][10] = new TableEntry("ReceivingPayloadFinished", "FollowProfile", "ReleasedPayload", 0, followProfile, noCondition);
-	myStateMaschine->tab[1][11] = new TableEntry("FollowProfile", "FollowProfile", "Timer1", 20, updateSteps, isProfileFinished);
+	myStateMaschine->tab[1][11] = new TableEntry("FollowProfile", "FollowProfile", "Timer1", 20, updateMotorController, isProfileFinished);
 	myStateMaschine->tab[1][12] = new TableEntry("FollowProfile", "Requesting", "finishedProfile", 0, requesting, isProfileFinished);
 	myStateMaschine->tab[1][13] = new TableEntry("Requesting", "Requesting", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
 	myStateMaschine->tab[1][14] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, handleWait, noCondition);
