@@ -99,7 +99,7 @@ void StateManager::startStateMaschine()
 // ACTIONS
 void startLocalMode()
 {
-	myConveyorBelt->currentAction = new string("Changes from IDLE to LocalMode. ");
+	myConveyorBelt->currentAction = new string("Changing from IDLE to LocalMode. ");
 	myConveyorBelt->currentMode = LocalMode::getInstance();
 }
 
@@ -112,7 +112,7 @@ void selectLocalMode() {
 
 void startChainMode() {
 	cout << "\nChanges from IDLE to ChainMode. " << endl;
-	myConveyorBelt->currentAction = new string("Changes from IDLE to ChainMode. ");
+	myConveyorBelt->currentAction = new string("Changing from IDLE to ChainMode. ");
 	myConveyorBelt->currentMode = ChainMode::getInstance();
 }
 
