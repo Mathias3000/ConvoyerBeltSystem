@@ -5,7 +5,7 @@
 
 #define MAXDIA 9
 #define MAXLINES 66
-#define MAXTOPLINES 5
+#define MAXTOPLINES 20
 #define MAX_STATE_NAME 20
 #define RAMP_UP 50
 #define RAMP_STEADY 300
