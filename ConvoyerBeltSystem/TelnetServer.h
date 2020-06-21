@@ -20,7 +20,7 @@ public:
 	// check if acually needed
 	double buffer2 = 0;		// buffer to save last speed value
 	bool dirBuffer = true;	// buffer to save last direction value: true = right & false = left
-	bool updateCommunicationType = false;
+	// bool updateCommunicationType = false;
 	static TelnetServer* getInstance();
 	
 	Command* parse();

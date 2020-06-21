@@ -107,7 +107,7 @@ void TCPServer::handleClientInput()
 	// Maybe set communication to network when changing to ChainMode: NO, only makes sense if in chainmode only TCP is used
 	// myConveyorBelt->currentMode->communication = ((ChainMode*)myConveyorBelt->currentMode)->network;
 	
-	updateCommunicationType = true;
+	// updateCommunicationType = true;
 	if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
 		requestBuffer++;
 		myStateMaschine->sendEvent("RecvCmdRequest");
@@ -162,7 +162,7 @@ void TCPServer::handleClientInput()
 	}
 	else
 	{
-		updateCommunicationType = false;
+		// updateCommunicationType = false;
 	}
 
 }

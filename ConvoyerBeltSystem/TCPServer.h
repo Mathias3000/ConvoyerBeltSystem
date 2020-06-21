@@ -45,12 +45,12 @@ private:
 	void threadClientHandler();
 	void handleClientInput();
 	void acceptClients();
-
+	bool isConnected = false;
 
 
 public: 
 	char buffer[BUF_SIZE];
-	bool updateCommunicationType = false;
+	// bool updateCommunicationType = false;
 	int speedBuffer = 0;
 	char dirBuffer;
 	string dataBuffer;

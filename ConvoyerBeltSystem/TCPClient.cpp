@@ -94,7 +94,7 @@ void TCPClient::handleServerInput()
     // Maybe set communication to network when changing to ChainMode: NO, only makes sense if in chainmode only TCP is used
     // myConveyorBelt->currentMode->communication = ((ChainMode*)myConveyorBelt->currentMode)->network;
 
-    updateCommunicationType = true;
+    // updateCommunicationType = true;
     // !!! Replave updateCom with a check, where the package is coming from: src
 
     if (input == "REQUEST\r\n" || input == "Request\r\n" || input == "request\r\n") {
@@ -114,7 +114,7 @@ void TCPClient::handleServerInput()
     }
     else
     {
-        updateCommunicationType = false;
+        // updateCommunicationType = false;
     }
 }
 
