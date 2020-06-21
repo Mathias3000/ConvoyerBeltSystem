@@ -11,6 +11,7 @@
 #include "defines.h"
 #include "Encoder.h"
 #include "Controller.h"
+// #include "../ConvoyerBeltSystem/Command.h"
 
 extern "C" {
 #include "gpio.h"
@@ -21,6 +22,11 @@ extern "C" {
 class Motor
 {
 public:
+	Encoder* myEncoder;
+	Controller* myController;
+	Controller* c;
+
+	Motor();
 	Motor(Encoder* encoder, Controller* controller);
 	~Motor();
 	int initMotor(); 
@@ -48,7 +54,6 @@ private:
 	int speed;
 	MotorState state = Stop;
 	Direction direction;
-	Encoder* myEncoder;
-	Controller* myController;
+
 };
 

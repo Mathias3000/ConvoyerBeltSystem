@@ -1,32 +1,69 @@
 #pragma once
-#include "keyboard.h"
-#include "stateMachine.h"
 #include <iostream>
-#include "SpeedProfile.h"
 #include <thread>
 #include <mutex>
-#include "MotorController.h"
+
+#include "stateMachine.h"
+#include "keyboard.h"
+
 #include "Helpers.h"
+#include "ConveyorBelt.h"
 
 using namespace std;
 
 
 class StateManager
 {
+private: 
+
 public: 
 
 	mutex mtx;
-
+	void init();
 	StateManager();
 	~StateManager();
-	void init();
 	void startStateMaschine();
 
 };
 
+// action and condition functions
+void noAction();
+void startLocalMode();
+void startChainMode();
+void selectLocalMode();
+void selectChainMode();
+void setSpeedPotentiometer();
+void setSpeedTelnet();
+void setDirectionKeyPad();
+void setDirectionTelnet();
+void followProfile();
+void finishedProfile();
+void updateMotorController();
+void handleRequest();
+void handleRequestRepeat();
+void checkRequestBuffer();
+void startSlowMovement();
+void requesting();
+void handleWait();
+void handleReady();
+void completingPassload();
+void releasePayload();
+
+
+bool noCondition();
+bool falseCondition();
+bool isProfileFinished();
+bool readyToReceive();
+
 // Function for reading keyInputs
 void readKeyInputs();
 
+
+
+
+
+
+// Functions for testing
 // implement noAction() only once for actual implementation
 void noAction1();
 void noAction2();

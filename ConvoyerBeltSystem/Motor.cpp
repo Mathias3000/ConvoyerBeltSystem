@@ -1,14 +1,34 @@
 #include "Motor.h"
 
-Motor::Motor(Encoder* encoder, Controller* controller) : myEncoder(encoder), myController(controller)
+// use this kind of ctor
+Motor::Motor()
 {
-	printf("Motor Konstruktor!\n");
+	myEncoder = new Encoder();
+	myController = new Controller();
+
 	//Create instances for hardware usage
 	this->IN1 = new gpioDescriptor;
 	this->pwmMotor = new pwmDescriptor;
 	this->spiDescMotor = new spiDescriptor;
 	this->bridgeEN = new gpioDescriptor;
 	this->bridgeDIS = new gpioDescriptor;
+
+	initMotor();
+}
+
+Motor::Motor(Encoder* encoder, Controller* controller) : myEncoder(encoder), myController(controller)
+{
+	//Create instances for hardware usage
+	this->IN1 = new gpioDescriptor;
+	this->pwmMotor = new pwmDescriptor;
+	this->spiDescMotor = new spiDescriptor;
+	this->bridgeEN = new gpioDescriptor;
+	this->bridgeDIS = new gpioDescriptor;
+}
+
+Motor::~Motor()
+{
+	delete this;
 }
 
 int Motor::initMotor()
@@ -57,7 +77,6 @@ int Motor::initMotor()
 	if (pwmSetPeriod_B(this->pwmMotor, 50000) < 0) return -1;
 	//if (pwmSetDuty_B(this->pwmMotor, 0)) return -1;
 	if (pwmSetPolarity_B(this->pwmMotor, 0)) return -1;
-	printf("SPI for Motor initialized!\n");
 	return 0;
 }
 
@@ -70,7 +89,7 @@ int Motor::setSpeedRPM(int speed)
 	else {
 		this->speed = 0;
 		//printf("speed should be between 100 - 2200!\n");
-		return -1;
+		return 0;
 	}
 }
 

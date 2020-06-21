@@ -6,7 +6,6 @@
 #include "Display.h"
 #include "TelnetServer.h"
 #include "TCPClient.h"
-#include "systemManager.h"
 #include "keyboard.h"
 #include "StateManager.h"
 #include "Potentiometer.h"
@@ -17,7 +16,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-#include <pthread.h>
+#include "MotorController.h"
 
 //#include "gpio.h"
 //#include "spi.h"
@@ -39,8 +38,9 @@ void testDisplay();			// shows some possible output of motor state
 void testTelnet();			// test with CMD line: telnet 192.168.7.2 4444
 void testTCPClient();		// test with socketTest tool: listen to 192.168.7.1 address with port 5555
 void testPotentiometer();
-void testMotor(int dir);
-
+void testMotor();
+void* followProfile(void*); //Thread handler for test purposes of followProfile()
+void testStateManager();
 void testSM();
 void testQEP();
 void testADC();

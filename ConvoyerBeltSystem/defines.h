@@ -5,6 +5,7 @@
 
 #define MAXDIA 9
 #define MAXLINES 66
+#define MAXTOPLINES 20
 #define MAX_STATE_NAME 20
 #define RAMP_UP 50
 #define RAMP_STEADY 300
@@ -20,6 +21,9 @@
 #define ENC_DELAY_NSEC 20000000
 #define ENC_DELAY_READ_QEP 20000	//Read the qep every x us
 #define ENC_DELAY_CALC_SPEED 10000	//Calculate the speed every x us
+
+// states, TODO: finish
+#define CMD_LOCAL "RecvCmdLocal"
 
 typedef enum
 {

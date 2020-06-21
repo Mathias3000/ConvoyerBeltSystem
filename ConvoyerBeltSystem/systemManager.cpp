@@ -4,7 +4,9 @@
 extern int n, m;
 StateMachine * myStateMachine;
 Keyboard* myKeyboard;
-MotorController* myMotorController;
+MotorController* 
+
+;
 
 SystemManager :: SystemManager() {
 	// Create the instance
@@ -151,6 +153,7 @@ void followProfile() {
 	printf(" IDLE -> switchToFollowProfile -> FollowProfile\n");
 	if (myMotorController->getConfiguredDirection() == Right) {
 		myMotorController->setMotorState(movingRight);
+		
 	}
 	else if (myMotorController->getConfiguredDirection() == Left) {
 		myMotorController->setMotorState(movingLeft);

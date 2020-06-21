@@ -34,9 +34,6 @@
     <ClCompile Include="TelnetServer.cpp">
       <Filter>Communication\Telnet</Filter>
     </ClCompile>
-    <ClCompile Include="ICommand.cpp">
-      <Filter>Communication\Command</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Communication\Command</Filter>
     </ClCompile>
@@ -89,20 +86,22 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
     <ClCompile Include="MotorController.cpp" />
-    <ClCompile Include="systemManager.cpp">
-      <Filter>FSM framework</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="spi.c">
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClCompile>
-
     <ClCompile Include="Discrete.c">
       <Filter>MotorController\Controller</Filter>
-
+    </ClCompile>
     <ClCompile Include="StateManager.cpp">
       <Filter>FSM framework</Filter>
-
+    </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Communication\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="ConveyorBelt.cpp" />
+    <ClCompile Include="ICommunication.cpp">
+      <Filter>Communication</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +140,6 @@
     </ClInclude>
     <ClInclude Include="TelnetServer.h">
       <Filter>Communication\Telnet</Filter>
-    </ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>Communication\Command</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Communication\Command</Filter>
@@ -197,12 +193,18 @@
       <Filter>FSM framework\HardwareFunctions</Filter>
     </ClInclude>
     <ClInclude Include="MotorController.h" />
-    <ClInclude Include="systemManager.h">
-      <Filter>FSM framework</Filter>
-    </ClInclude>
-
     <ClInclude Include="qep.h">
       <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Communication\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ConveyorBelt.h" />
+    <ClInclude Include="SystemLocation.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommunication.h">
+      <Filter>Communication</Filter>
     </ClInclude>
     <ClInclude Include="Discrete.h">
       <Filter>MotorController\Controller</Filter>
@@ -216,12 +218,9 @@
     <ClInclude Include="rtwtypes.h">
       <Filter>MotorController\Controller</Filter>
     </ClInclude>
-
     <ClInclude Include="StateManager.h">
       <Filter>FSM framework</Filter>
     </ClInclude>
-  
-
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FSM framework">

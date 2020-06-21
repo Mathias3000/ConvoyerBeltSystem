@@ -6,6 +6,9 @@
 #include <arpa/inet.h>
 #include <string>
 #include <iostream>
+#include <thread>
+#include <string.h>
+#include "stateMachine.h"
 
 #define HOST_IP "192.168.7.2"			// telnet
 #define CONVBELT_IP "91.0.0.7"			// tcp
@@ -15,6 +18,10 @@
 
 #define BUF_SIZE 128
 
+#define SPEED_CMD "tel speed"
+#define DIR_CMD "tel dir"
+
+
 using namespace std;
 
 class TCPServer
@@ -23,6 +30,8 @@ private:
 
 	int port = TCP_PORT;	// default
 	in_addr_t socketAddress = inet_addr(HOST_IP);	// default
+	int opt = 1;
+
 
 	int listening;
 	sockaddr_in server;
@@ -31,15 +40,25 @@ private:
 	char host[NI_MAXHOST];
 	char svc[NI_MAXSERV];	// services
 	int clientSocket;
-	char buffer[BUF_SIZE];
 
 	int init();
+	void threadClientHandler();
+	void handleClientInput();
+	void acceptClients();
+	bool isConnected = false;
+
 
 public: 
-	TCPServer(in_addr_t IPAddress, int port);
+	char buffer[BUF_SIZE];
+	// bool updateCommunicationType = false;
+	int speedBuffer = 0;
+	char dirBuffer;
+	string dataBuffer;
+	int requestBuffer = 0;
+
+	TCPServer(char* IPAddress, int port);
+	TCPServer();
 	~TCPServer();
-	char* recv();
-
-
+	void sendData(string data);
 };
 

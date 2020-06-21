@@ -11,5 +11,6 @@ using namespace std;
 // etc. 
 
 void sleep(int milliseconds);
+char* stringToCharArray(string* str);
 
 
