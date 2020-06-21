@@ -102,10 +102,10 @@ int MotorController::startProfile()
 int MotorController::followProfile()
 {	
 	unsigned int steps = mySpeedProfile->getStepCounter();
-	int speed = this->getConfiguredSpeedRPM();		// Was sollte das erreichen? wieso speed 0 oder 1?
+	int speed = this->getConfiguredSpeedRPM();		
 	int desiredSpeed, currentSpeed, error;
 	double output, duty, outputInvolts;
-	Discrete_initialize();
+	//Discrete_initialize();
 	//this->myMotor->setDutyCycle(0);
 	pwmSetEnable_B(this->myMotor->pwmMotor, 1);
 	//accelerate
@@ -132,7 +132,8 @@ int MotorController::followProfile()
 		duty = (outputInvolts * PWM_PER) / 7;
 		this->setMotorDutyCycle((int)duty);
 	}
-	printf("duty: %0.2f steps: \n", duty, steps);
+	printf("steps: %d Ist-Speed: %d Soll-Speed: %d duty: %0.2f  \n", steps, currentSpeed, desiredSpeed, duty );
+
 	if (steps >= 400) {
 		this->myMotor->stopMotor();
 		this->myMotor->setStatus(Stop);

@@ -75,11 +75,12 @@ void ConveyorBelt::init()
 	// use singleton design pattern to avoid multiple instances of local and chain mode
 	currentMode = ChainMode::getInstance();
 	currentMode = LocalMode::getInstance();
-	this->workerDisplayUI = thread(&ConveyorBelt::displayUI, this); //start thread Display UI
+	//this->workerDisplayUI = thread(&ConveyorBelt::displayUI, this); //start thread Display UI
 }
 
 int ConveyorBelt::displayUI()
 {
+	/*
 	char displayLine[MAX_CONS_LEN];
 	const char* tempData;
 	string tempString;
@@ -162,6 +163,7 @@ int ConveyorBelt::displayUI()
 		sleep(1);
 		this->currentMode->display->displayClear();
 	}
+	*/
 	return 0;
 }
 

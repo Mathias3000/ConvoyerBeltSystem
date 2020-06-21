@@ -216,6 +216,7 @@ void followProfile() {
 	else if (myConveyorBelt->currentMode->motorController->getConfiguredDirection() == Left) {
 		myConveyorBelt->currentMode->motorController->setMotorState(movingLeft);
 	}
+	Discrete_initialize();
 	/*
 	if (myConveyorBelt->currentMode->motorController->getConfiguredSpeedRPM() != 0) {	// orig: != 0, why?
 		myConveyorBelt->currentMode->motorController->startProfile();
