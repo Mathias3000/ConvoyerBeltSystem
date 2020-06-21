@@ -14,7 +14,7 @@ private:
 
 public: 
 
-	bool updateCommunicationType = false;
+	// bool updateCommunicationType = false;
 	static UserInterface* getInstance();
 
 

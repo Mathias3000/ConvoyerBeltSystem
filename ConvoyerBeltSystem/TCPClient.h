@@ -29,7 +29,7 @@ private:
 
 public: 
 
-	bool updateCommunicationType = false;
+	// bool updateCommunicationType = false;
 	char buffer[BUF_SIZE];
 
 	TCPClient(in_addr_t serverAddress, int port);
