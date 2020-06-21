@@ -2,9 +2,11 @@
 #include "keyboard.h"
 
 int keyCount;
+extern Keyboard* myKeyBoard;
 
 Keyboard :: Keyboard() {
-	printf("Keyboard Konstruktor!\n");	
+	kbdd = new kbdDescriptor();
+	initKeyboard(kbdd);
 	return;
 }
 
@@ -15,6 +17,11 @@ Keyboard :: ~Keyboard() {
 
 char Keyboard::getPressedKey( )
 {
-	printf(".\n"); //	Instead of printing dots the keyboard could be scanned here
-	return pressedKey;
+
+	char currentValue = getKey(kbdd);
+	sleep(10);	// implement a more elegant way of sleep: maybe timer
+
+	return currentValue;
+
+
 }

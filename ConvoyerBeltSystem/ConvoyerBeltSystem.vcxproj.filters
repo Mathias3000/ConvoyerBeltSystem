@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="diaTimer.cpp">
+      <Filter>FSM framework</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboard.cpp">
+      <Filter>FSM framework</Filter>
+    </ClCompile>
+    <ClCompile Include="setMyIP.cpp">
+      <Filter>FSM framework</Filter>
+    </ClCompile>
+    <ClCompile Include="stateMachine.cpp">
+      <Filter>FSM framework</Filter>
+    </ClCompile>
+    <ClCompile Include="stateTable.cpp">
+      <Filter>FSM framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>Communication\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient.cpp">
+      <Filter>Communication\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer.cpp">
+      <Filter>Communication\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="Potentiometer.cpp">
+      <Filter>Communication\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyPad.cpp">
+      <Filter>Communication\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="TelnetServer.cpp">
+      <Filter>Communication\Telnet</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Communication\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Mode.cpp">
+      <Filter>Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainMode.cpp">
+      <Filter>Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalMode.cpp">
+      <Filter>Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TestFunctions.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>MotorController\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>Display</Filter>
+    </ClCompile>
+    <ClCompile Include="Encoder.cpp">
+      <Filter>MotorController\Motor</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor.cpp">
+      <Filter>MotorController\Motor</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedProfile.cpp">
+      <Filter>MotorController\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorController.cpp">
+      <Filter>MotorController</Filter>
+    </ClCompile>
+    <ClCompile Include="cons.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="funcs.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="gpio.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="pwm.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="qep.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorController.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="spi.c">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Discrete.c">
+      <Filter>MotorController\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>FSM framework</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Communication\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="ConveyorBelt.cpp" />
+    <ClCompile Include="ICommunication.cpp">
+      <Filter>Communication</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="defines.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboard.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="diaTimer.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="myFunctions.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="stateMachine.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="stateTable.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>Communication\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPClient.h">
+      <Filter>Communication\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPServer.h">
+      <Filter>Communication\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="Potentiometer.h">
+      <Filter>Communication\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPad.h">
+      <Filter>Communication\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="TelnetServer.h">
+      <Filter>Communication\Telnet</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Communication\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Mode.h">
+      <Filter>Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainMode.h">
+      <Filter>Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalMode.h">
+      <Filter>Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TestFunctions.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Display.h">
+      <Filter>Display</Filter>
+    </ClInclude>
+    <ClInclude Include="Encoder.h">
+      <Filter>MotorController\Motor</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor.h">
+      <Filter>MotorController\Motor</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedProfile.h">
+      <Filter>MotorController\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="MotorController.h">
+      <Filter>MotorController</Filter>
+    </ClInclude>
+    <ClInclude Include="spi.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="cons.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="funcs.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="pwm.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="MotorController.h" />
+    <ClInclude Include="qep.h">
+      <Filter>FSM framework\HardwareFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Communication\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ConveyorBelt.h" />
+    <ClInclude Include="SystemLocation.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommunication.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete_private.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Discrete_types.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="rtwtypes.h">
+      <Filter>MotorController\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
+      <Filter>FSM framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="FSM framework">
+      <UniqueIdentifier>{8dd46300-9098-4165-b3c1-414570359de0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication">
+      <UniqueIdentifier>{bc7e6bce-5f82-4302-bf07-b7c348679cfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\Networking">
+      <UniqueIdentifier>{342418b5-3ea1-4ec8-9350-b02bcc5f268e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\Telnet">
+      <UniqueIdentifier>{bb192450-93a9-44ec-be43-85916616296a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\UserInterface">
+      <UniqueIdentifier>{bfe3a4ad-6c5f-4255-ab8f-3c04ed6adf1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Communication\Command">
+      <UniqueIdentifier>{7e90b5bb-f22d-4602-837d-d99d222937cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modes">
+      <UniqueIdentifier>{fba85525-dd4a-49c7-b91e-b73c53659efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{8b8b0020-57f2-4c39-bf2f-c03461e4b53b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Display">
+      <UniqueIdentifier>{6d7cef5d-4fa5-47d3-bb50-9f435e170f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController">
+      <UniqueIdentifier>{fa2115e6-edd7-4657-a5ba-699bfb8c71a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController\Motor">
+      <UniqueIdentifier>{8226994e-081d-4e08-97b8-1e692da7cffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController\Controller">
+      <UniqueIdentifier>{3d3d0cc1-1440-436e-b3fa-ea7150697e9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MotorController\Profile">
+      <UniqueIdentifier>{2d03bc26-fc20-49ee-9d81-0b8d485290fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM framework\HardwareFunctions">
+      <UniqueIdentifier>{cc175e9b-e054-46f9-95be-6d025468afa7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

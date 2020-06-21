@@ -8,7 +8,7 @@
 #include "stateMachine.h"
 
 StateMachine :: StateMachine() {
-	// Create the instance
+	printf("Statemachine Konstruktor!\n");
 	return;
 }
 
@@ -65,20 +65,22 @@ std::string StateMachine :: getEvent() {
 }
 
 void StateMachine :: runToCompletion() {
+	printf("State Machine starting...!\n");
 	std::string actualEvent;
 	int d,i,j;
+
 	while (true) {
 		if (sem_wait(&semEvent) != 0)
 			perror ("Sem wait"); // Wait for an event to arrive
 		actualEvent = getEvent(); // Get the event from the queue
-//		printf(actualEvent.c_str()); // For debug purposes only
+		//printf(actualEvent.c_str()); // For debug purposes only
 		for (d = 0; d < diagrams; d++) {
 			for (i = 0; i < lines[d]; i++) {
 				if ((actualState[d] == tab[d][i]->actState) && 
 						(actualEvent == tab[d][i]->myEvent) && 
 						((*tab[d][i]->condition)() == true)) { // Call the condition function which returns bool
 					actualState[d] = tab[d][i]->nextState;
-					(*tab[d][i]->action)(); //Call the funtion defined by pointer action
+					(*tab[d][i]->action)(); //Call the funtion defined by pointer action									
 					for (j = 0; j < lines[d]; j++) {
 						if ((actualState[d] == tab[d][j]->actState) && 
 								(tab[d][j]->myEvent == (diaTimerTable[d]->timerName))) {

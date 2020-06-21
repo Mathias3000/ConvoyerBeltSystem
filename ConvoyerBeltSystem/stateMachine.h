@@ -9,6 +9,9 @@
 #include "diaTimer.h"
 #include "stateTable.h"
 
+extern int n, m;
+extern StateMachine* myStateMaschine;
+
 class StateMachine {
 public:
 	StateMachine();
