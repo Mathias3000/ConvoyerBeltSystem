@@ -10,60 +10,6 @@ ConveyorBelt::~ConveyorBelt()
 	delete this;
 }
 
-void ConveyorBelt::updateCurrentCommunicationType()
-{
-	updateMutex.lock();
-	// Check in LocalMode and ChainMode
-	// Check if update flag is set and the instance is not NULL
-	if (((LocalMode*)currentMode)->userInterface != NULL) {
-		if (((LocalMode*)currentMode)->userInterface->updateCommunicationType)
-		{
-			currentMode->communication = ((LocalMode*)currentMode)->userInterface;
-			((LocalMode*)currentMode)->userInterface->updateCommunicationType = false;
-		}
-	}
-	else if (((LocalMode*)currentMode)->telnetServer != NULL)
-	{
-		if (((LocalMode*)currentMode)->telnetServer->updateCommunicationType)
-		{
-			currentMode->communication = ((LocalMode*)currentMode)->telnetServer;
-			((LocalMode*)currentMode)->telnetServer->updateCommunicationType = false;
-		}
-	}
-	else if (((ChainMode*)currentMode)->network->leftConveyorBelt != NULL)
-	{
-		if (((ChainMode*)currentMode)->network->leftConveyorBelt->updateCommunicationType)
-		{
-			currentMode->communication = ((ChainMode*)currentMode)->network;
-			((ChainMode*)currentMode)->network->leftConveyorBelt->updateCommunicationType = false;
-		}
-	}
-	else if (((ChainMode*)currentMode)->network->rightConveyorBelt != NULL)
-	{
-		if (((ChainMode*)currentMode)->network->rightConveyorBelt->updateCommunicationType)
-		{
-
-		}
-	}
-	else if (((ChainMode*)currentMode)->network->master != NULL)
-	{
-		if (((ChainMode*)currentMode)->network->master->updateCommunicationType)
-		{
-			currentMode->communication = ((ChainMode*)currentMode)->network;
-			((ChainMode*)currentMode)->network->master->updateCommunicationType = false;
-		}
-	}
-	else
-	{
-
-	}
-	updateMutex.unlock();
-}
-
-void ConveyorBelt::resetCommunicationFlags()
-{
-}
-
 void ConveyorBelt::stopDisplayUI()
 {
 	this->stop == true;
@@ -73,96 +19,109 @@ void ConveyorBelt::init()
 {
 	// Instiate local and chain mode + set local default
 	// use singleton design pattern to avoid multiple instances of local and chain mode
-	//currentMode = ChainMode::getInstance();
+	currentMode = ChainMode::getInstance();
 	currentMode = LocalMode::getInstance();
 	this->workerDisplayUI = thread(&ConveyorBelt::displayUI, this); //start thread Display UI
+
+
+
 }
 
 int ConveyorBelt::displayUI()
 {
-	char displayLine[MAX_CONS_LEN];
-	const char* tempData;
-	string tempString;
-	int configuredSpeed, actualSpeed;
-	Direction configuredDirection;
-	MotorState actualMotorState;
-
-	//mögliche Telnet Befehle, Keypad Befehle ganz oben anzeigen
-	char* topLines[MAXTOPLINES] = { "Possible Keypad commands:", 
-		"1: right, 2: left, 3: follow Profile, 4: stop,",
-		"F: go to chain mode, D: Set speed via potentiometer",
-		"Possible Telnet commands:", 
-		"tel:start, tel:stop, tel dir:right, tel dir:left, tel speed:xxxx" 
-	};
-
-	this->currentMode->display->displayClear();
-
 	while (!stop)
 	{
-		//display the very top lines
-		for (int i = 0; i < MAXTOPLINES; i++) {
-			this->currentMode->display->displayLine(topLines[i]);
-		}
-		//display configured speed:
-		configuredSpeed = currentMode->motorController->getConfiguredSpeedRPM();
-		tempString = to_string(configuredSpeed);
-		tempData = tempString.c_str();
-		strcpy(displayLine, "Configured speed is: ");
-		strcat(displayLine, tempData);
-		this->currentMode->display->displayLine(displayLine);
-		//display configured direction:
-		configuredDirection = currentMode->motorController->getConfiguredDirection();
-		if (configuredDirection == Right) {
-			strcpy(displayLine, "Configured direction is: Right");
-			this->currentMode->display->displayLine(displayLine);
-		}
-		else if (configuredDirection == Left) {
-			strcpy(displayLine, "Configured direction is: Left");
-			this->currentMode->display->displayLine(displayLine);
-		};
-		//display actual motor state:
-		actualMotorState = currentMode->motorController->getMotorState();
-		if (actualMotorState == movingLeft) {
-			strcpy(displayLine, "Motor state: left");
-			this->currentMode->display->displayLine(displayLine);
-		}
-		else if (actualMotorState == movingRight) {
-			strcpy(displayLine, "Motor state: right");
-			this->currentMode->display->displayLine(displayLine);
-		}
-		else if (actualMotorState == Stop) {
-			strcpy(displayLine, "Motor state: stopped");
-			this->currentMode->display->displayLine(displayLine);
-		};
-		//display currents speed:
-		actualSpeed = currentMode->motorController->getCurrentSpeedRPM();
-		tempString = to_string(actualSpeed);
-		tempData = tempString.c_str();
-		strcpy(displayLine, "Actual speed is: ");
-		strcat(displayLine, tempData);
-		this->currentMode->display->displayLine(displayLine);
-
-		//if in chain mode:
-		if(currentMode == ChainMode::getInstance()) {
-			strcpy(displayLine, "System in currently chain mode");
-			this->currentMode->display->displayLine(displayLine);
-			strcpy(displayLine, "current commands from Conveyorbelt right, left and from the master: ");
-			this->currentMode->display->displayLine(displayLine);
-
-			//letzte Befehle von Links, Rechts, Master anzeigen
-
-		}
-		
-		// local mode: in beide Richtungen fahren, gestartet und gestoppt, vor dem starten speed von 100-2200 einstellbar
-		if (currentMode == LocalMode::getInstance()) {
-			strcpy(displayLine, "System currently in local mode");
-			this->currentMode->display->displayLine(displayLine);
-		}
-
-		sleep(1);
-		this->currentMode->display->displayClear();
+		// test
+		// displayMutex.lock();
+		showDisplayOutput();
+		usleep(500000);
+		// this_thread::sleep_for(chrono::milliseconds(300));		
+				
 	}
 	return 0;
+}
+
+void ConveyorBelt::showDisplayOutput()
+{
+	this->currentMode->display->displayClear();
+
+	//display the very top lines
+	for (int i = 0; i < 7; i++) {
+		this->currentMode->display->displayLine(commands[i]);
+	}
+	for (int i = 0; i < 4; i++) {
+		this->currentMode->display->displayLine(commands2[i]);
+	}
+
+	usleep(10000);
+	string s = typeid(*myConveyorBelt->currentMode).name();
+	char* writable = new char[s.size() + 1];
+	std::copy(s.begin(), s.end(), writable);
+	writable[s.size()] = '\0'; // don't forget the terminating 0
+	char* data = writable + 1;
+
+	char* currentOpMode[2] = {
+		stringToCharArray(new string("SYSTEM PARAMETERS: ")),
+		stringToCharArray(new string("current operation mode: " + string(data)))
+	};
+
+	// TODO: in one line: concat char*
+	for (int i = 0; i < 2; i++) {
+		this->currentMode->display->displayLine(currentOpMode[i]);
+	}
+
+	char* currentState[4] = {
+		"",
+		"current states in statemaschine: ",
+		"[LOCAL diagram]\t\t\t[CHAIN diagram]",
+		stringToCharArray(new string(myStateMaschine->actualState[0] + "\t\t\t\t" + myStateMaschine->actualState[1]))
+	};
+	for (int i = 0; i < 4; i++) {
+		this->currentMode->display->displayLine(currentState[i]);
+	}
+
+	string dir;
+	if (myConveyorBelt->currentMode->motorController->getConfiguredDirection() == 0) {
+		dir = "Right";
+	}
+	else
+	{
+		dir = "Left";
+	}
+
+	string state;
+	switch (myConveyorBelt->currentMode->motorController->getMotorState())
+	{
+	case MotorState::movingLeft: 
+		state = "MovingLeft";
+		break;
+	case MotorState::movingRight: 
+		state = "MovingRight";
+		break;
+	case MotorState::Stop: 
+		state = "Stop";
+		break;
+	default:
+		break;
+	}
+
+	char* motorInfo[7] = {
+		"",
+		"MOTOR PARAMETERS: ",
+		stringToCharArray(new string("defined max speed: \t" + to_string(myConveyorBelt->currentMode->motorController->getConfiguredSpeedRPM()) + "rpm")),
+		stringToCharArray(new string("direction: \t\t" + dir)),
+		stringToCharArray(new string("motor state: \t\t" + state)), 
+		"================================================================================",
+		"CURRENT ACTIONS"
+
+	};
+	for (int i = 0; i < 7; i++) {
+		this->currentMode->display->displayLine(motorInfo[i]);
+	}
+
+	// print current action
+	this->currentMode->display->displayLine(stringToCharArray(currentAction));
+
 }
 
 
