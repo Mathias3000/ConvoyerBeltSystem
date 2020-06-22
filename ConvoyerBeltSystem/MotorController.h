@@ -46,12 +46,12 @@ public:
 	int startProfile();
 	//int updateController();
 	void oneStep();
-
+	int followProfile();
 	bool readyToRecvPayload();
 	bool finishedProfile();
 
 private:
-	int followProfile();
+	
 	bool profileRunning = false;
 	int currentSteps;
 	double currentSpeed = 1000;		// default: 1000 rpm

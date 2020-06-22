@@ -22,23 +22,6 @@ void ConveyorBelt::init()
 	currentMode = ChainMode::getInstance();
 	currentMode = LocalMode::getInstance();
 	this->workerDisplayUI = thread(&ConveyorBelt::displayUI, this); //start thread Display UI
-
-
-
-}
-
-int ConveyorBelt::displayUI()
-{
-	while (!stop)
-	{
-		// test
-		// displayMutex.lock();
-		showDisplayOutput();
-		usleep(500000);
-		// this_thread::sleep_for(chrono::milliseconds(300));		
-				
-	}
-	return 0;
 }
 
 void ConveyorBelt::showDisplayOutput()
@@ -124,6 +107,20 @@ void ConveyorBelt::showDisplayOutput()
 	// print current action
 	this->currentMode->display->displayLine(stringToCharArray(currentAction));
 
+}
+
+int ConveyorBelt::displayUI()
+{
+	while (!stop)
+	{
+		// test
+		// displayMutex.lock();
+		showDisplayOutput();
+		usleep(500000);
+		// this_thread::sleep_for(chrono::milliseconds(300));		
+
+	}
+	return 0;
 }
 
 

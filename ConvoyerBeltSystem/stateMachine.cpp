@@ -70,6 +70,7 @@ void StateMachine :: runToCompletion() {
 	int d,i,j;
 
 	while (true) {
+
 		if (sem_wait(&semEvent) != 0)
 			perror ("Sem wait"); // Wait for an event to arrive
 		actualEvent = getEvent(); // Get the event from the queue

@@ -26,6 +26,7 @@ void StateManager::init()
 
 	// DEFINE STATE CHARTS
 	// Local Mode Chart
+
 	// myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, startLocalMode, noCondition);
 	myStateMaschine->tab[0][0] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, selectChainMode, noCondition);	// reset to local mit cmd
 	myStateMaschine->tab[0][1] = new TableEntry("Chain", "Local", "Reset", 0, noAction, noCondition);	// reset to local 
@@ -34,7 +35,7 @@ void StateManager::init()
 	myStateMaschine->tab[0][4] = new TableEntry("Local", "Local", "RecvCmdDirectionKeyPad", 0, setDirectionKeyPad, noCondition);
 	myStateMaschine->tab[0][5] = new TableEntry("Local", "Local", "RecvCmdDirectionTelnet", 0, setDirectionTelnet, noCondition);
 	myStateMaschine->tab[0][6] = new TableEntry("Local", "FollowProfile", "RecvCmdFollowProfile", 0, followProfile, noCondition);
-	myStateMaschine->tab[0][7] = new TableEntry("FollowProfile", "FollowProfile", "Timer0", 20, updateSteps, isProfileFinished);
+	myStateMaschine->tab[0][7] = new TableEntry("FollowProfile", "FollowProfile", "Timer0", 20, updateMotorController, isProfileFinished);
 	myStateMaschine->tab[0][8] = new TableEntry("FollowProfile", "Local", "finishedProfile", 0, finishedProfile, noCondition);
 
 	// Chain Chart
@@ -50,7 +51,7 @@ void StateManager::init()
 	myStateMaschine->tab[1][8] = new TableEntry("ReceivingPayload", "ReceivingPayloadFinished", "Timer1", 1000, releasePayload, noCondition);
 	myStateMaschine->tab[1][9] = new TableEntry("ReceivingPayloadFinished", "ReceivingPayloadFinished", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
 	myStateMaschine->tab[1][10] = new TableEntry("ReceivingPayloadFinished", "FollowProfile", "ReleasedPayload", 0, followProfile, noCondition);
-	myStateMaschine->tab[1][11] = new TableEntry("FollowProfile", "FollowProfile", "Timer1", 20, updateSteps, isProfileFinished);
+	myStateMaschine->tab[1][11] = new TableEntry("FollowProfile", "FollowProfile", "Timer1", 20, updateMotorController, isProfileFinished);
 	myStateMaschine->tab[1][12] = new TableEntry("FollowProfile", "Requesting", "finishedProfile", 0, requesting, isProfileFinished);
 	myStateMaschine->tab[1][13] = new TableEntry("Requesting", "Requesting", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
 	myStateMaschine->tab[1][14] = new TableEntry("Requesting", "Requesting", "RecvCmdWait", 0, handleWait, noCondition);
@@ -59,7 +60,6 @@ void StateManager::init()
 	myStateMaschine->tab[1][17] = new TableEntry("Passload", "Passload", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
 	myStateMaschine->tab[1][18] = new TableEntry("PassloadCompleted", "PassloadCompleted", "RecvCmdRequest", 0, handleRequestRepeat, noCondition);
 	myStateMaschine->tab[1][19] = new TableEntry("PassloadCompleted", "Chain", "RecvCmdRelease", 0, checkRequestBuffer, noCondition);
-
 
 	// Initialize timer names for all diagrams
 	// e.g. Diagram 0 uses Timer0, ... 
@@ -92,8 +92,6 @@ void StateManager::startStateMaschine()
 	this_thread::sleep_for(chrono::microseconds(50));
 	// mtx.unlock();
 }
-
-
 
 // Defining global functions
 // ACTIONS
@@ -201,9 +199,6 @@ void setDirectionTelnet() {
 }
 
 void followProfile() {
-
-	// cout << "\nLocal -> FollowProfile" << endl;
-
 	if (myConveyorBelt->currentMode->motorController->getConfiguredDirection() == Right) {
 		myConveyorBelt->currentMode->motorController->setMotorState(movingRight);
 
@@ -211,31 +206,20 @@ void followProfile() {
 	else if (myConveyorBelt->currentMode->motorController->getConfiguredDirection() == Left) {
 		myConveyorBelt->currentMode->motorController->setMotorState(movingLeft);
 	}
-	if (myConveyorBelt->currentMode->motorController->getConfiguredSpeedRPM() != 0) {	// speed != 0
-		myConveyorBelt->currentMode->motorController->startProfile();
-	}
-	else
-	{
-		cout << "speed not set!\n" << endl;
-		myConveyorBelt->currentMode->motorController->setMotorState(Stop);
-	}
+	Discrete_initialize();
 	cout << "\nStarted Profile" << endl;
 	myConveyorBelt->currentAction = new string("Started following profile ... ");
 }
 
 void finishedProfile() {
-
 	cout << "\nFollowProfile  -> Steps completed -> Local" << endl;
 	myConveyorBelt->currentAction = new string("Finished profile. ");
-	//myMotorController->stop();
-	//myMotorController->resetStepCounter();
-
-
 }
 
-void updateSteps() 
+void updateMotorController() 
 {
 	myConveyorBelt->currentMode->motorController->incrementStepCounter();
+	myConveyorBelt->currentMode->motorController->followProfile();
 	myConveyorBelt->currentAction = new string("Updating profile steps. ");
 }
 
@@ -343,7 +327,6 @@ bool falseCondition()
 	return false;
 }
 
-
 bool isProfileFinished() {
 	int steps = myConveyorBelt->currentMode->motorController->getStepCounter();
 	MotorState state = myConveyorBelt->currentMode->motorController->getMotorState();
@@ -370,90 +353,6 @@ bool readyToReceive()
 	return myConveyorBelt->currentMode->motorController->readyToRecvPayload();
 
 }
-
-
-
-
-
-
-// TEST OF STATEMASCHINE
-// Test-Function for reading keyInputs
-//void readKeyInputs()
-//{
-//	char readKey;
-//
-//	while (true) {
-//
-//		readKey = myKeyBoard->getPressedKey();
-//		sleep(100);
-//
-//		// Evaluate
-//		// -- Events		
-//		// [1] RecvCmdLocal
-//		// [2] RecvCmdSpeed
-//		// [3] RecvCmdDirection
-//		// [4] RecvCmdFollowProfile
-//		// [5] motorControllerFinishedProfile
-//		// [6] RecvCmdChain
-//		// [7] RecvCmdRequest
-//		// [8] motorControllerReadToRecvPayload
-//		// [9] SendRelease
-//		// [0] motorControllerFinishedProfile
-//		// [A] RecvCmdWait
-//		// [B] RecvCmdReady
-//		// [C] RecvCmdRelease
-//
-//
-//		// mtxKeys.lock();
-//		switch (readKey)
-//		{
-//		case '0':
-//			myStateMaschine->sendEvent("motorControllerFinishedProfile");
-//			break;
-//		case '1':
-//			myStateMaschine->sendEvent("RecvCmdLocal");
-//			break;
-//		case '2':
-//			myStateMaschine->sendEvent("RecvCmdSpeed");
-//			break;
-//		case '3':
-//			myStateMaschine->sendEvent("RecvCmdDirection");
-//			break;
-//		case '4':
-//			myStateMaschine->sendEvent("RecvCmdFollowProfile");
-//			break;
-//		case '5':
-//			myStateMaschine->sendEvent("motorControllerFinishedProfile");
-//			break;
-//		case '6':
-//			myStateMaschine->sendEvent("RecvCmdChain");
-//			break;
-//		case '7':
-//			myStateMaschine->sendEvent("RecvCmdRequest");
-//			break;
-//		case '8':
-//			myStateMaschine->sendEvent("motorControllerReadyToRecvPayload");
-//			break;
-//		case '9':
-//			myStateMaschine->sendEvent("SendRelease");
-//			break;
-//		case 'A':
-//			myStateMaschine->sendEvent("RecvCmdWait");
-//			break;
-//		case 'B':
-//			myStateMaschine->sendEvent("RecvCmdReady");
-//			break;
-//		case 'C':
-//			myStateMaschine->sendEvent("RecvCmdReleased");
-//			break;
-//
-//		default:
-//			break;
-//		}
-//		// mtxKeys.unlock();
-//	}
-//
-//}
 
 //  ACTIONS FOR TESTING
 void noAction() {

@@ -38,7 +38,7 @@ void setDirectionKeyPad();
 void setDirectionTelnet();
 void followProfile();
 void finishedProfile();
-void updateSteps();
+void updateMotorController();
 void handleRequest();
 void handleRequestRepeat();
 void checkRequestBuffer();
