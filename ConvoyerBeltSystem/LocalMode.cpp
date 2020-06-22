@@ -8,7 +8,7 @@ LocalMode::LocalMode():Mode()
 
 LocalMode* LocalMode::getInstance()
 {
-	if (instance == NULL) {
+	if (instance == nullptr) {
 		instance = new LocalMode();
 	}
 	return instance;

@@ -8,7 +8,7 @@ UserInterface::UserInterface()
 
 UserInterface* UserInterface::getInstance()
 {
-	if (instance == NULL) {
+	if (instance == nullptr) {
 		instance = new UserInterface();
 	}
 	return instance;
