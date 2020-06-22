@@ -27,7 +27,6 @@ void StateManager::init()
 	// DEFINE STATE CHARTS
 	// Local Mode Chart
 
-	// myStateMaschine->tab[0][0] = new TableEntry("Idle", "Local", "RecvCmdLocal", 0, startLocalMode, noCondition);
 	myStateMaschine->tab[0][0] = new TableEntry("Local", "Chain", "RecvCmdChain", 0, selectChainMode, noCondition);	// reset to local mit cmd
 	myStateMaschine->tab[0][1] = new TableEntry("Chain", "Local", "Reset", 0, noAction, noCondition);	// reset to local 
 	myStateMaschine->tab[0][2] = new TableEntry("Local", "Local", "RecvCmdSetSpeedPoti", 0, setSpeedPotentiometer, noCondition);
@@ -39,7 +38,6 @@ void StateManager::init()
 	myStateMaschine->tab[0][8] = new TableEntry("FollowProfile", "Local", "finishedProfile", 0, finishedProfile, noCondition);
 
 	// Chain Chart
-	// myStateMaschine->tab[1][0] = new TableEntry("Idle", "Chain", "RecvCmdChain", 0, startChainMode, noCondition);
 	myStateMaschine->tab[1][0] = new TableEntry("Chain", "Local", "RecvCmdLocal", 0, selectLocalMode, noCondition);
 	myStateMaschine->tab[1][1] = new TableEntry("Local", "Chain", "Reset", 0, noAction, noCondition);
 	myStateMaschine->tab[1][2] = new TableEntry("Chain", "Chain", "RecvCmdSetSpeedPoti", 0, setSpeedPotentiometer, noCondition);
@@ -118,7 +116,6 @@ void selectChainMode() {
 	cout << "\Local -> Chain" << endl;
 	myConveyorBelt->currentMode = ChainMode::getInstance();
 	myConveyorBelt->currentAction = new string("Selected Chain Mode. ");
-	myConveyorBelt->showDisplayOutput();
 	myStateMaschine->sendEvent("Reset");
 }
 
@@ -260,12 +257,15 @@ void handleRequestRepeat()
 void checkRequestBuffer()
 {
 	cout << "\nPassload -> Chain" << endl;
-	myConveyorBelt->currentAction = new string("Checking Request buffer. ");
+
 
 	myConveyorBelt->currentMode->communication = Network::getInstance();
 	Command* cmd = myConveyorBelt->currentMode->communication->parse();
 
 	int reqBufferCount = stoi(cmd->data) - 1;	// first request is always processed
+
+	myConveyorBelt->currentAction = new string("Checking Request buffer. Open requests: " + to_string(reqBufferCount));
+
 	if (reqBufferCount > 0) {
 		myStateMaschine->sendEvent("RecvCmdRequest");
 	}
@@ -281,7 +281,7 @@ void startSlowMovement()
 void requesting()
 {
 	cout << "\nFollowProfile -> Requesting" << endl;
-	myConveyorBelt->currentAction = new string("Sent request to right conveyorbelt. ");
+	myConveyorBelt->currentAction = new string("Sent request to right conveyorbelt. Waiting for 'wait' or 'ready'. ");
 
 	// send request to right
 	myConveyorBelt->currentMode->communication = Network::getInstance();
@@ -293,7 +293,7 @@ void requesting()
 void handleWait()
 {
 	cout << "\nRequesting -> Requesting" << endl;
-	myConveyorBelt->currentAction = new string("Waiting for right conveyorbelt. ");
+	myConveyorBelt->currentAction = new string("Waiting for 'ready' from right conveyorbelt. ");
 	// stay in state
 	// stop motor
 	myConveyorBelt->currentMode->motorController->stop();
@@ -310,7 +310,7 @@ void handleReady()
 void completingPassload()
 {
 	cout << "\nPassload -> PassloadCompleted" << endl;
-	myConveyorBelt->currentAction = new string("Finished passing payload to right conveyorbelt. ");
+	myConveyorBelt->currentAction = new string("Finished passing payload to right conveyorbelt. Waiting for 'release'. ");
 	myConveyorBelt->currentMode->motorController->stop();
 	// reset status to stop
 	myConveyorBelt->currentMode->motorController->myMotor->setStatus(MotorState::Stop);
@@ -336,16 +336,17 @@ bool isProfileFinished() {
 		myStateMaschine->sendEvent("finishedProfile");
 		return false;
 	}
-	else if (steps <= (RAMP_UP + RAMP_STEADY + RAMP_DOWN))
-	{
-		return true;
-	}
-	else if (steps > (RAMP_UP + RAMP_STEADY + RAMP_DOWN)) {
+	if (steps >= (RAMP_UP + RAMP_STEADY + RAMP_DOWN - 1)) {		
 		myConveyorBelt->currentMode->motorController->stop();
 		myConveyorBelt->currentMode->motorController->resetStepCounter();
 		myStateMaschine->sendEvent("finishedProfile");
 		return false;
 	}
+	if (steps < (RAMP_UP + RAMP_STEADY + RAMP_DOWN))
+	{
+		return true;
+	}
+
 }
 
 bool readyToReceive()
