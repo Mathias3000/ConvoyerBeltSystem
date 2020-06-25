@@ -37,7 +37,14 @@ void TCPClient::connectToServer()
 
     cout << "Searching for server ... " << endl;
 
-    if (connect(sock, (struct sockaddr*) & serverAddr, sizeof(serverAddr)) < 0)
+    int res = 1;
+    while (res != 0) {
+        res = connect(sock, (struct sockaddr*) & serverAddr, sizeof(serverAddr));
+        int b = 0;  
+    }
+    int c = 0;
+
+    if (res < 0)
     {
         cerr << "Connection Failed " << endl;
         return;
@@ -45,7 +52,6 @@ void TCPClient::connectToServer()
 
     thread* serverThread;
     serverThread = new thread(&TCPClient::threadServerHandler, this);
-    // serverThread->join();
 
 }
 

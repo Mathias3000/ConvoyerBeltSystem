@@ -72,8 +72,8 @@ void TCPServer::threadClientHandler()
 
 	// TODO: Delete Greeting. Only used for debugging
 	// Greet Client!
-	char greeting[] = "Hi Client! What's up!";
-	send(clientSocket, greeting, sizeof(greeting) + 1, 0);
+	// char greeting[] = "Hi Client! What's up!";
+	// send(clientSocket, greeting, sizeof(greeting) + 1, 0);
 	// int val = write(*(int*)(clientSocket), greeting, sizeof(greeting) + 1);
 	// int val = send(*((int*)(clientSocket)), greeting, sizeof(greeting) + 1, 0);
 	
