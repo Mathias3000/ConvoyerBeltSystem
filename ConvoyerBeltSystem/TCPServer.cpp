@@ -115,7 +115,7 @@ void TCPServer::handleClientInput()
 	}
 	else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")
 	{
-		myStateMaschine->sendEvent("RecvCmdReleased");
+		myStateMaschine->sendEvent("RecvCmdRelease");
 	}
 	else if (input == "READY\r\n" || input == "Ready\r\n" || input == "ready\r\n")
 	{
@@ -130,7 +130,8 @@ void TCPServer::handleClientInput()
 	}
 	else if (input == "tel stop\r\n")
 	{
-		myStateMaschine->sendEvent("RecvCmdReleased");
+		// ADD RecvCmdStopMotor
+		// myStateMaschine->sendEvent("RecvCmdReleased");
 	}
 	else if (input.find(SPEED_CMD) != string::npos)		// check if speed command string
 	{
@@ -160,6 +161,20 @@ void TCPServer::handleClientInput()
 		dataBuffer = s;		
 		myStateMaschine->sendEvent("RecvCmdDirectionTelnet");
 
+	}
+	else if (input.find(MODE_CMD) != string::npos) 
+	{
+		string s = input;
+		std::string delimiter = ":";
+
+		size_t pos = 0;
+		std::string token;
+		while ((pos = s.find(delimiter)) != std::string::npos) {
+			token = s.substr(0, pos);
+			s.erase(0, pos + delimiter.length());
+		}
+		dataBuffer = s;
+		myStateMaschine->sendEvent("RecvCmdModeTelnet");
 	}
 	else
 	{

@@ -10,7 +10,7 @@ Network::Network()
 
 Network* Network::getInstance()
 {
-	if (instance == NULL) {
+	if (instance == nullptr) {
 		instance = new Network();
 	}
 	return instance;

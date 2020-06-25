@@ -9,7 +9,7 @@ TelnetServer::TelnetServer()
 
 TelnetServer* TelnetServer::getInstance()
 {
-	if (instance == NULL) {
+	if (instance == nullptr) {
 		instance = new TelnetServer();
 	}
 	return instance;
