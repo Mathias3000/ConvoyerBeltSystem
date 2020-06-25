@@ -23,6 +23,7 @@ public:
 	// void resetCommunicationFlags();
 	void stopDisplayUI();
 private:
+	int b = 0;
 	void init();
 	bool stop = false;
 	thread workerDisplayUI;
