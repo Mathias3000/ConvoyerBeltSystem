@@ -115,7 +115,7 @@ void TCPServer::handleClientInput()
 	}
 	else if (input == "RELEASE\r\n" || input == "Release\r\n" || input == "release\r\n")
 	{
-		myStateMaschine->sendEvent("RecvCmdReleased");
+		myStateMaschine->sendEvent("RecvCmdRelease");
 	}
 	else if (input == "READY\r\n" || input == "Ready\r\n" || input == "ready\r\n")
 	{
