@@ -33,8 +33,8 @@ private:
 		"[1] right dir\t [2] left dir\t [3] start profile\t [4] stop profile",
 		"--------------------------------------------------------------------------",
 		"TELNET commands: ",
-		"[tel start]\t [tel stop]",
-		"[tel dir:r]\t [tel dir:l] \t [tel speed:x]",
+		"[tel mode:c]\t [tel mode:l]\t [tel speed:value]",
+		"[tel dir:r]\t [tel dir:l]\t [tel start]\t\t [tel stop]"
 	};
 
 	char* commands2[4] = {

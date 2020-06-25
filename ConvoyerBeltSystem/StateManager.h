@@ -32,6 +32,7 @@ void startLocalMode();
 void startChainMode();
 void selectLocalMode();
 void selectChainMode();
+void setModeTelnet();
 void setSpeedPotentiometer();
 void setSpeedTelnet();
 void setDirectionKeyPad();

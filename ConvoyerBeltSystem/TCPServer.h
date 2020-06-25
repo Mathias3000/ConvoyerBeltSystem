@@ -20,6 +20,7 @@
 
 #define SPEED_CMD "tel speed"
 #define DIR_CMD "tel dir"
+#define MODE_CMD "tel mode"
 
 
 using namespace std;
